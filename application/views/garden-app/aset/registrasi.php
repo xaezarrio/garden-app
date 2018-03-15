@@ -54,7 +54,7 @@
 			            			Harga
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[price]" class="form-control rupiah" style="width: 200px">
+			            			<input type="text" name="dt[price]" class="form-control rupiah" style="width: 200px" id="price">
 			            		</td>
 			            	</tr>
 			            </table>
