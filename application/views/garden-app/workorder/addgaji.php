@@ -11,7 +11,7 @@
 				<div class="col-xs-12">
 					<div class="box box-primary">
 					  <div class="box-header with-border">	
-					<form id="upload" action="<?= base_url("workorder/list-timesheets/pegawai/add/action") ?>"  enctype="multipart/form-data">
+					<form id="upload" action="<?= base_url("workorder/list-timesheets/pegawai/add/action") ?>">
 						<div class="show_error"></div>
 						<table class="table table-bordered table-hover" style="width:50%">
 			            	<tr>
@@ -19,7 +19,7 @@
 			            			Tanggal
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[date]" class="form-control tgl" id="date" value="<?= date('Y-m-d') ?>" required>
+			            			<input type="text" name="dt[date]" class="form-control tgl" id="date" value="<?= date('Y-m-d') ?>">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -27,13 +27,13 @@
 			            			Pegawai
 			            		</td>
 			            		<td>
-			            			<select class="form-control" id="karyawan" onchange="loaddata()" name="dt[karyawan_id]" required>
+			            			<select class="form-control" id="karyawan" onchange="loaddata()" name="dt[karyawan_id]">
 					    				<option value="">Pilih Pegawai</option>
 					    				<?php 
 					    					$pegawai = $this->mymodel->selectData('karyawan');
 					    					foreach ($pegawai as $peg) {
 					    				?>
-					    					<option value="<?= $peg['id'] ?>" <?=($peg['id']==@$_GET['idp'])?'selected':'';?>><?= $peg['name'] ?></option>
+					    					<option value="<?= $peg['id'] ?>"><?= $peg['name'] ?></option>
 					    				<?php } ?>
 					    			</select>
 			            		</td>
@@ -43,7 +43,7 @@
 			            			Sub Aktivitas
 			            		</td>
 			            		<td>
-			            			<select class="form-control" name="dt[aktivitas_sub]" required>
+			            			<select class="form-control" name="dt[aktivitas_sub]">
 					    				<?php 
 					    					$parent = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pegawai'));
 					    					$sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$parent['id']));
@@ -59,7 +59,7 @@
 			            			Nominal (Rp) 
 			            		</td>
 			            		<td>
-			            			<input type="text" class="form-control rupiah" name="dt[nominal]" required>
+			            			<input type="text" class="form-control rupiah" name="dt[nominal]">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -68,14 +68,6 @@
 			            		</td>
 			            		<td>
 			            			<textarea class="form-control" name="dt[keterangan]"></textarea>
-			            		</td>
-			            	</tr>
-			            	<tr>
-			            		<td>
-			            			File
-			            		</td>
-			            		<td>
-			            			<input name="file" type="file" class="form-control" required />
 			            		</td>
 			            	</tr>
 			            </table>
@@ -128,7 +120,7 @@
 
 
     $("#date").datepicker({
-      dateFormat: "yy-mm-dd",
+      // dateFormat: "dd/mm/yy",
         onSelect: function (date) {
           loaddata();
 
@@ -137,7 +129,6 @@
 
 
     $("#upload").submit(function(){
-        var idp = $("#karyawan").val();
         var mydata = new FormData(this);
         var form = $(this);
         $.ajax({
@@ -159,7 +150,7 @@
                     form.find(".show_error").hide().html(response).slideDown("fast");
                     setTimeout(function(){ 
                         document.getElementById('upload').reset();
-                        window.location.href="<?= base_url("workorder/list-timesheets/pegawai/add?idp=") ?>"+idp;
+                        window.location.href="<?= base_url("workorder/list-timesheets/pegawai") ?>";
                     }, 1000);
                     $("#send-btn").removeClass("disabled").html("Tambahkan").attr('disabled',false);;
 

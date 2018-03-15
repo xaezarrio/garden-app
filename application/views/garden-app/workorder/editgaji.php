@@ -29,7 +29,7 @@
 			            			Pegawai
 			            		</td>
 			            		<td>
-			            			<select class="form-control" id="karyawan" onchange="loaddata()" name="dt[karyawan_id]" disabled="">
+			            			<select class="form-control" id="karyawan" onchange="loaddata()" name="dt[karyawan_id]">
 					    				<option value="">Pilih Pegawai</option>
 					    				<?php 
 					    					$pegawai = $this->mymodel->selectData('karyawan');
@@ -70,14 +70,6 @@
 			            		</td>
 			            		<td>
 			            			<textarea class="form-control" name="dt[keterangan]"><?= $data['keterangan'] ?></textarea>
-			            		</td>
-			            	</tr>
-			            	<tr>
-			            		<td>
-			            			File
-			            		</td>
-			            		<td>
-			            			<input name="file" type="file" class="form-control" />
 			            		</td>
 			            	</tr>
 			            </table>

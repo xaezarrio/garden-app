@@ -18,14 +18,12 @@ class Workorder extends CI_Controller {
 	public function listtimesheets()
 	{
 		$this->data['page']="matters";
-		$this->data['bulan']= array(array("name"=>"01","month"=>"Januari"),array("name"=>"02","month"=>"Februari"),array("name"=>"03","month"=>"Maret"),array("name"=>"04","month"=>"April"),array("name"=>"05","month"=>"Mei"),array("name"=>"06","month"=>"Juni"),array("name"=>"07","month"=>"Juli"),array("name"=>"08","month"=>"Agustus"),array("name"=>"09","month"=>"September"),array("name"=>"10","month"=>"Oktober"),array("name"=>"11","month"=>"November"),array("name"=>"12","month"=>"Desember"));
 		
 		$this->render->admin('garden-app/workorder/listtimesheets', $this->data);
 	}
 	public function addgaji()
 	{
 		$this->data['page']="matters";
-		$this->data['pegawai'] = $this->input->get('idp');
 		
 		$this->render->admin('garden-app/workorder/addgaji', $this->data);
 	}
@@ -66,21 +64,6 @@ class Workorder extends CI_Controller {
 			$this->alert->alertdanger($error);
         }else{
         	$data = $this->input->post('dt');
-
-        	$fileName = time().$_FILES['file']['name'];
-	        $config['upload_path'] = './uploads/'; //buat folder dengan nama assets di root folder
-	        $config['file_name'] = $fileName;
-	        $config['allowed_types'] = '*';
-	        $config['max_size'] = 10000;
-
-        	$this->load->library('upload');
-			$this->upload->initialize($config);
-	        if ( ! $this->upload->do_upload('file'))
-	        $this->upload->display_errors();
-	             
-	        $media = $this->upload->data('file');
-	        $data["file"] = str_replace(" ","_",$fileName);
-
 			$a = strtotime($_POST['dt']['date']);
         	$data['date'] = date('Y-m-d',$a);
 			$data['kategori'] = "Pegawai";
@@ -95,6 +78,7 @@ class Workorder extends CI_Controller {
 	{
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		$this->form_validation->set_rules('dt[date]', '<strong>Tanggal</strong>', 'required');
+		$this->form_validation->set_rules('dt[karyawan_id]', '<strong>Karyawan</strong>', 'required');
 		$this->form_validation->set_rules('dt[nominal]', '<strong>Nominal</strong>', 'required');
 		$this->form_validation->set_rules('dt[keterangan]', '<strong>keterangan</strong>', 'required');
 
@@ -105,23 +89,6 @@ class Workorder extends CI_Controller {
         }else{
         	$ids = $this->input->post('ids');
         	$data = $this->input->post('dt');
-
-        	$fileName = time().$_FILES['file']['name'];
-	        $config['upload_path'] = './uploads/'; //buat folder dengan nama assets di root folder
-	        $config['file_name'] = $fileName;
-	        $config['allowed_types'] = '*';
-	        $config['max_size'] = 10000;
-
-        	$this->load->library('upload');
-			$this->upload->initialize($config);
-	        if ( ! $this->upload->do_upload('file'))
-	        $this->upload->display_errors();
-	             
-	        $media = $this->upload->data('file');
-	        if ($_FILES['file']['name']) {
-	        	$data["file"] = str_replace(" ","_",$fileName);
-	        }
-
 			$a = strtotime($_POST['dt']['date']);
         	$data['date'] = date('Y-m-d',$a);
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
@@ -136,32 +103,11 @@ class Workorder extends CI_Controller {
 
 	public function listtimesheets_json()
 	{
-		$karyawan = $this->input->get('karyawan');
-		$sub = $this->input->get('sub');
-		$kategori = $this->input->get('kategori');
-		$bulan = $this->input->get('bulan');
-		$tahun = $this->input->get('tahun');
-
 		header('Content-Type: application/json');
-        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.kategori as kategori,karyawan.name as karyawan,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal');
+        $this->datatables->select('pengeluaran.id,pengeluaran.date,karyawan.name as karyawan,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal');
         $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'Pegawai'));
-        if ($karyawan) {
-        	$this->datatables->where('karyawan.id', $karyawan);
-        }
-        if ($sub) {
-        	$this->datatables->where('aktivitas.id', $sub);
-        }
-        if ($kategori) {
-        	$this->datatables->where('aktivitas.kategori', $kategori);
-        }
-        if ($bulan) {
-        	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);
-        }
-        if ($tahun) {
-        	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
-        }
         $this->datatables->from('pengeluaran');
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
         echo $this->datatables->generate();
@@ -170,18 +116,10 @@ class Workorder extends CI_Controller {
 	public function  listtimesheets_delete($id)
 	{
 		# code...
-		$date = $this->mmodel->selectWhere('pengeluaran',array('id'=>$id))->row()->date;
-		$date1=date_create($date);
-		$date2=date_create(date("Y-m-d"));
-		$diff=date_diff($date1,$date2);
-		$res = $diff->format("%a");
+		$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
+		redirect('workorder/list-timesheets/pegawai');
 
-		if ($res<=7) {
-			$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
-			redirect('workorder/list-timesheets/pegawai');
-		} else {
-			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/list-timesheets/pegawai/')."';</script>";
-		}
+
 	}
 
 // -------------------------------------------------------------------
@@ -348,8 +286,7 @@ class Workorder extends CI_Controller {
 	public function listtimesheetspribadi()
 	{
 		$this->data['page']="matters";
-		$this->data['bulan']= array(array("name"=>"01","month"=>"Januari"),array("name"=>"02","month"=>"Februari"),array("name"=>"03","month"=>"Maret"),array("name"=>"04","month"=>"April"),array("name"=>"05","month"=>"Mei"),array("name"=>"06","month"=>"Juni"),array("name"=>"07","month"=>"Juli"),array("name"=>"08","month"=>"Agustus"),array("name"=>"09","month"=>"September"),array("name"=>"10","month"=>"Oktober"),array("name"=>"11","month"=>"November"),array("name"=>"12","month"=>"Desember"));
-
+		
 		$this->render->admin('garden-app/workorder/listtimesheetspribadi', $this->data);
 	}
 	public function addpribadi()
@@ -388,21 +325,6 @@ class Workorder extends CI_Controller {
 			$this->alert->alertdanger($error);
         }else{
         	$data = $this->input->post('dt');
-
-        	$fileName = time().$_FILES['file']['name'];
-	        $config['upload_path'] = './uploads/'; //buat folder dengan nama assets di root folder
-	        $config['file_name'] = $fileName;
-	        $config['allowed_types'] = '*';
-	        $config['max_size'] = 10000;
-
-        	$this->load->library('upload');
-			$this->upload->initialize($config);
-	        if ( ! $this->upload->do_upload('file'))
-	        $this->upload->display_errors();
-	             
-	        $media = $this->upload->data('file');
-	        $data["file"] = str_replace(" ","_",$fileName);
-
 			$a = strtotime($_POST['dt']['date']);
         	$data['date'] = date('Y-m-d',$a);
 			$data['kategori'] = "Pribadi";
@@ -427,23 +349,6 @@ class Workorder extends CI_Controller {
         }else{
         	$ids = $this->input->post('ids');
         	$data = $this->input->post('dt');
-
-        	$fileName = time().$_FILES['file']['name'];
-	        $config['upload_path'] = './uploads/'; //buat folder dengan nama assets di root folder
-	        $config['file_name'] = $fileName;
-	        $config['allowed_types'] = '*';
-	        $config['max_size'] = 10000;
-
-        	$this->load->library('upload');
-			$this->upload->initialize($config);
-	        if ( ! $this->upload->do_upload('file'))
-	        $this->upload->display_errors();
-	             
-	        $media = $this->upload->data('file');
-	        if ($_FILES['file']['name']) {
-	        	$data["file"] = str_replace(" ","_",$fileName);
-	        }
-	        
 			$a = strtotime($_POST['dt']['date']);
         	$data['date'] = date('Y-m-d',$a);
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
@@ -458,24 +363,11 @@ class Workorder extends CI_Controller {
 
 	public function listtimesheetspribadi_json()
 	{
-		$sub = $this->input->get('sub');
-		// $kategori = $this->input->get('kategori');
-		$bulan = $this->input->get('bulan');
-		$tahun = $this->input->get('tahun');
 		header('Content-Type: application/json');
         $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal');
         // $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'Pribadi'));
-        if ($sub) {
-        	$this->datatables->where('aktivitas.id', $sub);
-        }
-        if ($bulan) {
-        	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);
-        }
-        if ($tahun) {
-        	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
-        }
         $this->datatables->from('pengeluaran');
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
         echo $this->datatables->generate();
@@ -483,19 +375,9 @@ class Workorder extends CI_Controller {
 
 	public function  listtimesheetspribadi_delete($id)
 	{
-		$date = $this->mmodel->selectWhere('pengeluaran',array('id'=>$id))->row()->date;
-		$date1=date_create($date);
-		$date2=date_create(date("Y-m-d"));
-		$diff=date_diff($date1,$date2);
-		$res = $diff->format("%a");
-
-		if ($res<=7) {
-			$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
-			redirect('workorder/list-timesheets/pribadi');
-		} else {
-			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/list-timesheets/pribadi')."';</script>";
-		}
-		
+		# code...
+		$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
+		redirect('workorder/list-timesheets/pribadi');
 
 
 	}
