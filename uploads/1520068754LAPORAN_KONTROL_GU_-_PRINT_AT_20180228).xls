@@ -1,0 +1,912 @@
+   <style>
+  #customers {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  #customers td, #customers th {
+      border: 1px solid #ddd;
+      padding: 8px;
+  }
+
+  #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+  #customers tr:hover {background-color: #ddd;}
+
+  #customers th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #4CAF50;
+      color: white;
+  }
+</style>
+           
+            <table class="table table-condensed table-bordered" style="margin-bottom: 0px;min-width: 1600px; " id="customers" border="1">
+              <thead style="background-color: #ddd">
+                <tr class="bg-blue">
+                  <th style="width: 130px">No</th>
+                  <th style="width: 400px">Uraian</th>
+                  <th style="width: 100px">Jumlah Pagu</th>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                  
+                  
+                    
+
+                                        <td style="width: 1px;border-right: 1px solid red;" class="bg-danger"></td>
+                                                            
+                    <!-- ---------------------------------------------------------------------- -->
+                      <!-- Data GU 2 -->
+                                          <th style="width: 100px">GU1</th>
+                                          <!-- Data Ls 2 -->
+                    
+                      <!-- Data Spk 2 -->
+                                          <th style="width: 100px">SPK</th>
+                    
+
+
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+
+                  <th style="width: 100px">Sisa</th>
+                  <th style="width: 100px">Jumlah SPJ</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                                <tr class="bg-orange print">
+                <td>2.05.1.03.02.20.01</td>
+                <td class="parent">PEMELIHARAAN TAMAN DAN JALUR HIJAU KOTA WILAYAH I</td>
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.01.06 - Uang Saku / Penataan Ruang</td>
+                  <td class="text-right">3,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">600,000</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">2,400,000</td>
+                  <td class="text-right">600,000</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.01.06 - Uang Saku Non PNS / Penataan Ruang</td>
+                  <td class="text-right">2,200,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">2,200,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.03.03 - Uang Piket / Penataan Ruang</td>
+                  <td class="text-right">62,550,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">1,000,000</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">61,550,000</td>
+                  <td class="text-right">1,000,000</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.01.02 - Belanja Dokumen Pengadaan Barang/Jasa / Penataan Ruang</td>
+                  <td class="text-right">1,750,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">1,750,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.02.02 - Belanja Bahan /Bibit Tanaman / Penataan Ruang</td>
+                  <td class="text-right">185,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">185,000,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.02 - Belanja Dokumentasi/Dekorasi / Penataan Ruang</td>
+                  <td class="text-right">690,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">690,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.04 - Belanja Upah Harian/Borongan / Penataan Ruang</td>
+                  <td class="text-right">210,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">1,000,000</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">209,000,000</td>
+                  <td class="text-right">1,000,000</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.39.18 - Belanja Pemeliharaan Infrastruktur Umum/Penerangan Jalan, Taman dan Hutan Kota / Penataan Ruang</td>
+                  <td class="text-right">534,810,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">50,000,000</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">484,810,000</td>
+                  <td class="text-right">50,000,000</td>
+                  <td></td>
+
+                </tr>
+                                                <tr class="bg-orange print">
+                <td>2.05.1.03.02.20.03</td>
+                <td class="parent">PEMELIHARAAN TAMAN DAN JALUR HIJAU KOTA WILAYAH III</td>
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.01.06 - Uang Saku / Penataan Ruang</td>
+                  <td class="text-right">3,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">700,000</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">2,300,000</td>
+                  <td class="text-right">700,000</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.02.02 - Uang Saku Non PNS / Penataan Ruang</td>
+                  <td class="text-right">2,200,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">2,200,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.03.03 - Uang PIket / Penataan Ruang</td>
+                  <td class="text-right">62,550,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">62,550,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.01.02 - Belanja Dokumen Pengadaan Barang/Jasa / Penataan Ruang</td>
+                  <td class="text-right">1,400,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">1,400,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.01.06 - Belanja Bahan Bakar Minyak/Gas dan Pelumas / Penataan Ruang</td>
+                  <td class="text-right">191,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">191,000,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.02.02 - Belanja Bahan/Bibit Tanaman / Penataan Ruang</td>
+                  <td class="text-right">57,850,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">57,850,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.02 - Belanja Dokumen/Dekorasi / Penataan Ruang</td>
+                  <td class="text-right">570,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">570,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.04 - Belanja Upah Harian/Borongan / Penataan Ruang</td>
+                  <td class="text-right">210,500,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">210,500,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.39.18 - Belanja Pemeliharaan Infrastruktur Umum/Penerangan Jalan, Taman dan Hutan Kota / Penataan Ruang</td>
+                  <td class="text-right">471,430,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">471,430,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                                <tr class="bg-orange print">
+                <td>2.05.1.03.02.20.02</td>
+                <td class="parent">PEMELIHARAAN TAMAN DAN JALUR HIJAU KOTA WILAYAH II</td>
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.01.06 - Uang Saku / Penataan Ruang</td>
+                  <td class="text-right">3,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">3,000,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.02.02 - Uang Saku Non PNS / Penataan Ruang</td>
+                  <td class="text-right">2,200,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">2,200,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.03.03 - Uang Piket / Penataan Ruang</td>
+                  <td class="text-right">70,500,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">70,500,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.01.02 - Belanja Dokumen Pengadaan Barang/Jasa / Penataan Ruang</td>
+                  <td class="text-right">2,100,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">2,100,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.02.02 - Belanja Bahan/Bibit Tanaman / Penataan Ruang</td>
+                  <td class="text-right">182,300,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">182,300,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.02 - Belanja Dokumentasi/Dekorasi / Penataan Ruang</td>
+                  <td class="text-right">950,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">950,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.04 - Belanja Upah Harian/Borongan / Penataan Ruang</td>
+                  <td class="text-right">294,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">294,000,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.39.18 - Belanja Pemelihraan Infrastruktur Umum/Penerangan Jalan, Taman dan Hutan Kota / Penataan Ruang</td>
+                  <td class="text-right">945,400,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">945,400,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                                <tr class="bg-orange print">
+                <td>2.05.1.03.02.20.04</td>
+                <td class="parent">PEMELIHARAAN TAMAN DAN JALUR HIJAU KOTA WILAYAH IV</td>
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.01.06 - Uang Saku / Penataan Ruang</td>
+                  <td class="text-right">3,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">3,000,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.02.02 - Uang Saku Non PNS / Penataan Ruang</td>
+                  <td class="text-right">2,200,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">2,200,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.1.03.03 - Uang Piket / Penataan Ruang</td>
+                  <td class="text-right">62,550,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">62,550,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.01.02 - Belanja Dokumen Pengadaan Barang/Jasa / Penataan Ruang</td>
+                  <td class="text-right">1,400,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">1,400,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.01.06 - Belanja Bahan Bakar Minyak/Gas dan Pelumas / Penataan Ruang</td>
+                  <td class="text-right">204,400,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">204,400,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.02.02 - Belanja Bahan/Bibit Tanaman / Penataan Ruang</td>
+                  <td class="text-right">56,700,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">56,700,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.02 - Belanja Dokumentasi/Dekorasi / Penataan Ruang</td>
+                  <td class="text-right">150,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">150,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.30.04 - Belanja Upah Harian/Borongan / Penataan Ruang</td>
+                  <td class="text-right">210,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">210,000,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                <tr>
+                  <td></td>
+                  <td>5.2.2.39.18 - Belanja Pemeliharaan Infrastruktur Umum/Penerangan Jalan, Taman dan Hutan Kota / Penataan Ruang</td>
+                  <td class="text-right">460,000,000</td>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                                        
+                    
+                  
+                                        <td style="border-right: 1px solid red;" style="width: 1px;" class="bg-danger"></td>
+                                                        
+                  <!-- ----------------------------------------------------------------------------- -->
+                                        <td style="width: 100px" class="text-right">0</td>
+                    
+                    
+                                           <td style="width: 100px" class="text-right">0</td>
+                    
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                                    <td class="text-right">460,000,000</td>
+                  <td class="text-right">0</td>
+                  <td></td>
+
+                </tr>
+                                              </tbody>
+                            <tfoot style="background-color: #ddd">
+                <tr>
+                  <th colspan="2">Jumlah</th>
+                  <th style="width: 100px" class="text-right">4,501,350,000</th>
+                  <!-- ---------------------------------------------------------------------------------------- -->
+                  
+                  
+                    
+
+                                        <td style="width: 1px;border-right: 1px solid red;" class="bg-danger"></td>
+                                                            
+                    <!-- ---------------------------------------------------------------------- -->
+                      <!-- Data GU 2 -->
+                                          <th style="width: 100px" class="text-right">3,300,000</th>
+                                          <!-- Data Ls 2 -->
+                    
+                      <!-- Data Spk 2 -->
+                                          <th style="width: 100px" class="text-right">50,000,000</th>
+                    
+
+
+                  <!-- ---------------------------------------------------------------------------------------- -->
+
+                                    <th style="width: 100px" class="text-right">4,448,050,000</th>
+                  <th style="width: 100px" class="text-right">53,300,000</th>
+                  <th>Keterangan</th>
+                </tr>
+              </tfoot>
+            </table>
+<script type="text/javascript">
+  $(function() {
+    var colCount = 0;
+    $('tr:nth-child(2) td').each(function () {
+        if ($(this).attr('colspan')) {
+            colCount += +$(this).attr('colspan');
+        } else {
+            colCount++;
+        }
+    });
+    // alert(colCount);
+    var tot = parseInt(colCount)-1;
+    $(".parent").attr('colspan',tot);
+});
+// setTimeout(function(){ 
+//       $('#example1').DataTable({
+//         "paging": true,
+//         "lengthChange": true,
+//         "searching": true,
+//         "ordering": true,
+//         "info": true,
+//         "autoWidth": false
+//       });
+//  }, 3000)
+
+</script>

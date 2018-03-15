@@ -1,0 +1,41 @@
+Aktivitas :
+- tidak boleh di delete : v
+1. Pribadi
+2. Pegawai
+3. Kantor
+ 
+Sub Aktifitas
+- tidak boleh didelete : v
+1. gaji (dari pegawai)
+2. Pemasukan (pribadi)
+3. tambah saldo (kantor)
+
+Delete diganti disable, disamakan dnx v
+
+pengeluaran->pegawai :
+- Filternya di aktifkan v
+- Hapusnya bisa max 7 hari setelah pembuatan
+- Yg ambil master dibuat select2
+- Bulannya dilihat kondisi v
+- Nominal tetep, ditambah tipe masuk/keluar sebelahnya sub aktv
+
+- Tambah : tgl, pegawai (sel2), sub (sel2), nominal, keterangan, file. (semua required)
+
+- Sisa gaji yang belum dibayarkan duganti "Total"
+- redirectnya kayak filter du tempat yg sama
+- Tambah Sisa gaji yang belum dibayarkan = tot masuk - tot keluar
+- Habis add, nama pegawai tetep kayak filter
+
+- Edit : tdk bisa ganti pegawai
+
+
+pengeluaran->pribadi :
+- Samakan pegawai tanpa field pegawai
+- Sisa gaji yang belum dibayarkan = margin
+- saldo awal ambil dari bulan sebelum ini dan tahun ini
+
+
+pengeluaran->kantor :
+- ada item
+- auto complete ambil namanya u/ suggest
+- item kalau ada masuk update, klo gada add master baru
