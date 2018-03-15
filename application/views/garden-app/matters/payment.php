@@ -139,7 +139,12 @@
 			            			Pajak
 			            		</td>
 			            		<td>
-			            			<?= $matters->pr_pajak ?>, <?= $matters->pr_pajak2 ?>
+			            			<?php 
+							            $pajak1 = $this->mymodel->selectdataOne('pajak',array('id'=>$matters->pr_pajak));
+							            $pajak2 = $this->mymodel->selectdataOne('pajak',array('id'=>$matters->pr_pajak2));
+
+			            			 ?>
+			            			<?= $pajak1['name'] ?>, <?= $pajak2['name'] ?>
 			            		</td>
 			            	</tr>
 			            	<tr>

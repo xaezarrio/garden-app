@@ -63,10 +63,50 @@ class Billing extends CI_Controller {
 
 	public function updatestatus($id)
 	{
-		$this->mymodel->updateData('invoice',array('status'=>'Lunas','updated_at'=>date('Y-m-d H:i:s')),array('id'=>$id));
-		$invoice =$this->mymodel->selectdataOne('invoice',array('id'=>$id));
+			$dir  = "webfile/invoice/";
+			$config['upload_path']          = $dir;
+			$config['allowed_types']        = 'gif|jpg|png';
+			// $config['max_size']             = 100;
+			$config['max_width']            = 500;
+			$config['max_height']           = 500;
+			$config['file_name']           = rand(1,1000);
 
-		redirect('matters/payment/'.$invoice['proyek_id']);
+			$this->load->library('upload', $config);
+			if ( ! $this->upload->do_upload('gambar')){
+				$error = $this->upload->display_errors();
+				$this->alert->alertdanger($error);		
+			}else{
+			   	// $str = $this->db->insert('aktivitas_proyek', $param);
+				$this->mymodel->updateData('invoice',array('status'=>'Lunas','updated_at'=>date('Y-m-d H:i:s')),array('id'=>$id));
+
+			   	$last_id = $this->db->insert_id();
+			   	$image = $this->upload->data();
+	   			$data = array(
+			   				'id' => '',
+			   				'name'=> $image['file_name'],
+			   				'type'=> $image['file_type'],
+			   				'size'=> $image['file_size'],
+			   				'dir'=> $dir.$image['file_name'],
+			   				'table'=> 'invoice',
+			   				'table_id'=> $id,
+			   				'user_id'=> 0 ,
+			   				'desc'=>"",
+			   				'created_at'=>date('Y-m-d H:i:s')
+
+			   	 		);
+
+
+			   	$str = $this->db->insert('file', $data);
+        		if($str){
+					$this->alert->alertsuccess('Success Input Data');
+        		}else{
+					$this->alert->alertdanger();		
+        		}
+			}
+
+		// $invoice =$this->mymodel->selectdataOne('invoice',array('id'=>$id));
+
+		// redirect('matters/payment/'.$invoice['proyek_id']);
 	}
 
 	public function json($status)

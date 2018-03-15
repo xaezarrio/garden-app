@@ -4,36 +4,39 @@
 		<div class="container">
 			<div class="row no_margin">
 				<h3 class="jdl_page">
-				TAMBAH PENGELUARAN PEGAWAI
+				TAMBAH PENGELUARAN KANTOR
 				</h3>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="box box-primary">
 					  <div class="box-header with-border">	
-					<form id="upload" action="<?= base_url("workorder/list-timesheets/pegawai/add/action") ?>">
-						<div class="show_error"></div>
+						<form id="upload" action="<?= base_url("workorder/list-timesheets/kantor/update/action") ?>">
+							<input type="hidden" name="ids" value="<?= $data['id'] ?>">
+							<div class="show_error"></div>
 						<table class="table table-bordered table-hover" style="width:50%">
 			            	<tr>
 			            		<td>
 			            			Tanggal
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[date]" class="form-control tgl" id="date" value="<?= date('Y-m-d') ?>">
+			            			<input type="text" name="dt[date]" class="form-control tgl" id="date" value="<?= $data['date'] ?>">
+			  
 			            		</td>
 			            	</tr>
+			            	
 			            	<tr>
 			            		<td>
-			            			Pegawai
+			            			Digunakan
 			            		</td>
 			            		<td>
-			            			<select class="form-control" id="karyawan" onchange="loaddata()" name="dt[karyawan_id]">
-					    				<option value="">Pilih Pegawai</option>
+			            			<select class="form-control" id="" name="dt[proyek_id]">
+					    				<option value="0">Kantor</option>
 					    				<?php 
-					    					$pegawai = $this->mymodel->selectData('karyawan');
-					    					foreach ($pegawai as $peg) {
+					    					$proyek = $this->mymodel->selectData('proyek');
+					    					foreach ($proyek as $pr) {
 					    				?>
-					    					<option value="<?= $peg['id'] ?>"><?= $peg['name'] ?></option>
+					    					<option value="<?= $pr['pr_id'] ?>" <?php if($data['proyek_id']==$pr['pr_id']){ echo "selected=''"; } ?>><?= $pr['pr_spk'] ?> - <?= $pr['pr_nama'] ?></option>
 					    				<?php } ?>
 					    			</select>
 			            		</td>
@@ -45,11 +48,35 @@
 			            		<td>
 			            			<select class="form-control" name="dt[aktivitas_sub]">
 					    				<?php 
-					    					$parent = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pegawai'));
+					    					$parent = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Kantor'));
 					    					$sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$parent['id']));
 					    					foreach ($sub as $s) {
 					    				?>
-					    					<option value="<?= $s['id'] ?>"><?= $s['name'] ?></option>
+					    					<option value="<?= $s['id'] ?>" <?php if($data['aktivitas_sub']==$s['id']){ echo "selected=''"; } ?>><?= $s['name'] ?></option>
+					    				<?php } ?>
+					    			</select>
+			            		</td>
+			            	</tr>
+			            	<tr>
+			            		<td>
+			            			Item
+			            		</td>
+			            		<td>
+			            			<input type="text" name="dt[item]" placeholder="masukan item produk" class="form-control" value="<?= $data['item'] ?>">
+			            		</td>
+			            	</tr>
+			            	<tr>
+			            		<td>
+			            			QTY
+			            		</td>
+			            		<td>
+			            			<input type="number" name="dt[qty]" class="form-control" style="display: inline;width: 100px;" value="<?= $data['qty'] ?>">
+			            			<select class="form-control" style="display: inline;width: 100px;" name="dt[satuan_id]">
+					    				<?php 
+					    					$satuan = $this->mymodel->selectData('satuan');
+					    					foreach ($satuan as $st) {
+					    				?>
+					    					<option value="<?= $st['id'] ?>" <?php if($data['satuan_id']==$st['id']){ echo "selected=''"; } ?>><?= $st['name'] ?></option>
 					    				<?php } ?>
 					    			</select>
 			            		</td>
@@ -59,7 +86,7 @@
 			            			Nominal (Rp) 
 			            		</td>
 			            		<td>
-			            			<input type="text" class="form-control rupiah" name="dt[nominal]">
+			            			<input type="text" class="form-control rupiah" name="dt[nominal]" value="<?= number_format($data['nominal']) ?>">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -67,13 +94,12 @@
 			            			Keterangan
 			            		</td>
 			            		<td>
-			            			<textarea class="form-control" name="dt[keterangan]"></textarea>
+			            			<textarea class="form-control" name="dt[keterangan]"><?= $data['keterangan'] ?></textarea>
 			            		</td>
 			            	</tr>
 			            </table>
-            			<button type="submit" class="btn btn-primary btn-flat" id="send-btn"><i class="fa fa-save"></i> Save</button>
-						</form>
-
+            			<button type="submit" class="btn btn-primary btn-flat" id="send-btn">Save</button>
+            			</form>
 					  </div>
 					  <div class="box-body table-responsive">
 					  		<div id='loadingDiv'> 
@@ -85,6 +111,7 @@
 				          <div class="table-responsive" id="table">
 				           
 				          </div>
+
 			          </div>
 			          <!-- END OF BODY -->
 			        </div> 
@@ -99,15 +126,11 @@
 	</section><!-- /.content -->
 	
 </div><!-- /.content-wrapper -->
+
 <script type="text/javascript">
-	  function loaddata() {
-    // body...
-    var id = $("#karyawan").val();
+  function loaddata() {
     var date = $("#date").val();
-
-    $("#table").load("<?= base_url('workorder/list-timesheets/pegawai/detail/') ?>"+id+"?date="+date);
-
-
+    $("#table").load("<?= base_url('workorder/list-timesheets/kantor/detail/') ?>?date="+date);
   }
 
   loaddata();
@@ -120,7 +143,7 @@
 
 
     $("#date").datepicker({
-      // dateFormat: "dd/mm/yy",
+      dateFormat: "yy-mm-dd",
         onSelect: function (date) {
           loaddata();
 
@@ -150,7 +173,7 @@
                     form.find(".show_error").hide().html(response).slideDown("fast");
                     setTimeout(function(){ 
                         document.getElementById('upload').reset();
-                        window.location.href="<?= base_url("workorder/list-timesheets/pegawai") ?>";
+                        window.location.href="<?= base_url("workorder/list-timesheets/kantor") ?>";
                     }, 1000);
                     $("#send-btn").removeClass("disabled").html("Tambahkan").attr('disabled',false);;
 

@@ -22,8 +22,8 @@
 		                    <div class="form-group">
 		                      <label>Karyawan:</label>
 
-		                        <select class="form-control select2" id="karyawan">
-		                          <option value="">Semua Karyawan</option>
+		                        <select class="form-control select2">
+		                          <option>Semua Karyawan</option>
 		                          <?php 
 		                          $karyawan = $this->mymodel->selectData('karyawan');
 		                          foreach ($karyawan as $kar) {
@@ -37,8 +37,8 @@
 		                    <div class="form-group">
 		                      <label>Sub Aktivitas:</label>
 
-		                      <select class="form-control select2" id="sub">
-		                          <option value="">Semua Sub</option>
+		                      <select class="form-control select2">
+		                          <option>Semua Sub</option>
 		                          <?php 
 		                          $cari = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pegawai'));
 		                          $sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$cari['id']));
@@ -53,28 +53,15 @@
 		                  </div>
 		                  <div class="col-xs-2">
 		                    <div class="form-group">
-		                      <label>Kategori:</label>
+		                      <label>Bulan:</label>
 
-		                      <select class="form-control select2" id="kategori">
-		                          <option value="">Semua Kategori</option>
-		                          <option value="Masuk">Masuk</option>
-		                          <option value="Keluar">Keluar</option>
-
-		                        </select>
-		                      <!-- /.input group -->
-		                    </div>      
-		                  </div>
-		                  <div class="col-xs-2">
-		                    <div class="form-group">
-		                      <label>Bulan :</label>
-
-		                      <select class="form-control select2" id="bulan">
-		                          <option value="">Semua Bulan</option>
+		                      <select class="form-control select2">
+		                          <option>semua bulan</option>
 		                          <?php 
-		                          // $bulan = $this->db->query("SELECT DISTINCT MONTHNAME(date) as month, DATE_FORMAT(date,'%m') as name FROM pengeluaran")->result_array();
-		                          for ($i=0; $i < count($bulan) ; $i++) { 
+		                          $bulan = $this->db->query("SELECT DISTINCT MONTHNAME(date) as month, MONTH(date) as name FROM pengeluaran")->result_array();
+		                          foreach ($bulan as $m) {
 		                          ?>
-		                          <option value="<?= $bulan[$i]['name'] ?>"><?= $bulan[$i]['month'] ?></option>
+		                          <option value="<?= $m['name'] ?>"><?= $m['month'] ?></option>
 		                        <?php } ?>
 		                        </select>
 		                      <!-- /.input group -->
@@ -84,7 +71,7 @@
 		                    <div class="form-group">
 		                      <label>Tahun:</label>
 		                      
-		                      <select class="form-control select2" id="tahun">
+		                      <select class="form-control select2">
 		                      	<?php 
 	                          $year = $this->db->query("SELECT DISTINCT YEAR(date) as year FROM pengeluaran ")->result_array();
 		                          foreach ($year as $y) {
@@ -97,22 +84,21 @@
 		                      <!-- /.input group -->
 		                    </div>      
 		                  </div>
-		                  <div class="col-xs-1">
+		                  <div class="col-xs-2">
 		                    <div class="form-group">
-		                      <label style="color: #fff">.</label>
+		                      <label>.</label>
 		                      <div class="input-group">
 		                        <!-- <div class="input-group-addon">
 		                          <i class="fa fa-calendar"></i>
 		                        </div> -->
 		                        <!-- <input type="text" class="form-control pull-right" id="reservation"> -->
-		                        <button type="button" class="btn btn-info" onclick="settable()">Filter</button>
+		                        <button class="btn btn-info">Filter</button>
 
 		                      </div>
 		                    </div>
 		                  </div>
 		              </div>
 			          	<!-- end filter -->
-			          	<div id="resettable">
 			            <table class="table table-condensed table-hover table-bordered" id="mytable">
 			              <thead>
 			                <tr>
@@ -120,16 +106,16 @@
 			            		<th>Tanggal</th>
 			            		<th>Pegawai</th>
 			            		<th>Sub Aktivitas</th>
-			            		<th>Kategori</th>
 			            		<th>Keterangan</th>
 			            		<th>Nominal</th>
 			                  	<th style="width:80px;">Action</th>
 			                </tr>
 			              </thead>
 			              <tbody>
+			                
+			                
 			              </tbody>
 			            </table>
-			            </div>
 			          </div>
 			        </div>
 
@@ -143,42 +129,8 @@
 	</section><!-- /.content -->
 	
 </div><!-- /.content-wrapper -->
-
 <script>
-	function settable() {
-		var table = '<table class="table table-condensed table-hover table-bordered" id="mytable">'+
-					'  <thead>'+
-					'    <tr>'+
-					'      <th style="width: 30px;">No</th>'+
-					'		<th>Tanggal</th>'+
-					'		<th>Pegawai</th>'+
-					'		<th>Sub Aktivitas</th>'+
-					'		<th>Kategori</th>'+
-					'		<th>Keterangan</th>'+
-					'		<th>Nominal</th>'+
-					'      	<th style="width:80px;">Action</th>'+
-					'    </tr>'+
-					'  </thead>'+
-					'  <tbody>'+
-					'  </tbody>'+
-					'</table>';
-		 $("#resettable").html(table);
-		 var karyawan = $("#karyawan").val();
-		 var sub = $("#sub").val();
-		 var kategori = $("#kategori").val();
-		 var bulan = $("#bulan").val();
-		 var tahun = $("#tahun").val();
-
-		 var url = "?karyawan="+karyawan+"&sub="+sub+"&kategori="+kategori+"&bulan="+bulan+"&tahun="+tahun;
-
-		 loaddata(url);
-	}
- function loaddata(url="") {
- 		 if(url!=null){
-         	var urls = "<?= base_url('workorder/list-timesheets/pegawai/json') ?>"+url;
-         }else{
-         	var urls = "<?= base_url('workorder/list-timesheets/pegawai/json') ?>";
-         }
+ function loaddata() {
 		var t = $("#mytable").dataTable({
 		  initComplete: function() {
 		    var api = this.api();
@@ -195,13 +147,12 @@
 		  },
 		  processing: true,
 		  serverSide: true,
-		  ajax: {"url": urls, "type": "POST"},
+		  ajax: {"url": "<?= base_url('workorder/list-timesheets/pegawai/json') ?>/", "type": "POST"},
 		    columns: [
 		      {"data": "id","orderable": false},
 		      {"data": "date"},
 		      {"data": "karyawan"},
 		      {"data": "sub"},
-		      {"data": "kategori"},
 		      {"data": "keterangan"},
 		      {"data": "nominal"},
 		      {   "data": "view",
@@ -210,7 +161,7 @@
 		    ],
 		  order: [[0, 'asc']],
 		  columnDefs : [
-		    { targets : [6],
+		    { targets : [5],
 		      render : function (data, type, row) {
 		        return convertToRupiah(row['nominal']);
 		      }

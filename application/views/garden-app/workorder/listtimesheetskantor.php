@@ -34,9 +34,14 @@
 		                      <label>Sub Aktivitas:</label>
 
 		                      <select class="form-control select2">
-		                          <option>semua sub</option>
-		                          <option>gaji</option>
-		                          <option>honor</option>
+		                          <option value="">semua sub</option>
+		                         	<?php 
+		                          $cari = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Kantor'));
+		                          $sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$cari['id']));
+		                          foreach ($sub as $aktivitas) {
+		                           ?>
+		                           <option value="<?= $aktivitas['id'] ?>"><?= $aktivitas['name'] ?></option>
+		                           <?php } ?>
 
 		                        </select>
 		                      <!-- /.input group -->
@@ -47,8 +52,12 @@
 		                      <label>Bulan:</label>
 
 		                      <select class="form-control select2">
-		                          <option>semua bulan</option>
-		                          <option></option>
+		                          <?php 
+		                          $bulan = $this->db->query("SELECT DISTINCT MONTHNAME(date) as month, MONTH(date) as name FROM pengeluaran")->result_array();
+		                          foreach ($bulan as $m) {
+		                          ?>
+		                          <option value="<?= $m['name'] ?>"><?= $m['month'] ?></option>
+		                        <?php } ?>
 
 		                        </select>
 		                      <!-- /.input group -->
@@ -59,8 +68,13 @@
 		                      <label>Tahun:</label>
 
 		                      <select class="form-control select2">
-		                          <option>2018</option>
-		                          <option></option>
+		                          	<?php 
+	                          		$year = $this->db->query("SELECT DISTINCT YEAR(date) as year FROM pengeluaran ")->result_array();
+		                          foreach ($year as $y) {
+
+		                      		?>
+		                          <option value="<?= $y['year'] ?>"><?= $y['year'] ?></option>
+		                          <?php } ?>
 
 		                        </select>
 		                      <!-- /.input group -->
@@ -82,7 +96,7 @@
 		              </div>
 
 			          	<!-- end filter -->
-			            <table class="table table-condensed table-hover table-bordered" id="example1">
+			            <table class="table table-condensed table-hover table-bordered" id="mytable">
 			              <thead>
 			                <tr>
 			                  <th style="width: 30px;">No</th>
@@ -90,61 +104,13 @@
 			            		<th>Sub Aktivitas</th>
 			            		<th>Item</th>
 			            		<th>QTY</th>
-			            		
-			            		<!-- <th>Item</th> -->
-			            		<!-- <th>Nominal</th> -->
 			            		<th>Keterangan</th>
 			            		<th>Nominal</th>
 			                  	<th style="width:80px;">Action</th>
 			                </tr>
 			              </thead>
 			              <tbody>
-			                <?php for ($i=1; $i < 5 ; $i++) { ?>
-			                <tr>
-			                  	<td><?= $i ?></td>
-		            			<td><?= date('Y-m-d') ?></td>
-		            			<td>ATK</td>
-		            			<td>Produk <?= $i ?></td>
-		            			<td>20 pcs</td>
-		            			<td>
-		            				Beli produk 20 pcs
-		            			</td>
-		            			<td>
-		            				<?= number_format(5000000) ?>
-		            			</td>
-			                  	<td>
-				                  	<a href="#" class="btn btn-xs btn-primary btn-flat" >
-				                  		<i class="fa fa-edit"></i> edit
-				                  	</a>
-				                  	<a href="#" class="btn btn-xs btn-danger btn-flat" >
-				                  		<i class="fa fa-remove"></i>
-				                  	</a>		                  	
-			                  	</td>
-			                </tr>
-			                <?php } ?>
-			                <?php for ($i=5; $i < 7 ; $i++) { ?>
-			                <tr>
-			                  	<td><?= $i ?></td>
-		            			<td><?= date('Y-m-d') ?></td>
-		            			<td>Konsumsi</td>
-		            			<td>Produk <?= $i ?></td>
-		            			<td>100 kg</td>
-		            			<td>
-		            				Beli produk 100 kg
-		            			</td>
-		            			<td>
-		            				<?= number_format(5000000) ?>
-		            			</td>
-			                  	<td>
-				                  	<a href="#" class="btn btn-xs btn-primary btn-flat" >
-				                  		<i class="fa fa-edit"></i> edit
-				                  	</a>
-				                  	<a href="#" class="btn btn-xs btn-danger btn-flat" >
-				                  		<i class="fa fa-remove"></i>
-				                  	</a>		                  	
-			                  	</td>
-			                </tr>
-			                <?php } ?>
+			               
 			                
 			              </tbody>
 			            </table>
@@ -162,14 +128,67 @@
 	
 </div><!-- /.content-wrapper -->
 <script>
-  $(function () {
-    $('#example1').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
-    });
-  });
+ function loaddata() {
+		var t = $("#mytable").dataTable({
+		  initComplete: function() {
+		    var api = this.api();
+		    $('#mytable_filter input')
+		    .off('.DT')
+		    .on('keyup.DT', function(e) {
+		      if (e.keyCode == 13) {
+		        api.search(this.value).draw();
+		      }
+		    });
+		  },
+		  oLanguage: {
+		    sProcessing: "loading..."
+		  },
+		  processing: true,
+		  serverSide: true,
+		  ajax: {"url": "<?= base_url('workorder/list-timesheets/kantor/json') ?>/", "type": "POST"},
+		    columns: [
+		      {"data": "id","orderable": false},
+		      {"data": "date"},
+		      {"data": "sub"},
+		      {"data": "item"},
+		      {"data": "qty"},
+		      {"data": "keterangan"},
+		      {"data": "nominal"},
+		      {   "data": "view",
+		      "orderable": false
+		      }
+		    ],
+		  order: [[0, 'asc']],
+		  columnDefs : [
+		    { targets : [6],
+		      render : function (data, type, row) {
+		        return convertToRupiah(row['nominal']);
+		      }
+		    }
+		  ],
+		  rowCallback: function(row, data, iDisplayIndex) {
+		    var info = this.fnPagingInfo();
+		    var banner = info.ibanner;
+		    var length = info.iLength;
+		    var index = banner * length + (iDisplayIndex + 1);
+		    $('td:eq(0)', row).html(index);
+		  }
+		});
+		}
+
+     loaddata();
+
+
+     function edit(id) {
+     	window.location.href = "<?= base_url('workorder/list-timesheets/kantor/edit/') ?>"+id;
+     }
+
+     function hapus(id) {
+     	if (confirm('Are you sure delete this data ?')) {
+     		window.location.href = "<?= base_url('workorder/list-timesheets/kantor/delete/') ?>"+id;		
+		} else {
+		    return false
+		}
+
+     }
 </script>

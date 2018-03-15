@@ -41,7 +41,7 @@
 			            		foreach ($ap->result() as $i => $v): 
 			            		
 								$sub = $this->mymodel->selectdataOne("aktivitas",array("id"=>$v->ap_idsubaktivitas));
-			            		if($sub['kategori']=="masuk"){
+			            		if($sub['kategori']=="Masuk"){
 			            			$masuk = $v->ap_nominal;
 			            			$keluar = 0;
 			            			$type = "IN";
@@ -159,7 +159,12 @@
 			            			Pajak
 			            		</td>
 			            		<td>
-			            			<?= $matters->pr_pajak ?>, <?= $matters->pr_pajak2 ?>
+			            			<?php 
+							            $pajak1 = $this->mymodel->selectdataOne('pajak',array('id'=>$matters->pr_pajak));
+							            $pajak2 = $this->mymodel->selectdataOne('pajak',array('id'=>$matters->pr_pajak2));
+
+			            			 ?>
+			            			<?= $pajak1['name'] ?>, <?= $pajak2['name'] ?>
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -268,16 +273,17 @@
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title" id="myModalLabel">Tambahkan Aktivitas Baru</h4>
 	      </div>
-	      <form action="<?= base_url('matters/aktivitas/add'); ?>" method="get" accept-charset="utf-8">
+	      <form action="<?= base_url('matters/aktivitas/add'); ?>" method="post" accept-charset="utf-8" id="upload" enctype="multipart/form-data">
 	      <div class="modal-body">
+	      	<div class="show_error"></div>
 	      	<table class="table table-bordered table-hover">
-	      		<input type="hidden" name="ap_idproyek" value="<?= $matters->pr_id ?>" placeholder="">
+	      		<input type="hidden" name="dt[ap_idproyek]" value="<?= $matters->pr_id ?>" placeholder="">
             	<tr>
             		<td>
             			Tanggal
             		</td>
             		<td>
-            			<input type="text" name="ap_tanggal" class="form-control tgl" required="" value="<?= date("Y-m-d") ?>">
+            			<input type="text" name="dt[ap_tanggal]" class="form-control tgl" required="" value="<?= date("Y-m-d") ?>">
             		</td>
             	</tr>
             	<tr>
@@ -285,28 +291,36 @@
             			Aktivitas
             		</td>
             		<td>
-            			<select class="form-control" name="ap_idaktivitas" onchange="aktivitass();" id="aktivitas" required="">
+            			<select class="form-control" name="dt[ap_idaktivitas]" onchange="aktivitass();" id="aktivitas" required="">
             				<?php foreach ($aktivitas->result() as $a): ?>
 		    				<option value="<?= $a->id ?>"><?= $a->name ?></option>
             				<?php endforeach ?>
 		    			</select>
             		</td>
             	</tr>
-            	<tr>
+            	<tr >
             		<td>
             			Sub Aktivitas
             		</td>
             		<td>
-            			<select class="form-control" name="ap_idsubaktivitas" id="parent" required="">
+            			<select class="form-control" name="dt[ap_idsubaktivitas]" id="parent" required="" onchange="getattr()">
 		    			</select>
             		</td>
             	</tr>
-            	<tr>
+            	<tr class="cekap">
+            		<td>
+            			Item 
+            		</td>
+            		<td>
+            			<input type="text" class="form-control" name="dt[ap_item]"  >
+            		</td>
+            	</tr>
+            	<tr class="cekap">
             		<td>
             			QTY 
             		</td>
             		<td>
-            			<input type="text" class="form-control" name="ap_qty" style="width: 60px;" value="1" required="">
+            			<input type="text" class="form-control" name="dt[ap_qty]" style="width: 60px;" value="0" >
             		</td>
             	</tr>
             	<tr>
@@ -314,7 +328,15 @@
             			Nominal (Rp) 
             		</td>
             		<td>
-            			<input type="text" class="form-control" name="ap_nominal" required="">
+            			<input type="text" class="form-control rupiah" name="dt[ap_nominal]" required="">
+            		</td>
+            	</tr>
+            	<tr>
+            		<td>
+            			Upload File 
+            		</td>
+            		<td>
+            			<input type="file" class="form-control" name="gambar" required="">
             		</td>
             	</tr>
             	<tr>
@@ -322,13 +344,13 @@
             			Keterangan
             		</td>
             		<td>
-            			<textarea class="form-control" name="ap_keterangan"></textarea>
+            			<textarea class="form-control" name="dt[ap_keterangan]"></textarea>
             		</td>
             	</tr>
             </table>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" >Save</button>
+	        <button type="submit" class="btn btn-primary" id="send-btn">Save</button>
 	      </div>
 	      </form>
 	  </div>
@@ -337,18 +359,6 @@
 <!-- end modal review -->
 
 
-<script>
-  $(function () {
-    $('#example1').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
-    });
-  });
-</script>
 
 <script type="text/javascript">
 	function aktivitass() {
@@ -357,8 +367,68 @@
 		url = "<?= base_url('matters/aktivitas/'); ?>/"+id;
 		$("#parent").load(url);
 		$("#parent").prop( "disabled", false );
+		
+		if(id==75 || id==77){
+			$(".cekap").show();
+		}else{
+			$(".cekap").hide();
+		}
+		getattr();
+	}
 
+	function getattr(){
+		var option = $('#parent').find(":selected").attr('data-kategori');
+		// alert(option);
+		if(option==="Keluar"){
+			$(".cekap").slideDown();
+		}else{
+			$(".cekap").slideUp();
+		}
 	}
 
 	aktivitass();
+	// getattr();
+	 $("#upload").submit(function(){
+	        var mydata = new FormData(this);
+	        var form = $(this);
+	        $.ajax({
+	            type: "POST",
+	            url: form.attr("action"),
+	            data: mydata,
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            beforeSend : function(){
+	                $("#send-btn").addClass("disabled").html("<i class='fa fa-spinner fa-spin'></i>  Processing...").attr('disabled',true);
+	                form.find(".show_error").slideUp().html("");
+
+	            },
+	            success: function(response, textStatus, xhr) {
+	                // alert(mydata);
+	               var str = response;
+	                if (str.indexOf("Success Input Data") != -1){
+	                    form.find(".show_error").hide().html(response).slideDown("fast");
+	                    setTimeout(function(){ 
+	                        document.getElementById('upload').reset();
+	                        $("#activity").modal('hide');
+	                        // loaddatas();
+	                        location.reload();
+	                    }, 1000);
+	                    $("#send-btn").removeClass("disabled").html("Save").attr('disabled',false);;
+
+	            
+	                }else{
+	                    form.find(".show_error").hide().html(response).slideDown("fast");
+	                    $("#send-btn").removeClass("disabled").html("Save").attr('disabled',false);;
+	                    
+	                    
+	                }
+	            },
+	            error: function(xhr, textStatus, errorThrown) {
+	        		console.log(xhr);
+	            }
+	        });
+	        return false;
+	        });
+
 </script>

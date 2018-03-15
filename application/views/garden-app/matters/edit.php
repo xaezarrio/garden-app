@@ -11,7 +11,8 @@
 					  <div class="box-header with-border">	
 						<b>Informasi Proyek</b>
 					  </div>
-					  <form action="<?= base_url('matters/save'); ?>" method="post" accept-charset="utf-8">
+					  <form action="<?= base_url('matters/save_edit'); ?>" method="post" accept-charset="utf-8">
+					  	<input type="hidden" name="id" value="<?= $matters['pr_id'] ?>">
 			          <div class="box-body">
 			            <table class="table table-bordered table-hover">
 			            	<tr>
@@ -161,22 +162,24 @@
 					  	<div class="show_error"></div>
 			         
 							<?php 
-			            	$file = $this->mymodel->selectWhere('file',array('table'=>'proyek','table_id'=>$matters['pr_id']));
+			            		$file = $this->mymodel->selectWhere('file',array('table'=>'proyek','table_id'=>$matters['pr_id']));
 			            		$a = array();
 			            		foreach ($file as $fl) {
 			            			$date = strtotime($fl['created_at']);
-			            			$date = date('Y-m-d');
+			            			$date = date('Y-m-d',$date);
 			            			$a[] = $date;
 			            		}
 
 			            		$d = array_unique($a);
 			            		foreach ($d as $dt) {
 				            		$files = $this->mymodel->selectWhere('file',array('date(created_at)'=>$dt,'table'=>'proyek','table_id'=>$matters['pr_id']));
+				            	
 				            		$json[] = array(			            				
-				            						'desc'=>$files[0]['desc'],
+				            						'desc'=>@$files[0]['desc'],
 				            						'file'=>$files
 				            					);
 			            		}
+
 
 
 			            	?>
@@ -199,6 +202,7 @@
 			            	<?php 
 			            		$i = 1;
 			            		foreach ($json as $rec) {
+			 	
 			            	?>
 			            	<tr>
 			            		<td>
@@ -212,7 +216,7 @@
 			            				$j = 1;
 			            				foreach ($rec['file'] as $val) {
 			            			?>
-			            			<div><?= $j ?>. Created by Super Admin <a href="<?= base_url($val['dir']) ?>"><?= $val['name'] ?></a></div>
+			            			<div><?= $j ?>. Created by Super Admin <a href="<?= base_url($val['dir']) ?>" target="_blank"><?= $val['name'] ?></a></div>
 			            			<?php $j++;} ?>
 			            		</td>
 			            	</tr>
@@ -269,6 +273,7 @@
                     $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> SAVE and ADD PROCEDURES').attr('disabled',false);
                    
                      $('#upload')[0].reset();
+                     window.reload();
             
                 }else{
                     form.find(".show_error").hide().html(response).slideDown("fast");
