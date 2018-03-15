@@ -115,5 +115,34 @@
         });
         return false;
         });
+      $( "#code" ).autocomplete({
+ 
+        source: "<?= base_url('aset/json_asset'); ?>",
+ 
+        select: function (event, ui) {
+ 
+          var label = ui.item.label;
+ 
+          var value = ui.item.value;
+ 
+          document.valueSelectedForAutocomplete = value;
+ 
+           getdetail(value)
+      }
+      });
 
+      function getdetail(kode) {
+        // body...
+        $.getJSON( "<?= base_url('aset/json_detail/'); ?>"+kode, function( data ) {
+         $("#price").val(data.price);
+         $("#name").val(data.name);   
+      });
+      }
+ 
+      
+ 
+    function resets() {
+        $("#price").val("");
+        $("#name").val("");  
+    }
   </script>
