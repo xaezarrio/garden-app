@@ -96,6 +96,14 @@
 			            			<textarea class="form-control" name="dt[keterangan]"></textarea>
 			            		</td>
 			            	</tr>
+			            	<tr>
+			            		<td>
+			            			File
+			            		</td>
+			            		<td>
+			            			<input name="file" type="file" class="form-control" required/>
+			            		</td>
+			            	</tr>
 			            </table>
             			<button type="submit" class="btn btn-primary btn-flat" id="send-btn">Save</button>
             			</form>

@@ -157,9 +157,12 @@ class Workorder extends CI_Controller {
 	{
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		$this->form_validation->set_rules('dt[date]', '<strong>Tanggal</strong>', 'required');
+<<<<<<< Updated upstream
 		$this->form_validation->set_rules('dt[aktivitas_sub]', '<strong>Aktivitas Sub</strong>', 'required');
 		$this->form_validation->set_rules('dt[item]', '<strong>Item</strong>', 'required');
 		$this->form_validation->set_rules('dt[nominal]', '<strong>Item</strong>', 'required');
+=======
+>>>>>>> Stashed changes
 		$this->form_validation->set_rules('dt[nominal]', '<strong>Nominal</strong>', 'required');
 		$this->form_validation->set_rules('dt[keterangan]', '<strong>keterangan</strong>', 'required');
 
@@ -169,9 +172,30 @@ class Workorder extends CI_Controller {
 			$this->alert->alertdanger($error);
         }else{
         	$data = $this->input->post('dt');
+<<<<<<< Updated upstream
 			$a = strtotime($_POST['dt']['date']);
         	$data['date'] = date('Y-m-d',$a);
 			$data['kategori'] = "Kantor";
+=======
+
+        	$fileName = time().$_FILES['file']['name'];
+	        $config['upload_path'] = './uploads/'; //buat folder dengan nama assets di root folder
+	        $config['file_name'] = $fileName;
+	        $config['allowed_types'] = '*';
+	        $config['max_size'] = 10000;
+
+        	$this->load->library('upload');
+			$this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('file'))
+	        $this->upload->display_errors();
+	             
+	        $media = $this->upload->data('file');
+	        $data["file"] = str_replace(" ","_",$fileName);
+
+			$a = strtotime($_POST['dt']['date']);
+        	$data['date'] = date('Y-m-d',$a);
+			$data['kategori'] = "Pribadi";
+>>>>>>> Stashed changes
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['created_at'] = date('Y-m-d H:i:s');
         	$this->db->insert('pengeluaran',$data);
@@ -183,9 +207,12 @@ class Workorder extends CI_Controller {
 	{
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		$this->form_validation->set_rules('dt[date]', '<strong>Tanggal</strong>', 'required');
+<<<<<<< Updated upstream
 		$this->form_validation->set_rules('dt[aktivitas_sub]', '<strong>Aktivitas Sub</strong>', 'required');
 		$this->form_validation->set_rules('dt[item]', '<strong>Item</strong>', 'required');
 		$this->form_validation->set_rules('dt[nominal]', '<strong>Item</strong>', 'required');
+=======
+>>>>>>> Stashed changes
 		$this->form_validation->set_rules('dt[nominal]', '<strong>Nominal</strong>', 'required');
 		$this->form_validation->set_rules('dt[keterangan]', '<strong>keterangan</strong>', 'required');
 
@@ -196,6 +223,26 @@ class Workorder extends CI_Controller {
         }else{
         	$ids = $this->input->post('ids');
         	$data = $this->input->post('dt');
+<<<<<<< Updated upstream
+=======
+
+        	$fileName = time().$_FILES['file']['name'];
+	        $config['upload_path'] = './uploads/'; //buat folder dengan nama assets di root folder
+	        $config['file_name'] = $fileName;
+	        $config['allowed_types'] = '*';
+	        $config['max_size'] = 10000;
+
+        	$this->load->library('upload');
+			$this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('file'))
+	        $this->upload->display_errors();
+	             
+	        $media = $this->upload->data('file');
+	        if ($_FILES['file']['name']) {
+	        	$data["file"] = str_replace(" ","_",$fileName);
+	        }
+	        
+>>>>>>> Stashed changes
 			$a = strtotime($_POST['dt']['date']);
         	$data['date'] = date('Y-m-d',$a);
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
@@ -210,11 +257,32 @@ class Workorder extends CI_Controller {
 
 	public function listtimesheetskantor_json()
 	{
+<<<<<<< Updated upstream
 		header('Content-Type: application/json');
         $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal,pengeluaran.qty,satuan.name as satuan,pengeluaran.item');
         $this->datatables->join('satuan','satuan.id=pengeluaran.satuan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'Kantor'));
+=======
+		$sub = $this->input->get('sub');
+		// $kategori = $this->input->get('kategori');
+		$bulan = $this->input->get('bulan');
+		$tahun = $this->input->get('tahun');
+		header('Content-Type: application/json');
+        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal');
+        // $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
+        $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
+        $this->datatables->where(array('pengeluaran.kategori'=>'kantor'));
+        if ($sub) {
+        	$this->datatables->where('aktivitas.id', $sub);
+        }
+        if ($bulan) {
+        	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);
+        }
+        if ($tahun) {
+        	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
+        }
+>>>>>>> Stashed changes
         $this->datatables->from('pengeluaran');
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
         echo $this->datatables->generate();
@@ -222,9 +290,25 @@ class Workorder extends CI_Controller {
 
 	public function  listtimesheetskantor_delete($id)
 	{
+<<<<<<< Updated upstream
 		# code...
 		$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
 		redirect('workorder/list-timesheets/kantor');
+=======
+		$date = $this->mmodel->selectWhere('pengeluaran',array('id'=>$id))->row()->date;
+		$date1=date_create($date);
+		$date2=date_create(date("Y-m-d"));
+		$diff=date_diff($date1,$date2);
+		$res = $diff->format("%a");
+
+		if ($res<=7) {
+			$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
+			redirect('workorder/list-timesheets/kantor');
+		} else {
+			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/list-timesheets/pribadi')."';</script>";
+		}
+		
+>>>>>>> Stashed changes
 
 
 	}
