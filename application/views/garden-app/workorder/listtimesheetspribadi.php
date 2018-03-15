@@ -22,8 +22,8 @@
 		                    <div class="form-group">
 		                      <label>Sub Aktivitas:</label>
 
-		                      <select class="form-control select2">
-		                          <option>semua sub</option>
+		                      <select class="form-control select2" id="sub">
+		                          <option value="">Semua Sub</option>
 		                          <?php 
 		                          $cari = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pribadi'));
 		                          $sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$cari['id']));
@@ -40,13 +40,13 @@
 		                    <div class="form-group">
 		                      <label>Bulan:</label>
 
-		                      <select class="form-control select2">
-		                          <option>semua bulan</option>
+		                      <select class="form-control select2" id="bulan">
+		                          <option value="">Semua Bulan</option>
 		                          <?php 
-		                          $bulan = $this->db->query("SELECT DISTINCT MONTHNAME(date) as month, MONTH(date) as name FROM pengeluaran")->result_array();
-		                          foreach ($bulan as $m) {
+		                          // $bulan = $this->db->query("SELECT DISTINCT MONTHNAME(date) as month, MONTH(date) as name FROM pengeluaran")->result_array();
+		                          for ($i=0; $i < count($bulan) ; $i++) { 
 		                          ?>
-		                          <option value="<?= $m['name'] ?>"><?= $m['month'] ?></option>
+		                          <option value="<?= $bulan[$i]['name'] ?>"><?= $bulan[$i]['month'] ?></option>
 		                        <?php } ?>
 		                        </select>
 		                      <!-- /.input group -->
@@ -56,7 +56,7 @@
 		                    <div class="form-group">
 		                      <label>Tahun:</label>
 
-		                      <select class="form-control select2">
+		                      <select class="form-control select2" id="tahun">
 		                      	<?php 
 	                          $year = $this->db->query("SELECT DISTINCT YEAR(date) as year FROM pengeluaran ")->result_array();
 		                          foreach ($year as $y) {
@@ -77,7 +77,7 @@
 		                          <i class="fa fa-calendar"></i>
 		                        </div> -->
 		                        <!-- <input type="text" class="form-control pull-right" id="reservation"> -->
-		                        <button class="btn btn-info">Filter</button>
+		                        <button class="btn btn-info" onclick="settable()">Filter</button>
 
 		                      </div>
 		                    </div>
@@ -85,15 +85,13 @@
 		              </div>
 
 			          	<!-- end filter -->
+			          	<div id="resettable">
 			            <table class="table table-condensed table-hover table-bordered" id="mytable">
 			              <thead>
 			                <tr>
 			                  <th style="width: 30px;">No</th>
 			            		<th>Tanggal</th>
 			            		<th>Sub Aktivitas</th>
-			            		
-			            		<!-- <th>Item</th> -->
-			            		<!-- <th>Nominal</th> -->
 			            		<th>Keterangan</th>
 			            		<th>Nominal</th>
 			                  	<th style="width:80px;">Action</th>
@@ -104,6 +102,7 @@
 			                
 			              </tbody>
 			            </table>
+			            </div>
 			          </div>
 			        </div>
 
@@ -117,8 +116,40 @@
 	</section><!-- /.content -->
 	
 </div><!-- /.content-wrapper -->
+
 <script>
- function loaddata() {
+	function settable() {
+		var table = '<table class="table table-condensed table-hover table-bordered" id="mytable">'+
+					'  <thead>'+
+					'    <tr>'+
+					'      <th style="width: 30px;">No</th>'+
+					'		<th>Tanggal</th>'+
+					'		<th>Sub Aktivitas</th>'+
+					'		<th>Keterangan</th>'+
+					'		<th>Nominal</th>'+
+					'      	<th style="width:80px;">Action</th>'+
+					'    </tr>'+
+					'  </thead>'+
+					'  <tbody>'+
+					'  </tbody>'+
+					'</table>';
+		 $("#resettable").html(table);
+		 var sub = $("#sub").val();
+		 // var kategori = $("#kategori").val();
+		 var bulan = $("#bulan").val();
+		 var tahun = $("#tahun").val();
+
+		 var url = "?sub="+sub+"&bulan="+bulan+"&tahun="+tahun;
+
+		 loaddata(url);
+	}
+
+ function loaddata(url="") {
+ 		if(url!=null){
+         	var urls = "<?= base_url('workorder/list-timesheets/pribadi/json') ?>"+url;
+         }else{
+         	var urls = "<?= base_url('workorder/list-timesheets/pribadi/json') ?>";
+         }
 		var t = $("#mytable").dataTable({
 		  initComplete: function() {
 		    var api = this.api();
@@ -135,7 +166,7 @@
 		  },
 		  processing: true,
 		  serverSide: true,
-		  ajax: {"url": "<?= base_url('workorder/list-timesheets/pribadi/json') ?>/", "type": "POST"},
+		  ajax: {"url": urls, "type": "POST"},
 		    columns: [
 		      {"data": "id","orderable": false},
 		      {"data": "date"},

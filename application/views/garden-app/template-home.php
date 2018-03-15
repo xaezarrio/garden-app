@@ -8,7 +8,6 @@
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<!-- style -->
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/bootstrap.min.css">
- 		 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/font-awesome.min.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/AdminLTE.min.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/skins/_all-skins.css">
@@ -22,11 +21,9 @@
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/style.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/jquery-ui.min.css"></script>
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/jquery-ui.theme.min.css"></script>
-
-
+		<!-- script -->
 		<script src="<?= base_url('assets');?>/js/select2/select2.full.min.js"></script>
 		<script src="<?= base_url('assets');?>/js/jquery-1.11.3.min.js"></script>
-		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<script src="<?= base_url('assets');?>/js/jquery-ui.js"></script>
 		<script src="<?= base_url('assets');?>/js/bootstrap.min.js"></script>
 		<script src="<?= base_url('assets');?>/js/jquery.dataTables.min.js"></script>

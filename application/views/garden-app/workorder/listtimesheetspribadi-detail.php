@@ -5,7 +5,8 @@ $tgl = date('Y-m-d',$a);
 $bulan = date('M',$a);
 $tahun = date('Y',$a);
 $mn = date('m',$a);
-
+$sql = 'SELECT sum(nominal) as saldo FROM pengeluaran, aktivitas WHERE aktivitas_sub = aktivitas.id AND pengeluaran.kategori = "pribadi" AND aktivitas.kategori="Masuk" AND YEAR(date) = "'.$tahun.'" AND MONTH(date) <= "'.$mn.'"';
+$saldo = $this->db->query($sql)->row()->saldo;
  ?>
 
 
@@ -13,13 +14,17 @@ $mn = date('m',$a);
 	<caption class="text-center"><h4><?= $bulan." ".$tahun ?></h4></caption>
 
 	<thead>
-		<th style="width: 30px;">No</th>
-		<th>Tanggal</th>
-		<th>Sub Aktivitas</th>
-		<th>Keterangan</th>
-		<th>Keluar</th>
-		<th></th>
-
+		<tr>
+			<th style="width: 30px;">No</th>
+			<th>Tanggal</th>
+			<th>Sub Aktivitas</th>
+			<th>Keterangan</th>
+			<th>Keluar</th>
+		</tr>
+		<tr style="background: #ddd">
+			<th colspan="4">Saldo Awal</th>
+			<th class="text-right"><?= number_format($saldo)  ?></th>
+		</tr>
 	</thead>
 	<tbody>
 		<?php 
@@ -37,16 +42,6 @@ $mn = date('m',$a);
 		 	<td><?= $sub['name'] ?></td>
 		 	<td><?= $rec['keterangan'] ?></td>
 		 	<td class="text-right"><?= number_format($rec['nominal']) ?></td>
-		 	<td>
-		 	<?php 
-		 	$created = strtotime($rec['created_at']);
-		 	$created = date('Y-m-d',$created);
-		 	$now = date('Y-m-d');
-		 	if($created==$now){
-		 	?>
-		 		<a href="javascript:void(0)" onclick="hapus(<?= $rec['id'] ?>)" class="text-danger"><i class="fa fa-times"></i></a>
-		 	<?php } ?>
-		 	</td>
 		 </tr>
 		<?php $i++;} ?>
 	</tbody>
@@ -55,21 +50,15 @@ $mn = date('m',$a);
 		$totals =  array_sum($total);
 		?>
 		<tr>
-			<th colspan="4">Jumlah</th>
+			<th colspan="4">Total</th>
 			<th class="text-right"><?= number_format($totals); ?></th>
-			<th></th>
+		</tr>
+		<tr style="background: #ddd;font-weight: bold;color:blue">
+			<td colspan="4">Margin</td>
 
+			<td class="text-right">
+				<?= number_format($saldo-$totals) ?>
+			</td>
 		</tr>
 	</tfoot>
 </table>
-
-<script type="text/javascript">
-	 function hapus(id) {
-     	if (confirm('Are you sure delete this data ?')) {
-     		window.location.href = "<?= base_url('workorder/list-timesheets/pribadi/delete/') ?>"+id;		
-		} else {
-		    return false
-		}
-
-     }
-</script>
