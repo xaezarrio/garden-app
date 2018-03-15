@@ -11,7 +11,7 @@
 				<div class="col-xs-12">
 					<div class="box box-primary">
 					  <div class="box-header with-border">	
-					<form id="upload" action="<?= base_url("workorder/list-timesheets/pribadi/add/action") ?>">
+					<form id="upload" action="<?= base_url("workorder/list-timesheets/pribadi/add/action") ?>" enctype="multipart/form-data">
 						<div class="show_error"></div>
 
 						<table class="table table-bordered table-hover" style="width:50%">
@@ -55,6 +55,14 @@
 			            		</td>
 			            		<td>
 			            			<textarea class="form-control" name="dt[keterangan]"></textarea>
+			            		</td>
+			            	</tr>
+			            	<tr>
+			            		<td>
+			            			File
+			            		</td>
+			            		<td>
+			            			<input name="file" type="file" class="form-control" required/>
 			            		</td>
 			            	</tr>
 			            </table>
@@ -110,7 +118,7 @@
 
 
     $("#date").datepicker({
-      // dateFormat: "dd/mm/yy",
+      	dateFormat: "yy-mm-dd",
         onSelect: function (date) {
           loaddata();
 

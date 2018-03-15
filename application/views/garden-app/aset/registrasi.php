@@ -28,7 +28,7 @@
 			            			Kode
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[kode]" class="form-control" style="width: 300px" id="code" onkeydown="resets()"> 
+			            			<input type="text" name="dt[kode]" class="form-control" style="width: 300px"> 
 			            			<small class="text-danger">* If found the same code on the list of assets will automatically add to the stock</small>
 			            		</td>
 			            	</tr>
@@ -37,7 +37,7 @@
 			            			Nama
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[name]" class="form-control" style="width: 400px" id="name">
+			            			<input type="text" name="dt[name]" class="form-control" style="width: 400px">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -53,7 +53,7 @@
 			            			Harga
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[price]" class="form-control rupiah" style="width: 200px" id="price">
+			            			<input type="text" name="dt[price]" class="form-control rupiah" style="width: 200px">
 			            		</td>
 			            	</tr>
 			            </table>
@@ -115,37 +115,4 @@
         return false;
         });
 
-	    $( "#code" ).autocomplete({
-	      source: "<?= base_url('aset/json_asset'); ?>",
-	      select: function (event, ui) {
-			    var label = ui.item.label;
-			    var value = ui.item.value;
-			  	document.valueSelectedForAutocomplete = value;
-		  	 	getdetail(value)
-			  	
-			}
-	    });
-
-
-	    function getdetail(kode) {
-	    	// body...
-	    	$.getJSON( "<?= base_url('aset/json_detail/'); ?>"+kode, function( data ) {
-		 		$("#price").val(data.price);
-		 		$("#name").val(data.name);	
-
-		 	
-			});
-	    }
-	    
-	    function resets() {
-	    
-	    		$("#price").val("");
-		 		$("#name").val("");	
-		}
-	    
-
-
-
-
-	 
   </script>
