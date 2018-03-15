@@ -59,6 +59,14 @@
 			            			<textarea class="form-control" name="dt[keterangan]"><?= $data['keterangan'] ?></textarea>
 			            		</td>
 			            	</tr>
+			            	<tr>
+			            		<td>
+			            			File
+			            		</td>
+			            		<td>
+			            			<input name="file" type="file" class="form-control"/>
+			            		</td>
+			            	</tr>
 			            </table>
             			<button type="submit" class="btn btn-primary btn-flat" id="send-btn"><i class="fa fa-save"></i> Save</button>
             		</form>
@@ -112,7 +120,7 @@
 
 
     $("#date").datepicker({
-      // dateFormat: "dd/mm/yy",
+      dateFormat: "yy-mm-dd",
         onSelect: function (date) {
           loaddata();
 
