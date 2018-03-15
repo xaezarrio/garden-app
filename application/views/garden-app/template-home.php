@@ -12,6 +12,7 @@
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/AdminLTE.min.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/skins/skin-yellow-light.css">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> 
 		<link rel="stylesheet" href="<?= base_url('assets');?>/js/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/jQuery.verticalCarousel.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/js/select2/select2.min.css">
@@ -28,7 +29,7 @@
 		<script src="<?= base_url('assets');?>/js/bootstrap.min.js"></script>
 		<script src="<?= base_url('assets');?>/js/jquery.dataTables.min.js"></script>
     	<script src="<?= base_url('assets');?>/maskmoney/src/jquery.maskMoney.js" type="text/javascript"></script>
-
+		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script> 
 		<script src="<?= base_url('assets');?>/js/datatables/dataTables.bootstrap.min.js"></script>
 		<script src="<?= base_url('assets');?>/js/jQuery.verticalCarousel.js"></script>
 		<script src="<?= base_url('assets');?>/js/chartjs/Chart.min.js"></script>

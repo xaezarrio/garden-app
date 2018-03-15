@@ -1,44 +1,45 @@
 <div class="content-wrapper" >
-	<!-- Main content -->
-	<section class="content">
-		<div class="container">
-			<div class="row no_margin">
-				<h3 class="jdl_page">Registrasi Aset</h3>
-			</div>
-			<div class="row">
-				<div class="col-xs-8">
-					<div class="box box-primary">
-					  <div class="box-header with-border">	
-						<b>Data Aset</b>
-					  </div>	
-					  <form id="upload" action="<?= base_url("aset/registrasi/action") ?>">
-			          <div class="box-body">
-			          	<div class="show_error"></div>
-			            <table class="table table-bordered table-hover">
-			            	<tr>
-			            		<td style="width: 140px;">
-			            			Tanggal Beli
-			            		</td>
-			            		<td>
-			            			<input type="text" name="date" class="form-control tgl" value="<?= date('m/d/Y') ?>" style="width: 200px">
-			            		</td>
-			            	</tr>
-			            	<tr>
-			            		<td style="width: 140px;">
-			            			Kode
-			            		</td>
-			            		<td>
-			            			<input type="text" name="dt[kode]" class="form-control" style="width: 300px"> 
-			            			<small class="text-danger">* If found the same code on the list of assets will automatically add to the stock</small>
-			            		</td>
-			            	</tr>
-			            	<tr>
-			            		<td>
-			            			Nama
-			            		</td>
-			            		<td>
-			            			<input type="text" name="dt[name]" class="form-control" style="width: 400px">
-			            		</td>
+  <!-- Main content -->
+  <section class="content">
+    <div class="container">
+      <div class="row no_margin">
+        <h3 class="jdl_page">Registrasi Aset</h3>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="box box-primary">
+            <div class="box-header with-border">  
+            <b>Data Aset</b>
+            </div>  
+            <form id="upload" action="<?= base_url("aset/registrasi/action") ?>">
+                <div class="box-body">
+                  <div class="show_error"></div>
+                  <table class="table table-bordered table-hover">
+                    <tr>
+                      <td style="width: 140px;">
+                        Tanggal Beli
+                      </td>
+                      <td>
+                        <input type="text" name="date" class="form-control tgl" value="<?= date('m/d/Y') ?>" style="width: 200px">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width: 140px;">
+                        Kode
+                      </td>
+                      <td>
+                        <input type="text" name="dt[kode]" class="form-control" style="width: 300px" id="code" onkeydown="resets()"> 
+                        <small class="text-danger">* If found the same code on the list of assets will automatically add to the stock</small>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        Nama
+                      </td>
+                      <td>
+                        <input type="text" name="dt[name]" class="form-control" style="width: 400px" id="name">
+                      </td>
+
 			            	</tr>
 			            	<tr>
 			            		<td>
