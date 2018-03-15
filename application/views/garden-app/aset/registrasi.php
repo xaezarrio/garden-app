@@ -29,6 +29,7 @@
 			            		</td>
 			            		<td>
 			            			<input type="text" name="dt[kode]" class="form-control" style="width: 300px"> 
+			            			<small class="text-danger">* If found the same code on the list of assets will automatically add to the stock</small>
 			            		</td>
 			            	</tr>
 			            	<tr>

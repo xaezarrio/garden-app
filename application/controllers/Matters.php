@@ -54,15 +54,53 @@ class Matters extends CI_Controller {
 	public function aktivitas($id){
 		$akt = $this->mmodel->selectWhere("aktivitas",array("parent"=>$id))->result();
 		foreach ($akt as $akt) {
-			echo '<option value="'.$akt->id.'">'.$akt->name.'</option>';
+			echo '<option value="'.$akt->id.'" data-kategori="'.$akt->kategori.'">'.$akt->name.'</option>';
 		}
 	}
 
 	public function add_aktivitas(){
-		$param = $this->input->get();
-		$query = $this->mmodel->insertData("aktivitas_proyek",$param);
+		$param = $this->input->post('dt');
+		$param['ap_nominal'] = str_replace(",", "",$param['ap_nominal']);
+	        $dir  = "webfile/aktivitas-proyek/";
+			$config['upload_path']          = $dir;
+			$config['allowed_types']        = 'gif|jpg|png';
+			// $config['max_size']             = 100;
+			$config['max_width']            = 500;
+			$config['max_height']           = 500;
+			$config['file_name']           = rand(1,1000);
 
-		redirect('matters/detail/'.$param['ap_idproyek']);
+			$this->load->library('upload', $config);
+			if ( ! $this->upload->do_upload('gambar')){
+				$error = $this->upload->display_errors();
+				$this->alert->alertdanger($error);		
+			}else{
+			   	$str = $this->db->insert('aktivitas_proyek', $param);
+			   	$last_id = $this->db->insert_id();
+			   	$image = $this->upload->data();
+	   			$data = array(
+			   				'id' => '',
+			   				'name'=> $image['file_name'],
+			   				'type'=> $image['file_type'],
+			   				'size'=> $image['file_size'],
+			   				'dir'=> $dir.$image['file_name'],
+			   				'table'=> 'aktivitas_proyek',
+			   				'table_id'=> $last_id,
+			   				'user_id'=> 0 ,
+			   				'desc'=>"",
+			   				'created_at'=>date('Y-m-d H:i:s')
+
+			   	 		);
+
+
+			   	$str = $this->db->insert('file', $data);
+        		if($str){
+					$this->alert->alertsuccess('Success Input Data');
+        		}else{
+					$this->alert->alertdanger();		
+        		}
+			}
+		// $query = $this->mmodel->insertData("aktivitas_proyek",$param);
+		// redirect('matters/detail/'.$param['ap_idproyek']);
 	}
 
 	public function payment($id)
@@ -74,11 +112,25 @@ class Matters extends CI_Controller {
 		$this->render->admin('garden-app/matters/payment', $this->data);
 	}
 	public function save(){
-		$param = $this->input->post();
+		$param = $this->input->post('dt');
+		$param['pr_nilai_kontrak'] = str_replace(",", "", $param['pr_nilai_kontrak']);
+		$param['pr_modal'] = str_replace(",", "", $param['pr_modal']);
+
 		$param['pr_status'] = "open";
 		$param['created_at'] = date("Y-m-d H:i:s");
 		$param['created_by'] = "";
 		$query = $this->mmodel->insertData("proyek",$param);
+		redirect('matters/list-matters');
+	}
+
+	public function save_edit(){
+		$id = $this->input->post('id');
+		$param = $this->input->post('dt');
+		$param['pr_nilai_kontrak'] = str_replace(",", "", $param['pr_nilai_kontrak']);
+		$param['pr_modal'] = str_replace(",", "", $param['pr_modal']);
+		$param['update_at'] = date("Y-m-d H:i:s");
+		$param['update_by'] = "";
+		$query = $this->mymodel->updateData("proyek",$param,array('pr_id'=>$id));
 		redirect('matters/list-matters');
 	}
 

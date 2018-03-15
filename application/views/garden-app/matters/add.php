@@ -17,7 +17,7 @@
 			            	<tr>
 			            		<td style="width: 180px;">Pelanggan</td>
 			            		<td>
-			            			<select class="form-control select2" name="pr_idpelanggan" required="">
+			            			<select class="form-control select2" name="dt[pr_idpelanggan]" required="">
 			            				<?php foreach ($pelanggan->result() as $p): ?>
 			            					<option value="<?= $p->p_id ?>"><?= $p->p_nama_perusahaan ?> / <?= $p->p_alamat ?></option>
 			            				<?php endforeach ?>
@@ -29,7 +29,7 @@
 			            			Nomor SPK
 			            		</td>
 			            		<td>
-			            			<input type="text" name="pr_spk" class="form-control" required="">
+			            			<input type="text" name="dt[pr_spk]" class="form-control" required="">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -37,7 +37,7 @@
 			            			Nama Proyek
 			            		</td>
 			            		<td>
-			            			<input type="text" name="pr_nama" class="form-control" required="">
+			            			<input type="text" name="dt[pr_nama]" class="form-control" required="">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -45,7 +45,7 @@
 			            			Cost Center (Area)
 			            		</td>
 			            		<td>
-			            			<select class="form-control select2" name="pr_idcost" required="">
+			            			<select class="form-control select2" name="dt[pr_idcost]" required="">
 			            				<?php foreach ($cost->result() as $c): ?>
 			            					<option value="<?= $c->id ?>"><?= $c->name ?></option>
 			            				<?php endforeach ?>
@@ -57,7 +57,7 @@
 			            			Tanggal Mulai
 			            		</td>
 			            		<td>
-			            			<input type="text" name="pr_tgl_mulai" class="form-control tgl" required="">
+			            			<input type="text" name="dt[pr_tgl_mulai]" class="form-control tgl" required="">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -65,7 +65,7 @@
 			            			Tanggal Selesai
 			            		</td>
 			            		<td>
-			            			<input type="text" name="pr_tgl_selesai" class="form-control tgl" required="">
+			            			<input type="text" name="dt[pr_tgl_selesai]" class="form-control tgl" required="">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -73,7 +73,7 @@
 			            			Keterangan
 			            		</td>
 			            		<td>
-			            			<input type="text" name="pr_keterangan" class="form-control" required="">
+			            			<input type="text" name="dt[pr_keterangan]" class="form-control" required="">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -86,7 +86,7 @@
 			            			Nilai Kontrak
 			            		</td>
 			            		<td>
-			            			<input type="text" name="pr_nilai_kontrak" class="form-control" required="">
+			            			<input type="text" name="dt[pr_nilai_kontrak]" class="form-control rupiah" required="">
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -94,7 +94,7 @@
 			            			Pajak
 			            		</td>
 			            		<td>
-			            			<select class="form-control" name="pr_pajak" required="">
+			            			<select class="form-control" name="dt[pr_pajak]" required="">
 			            				<option value="">- </option>
 			            				<?php 
 			            					$pajak = $this->mymodel->selectData('pajak');
@@ -103,7 +103,7 @@
 			            				<option value="<?= $pjk['id'] ?>"><?= $pjk['name'] ?></option>
 			            				<?php } ?>
 			            			</select>
-			            			<select class="form-control" name="pr_pajak2" required="">
+			            			<select class="form-control" name="dt[pr_pajak2]" required="">
 			            				<option value="">-</option>
 			            				<?php 
 			            					foreach ($pajak as $pjk) {
@@ -118,7 +118,7 @@
 			            			Sumber Modal
 			            		</td>
 			            		<td>
-			            			<select class="form-control" name="pr_sumber" required="">
+			            			<select class="form-control" name="dt[pr_sumber]" required="">
 			            				<?php 
 			            					$modal = $this->mymodel->selectData('modal');
 			            					foreach ($modal as $mdl) {
@@ -126,6 +126,14 @@
 			            				<option value="<?= $mdl['id'] ?>"><?= $mdl['name'] ?></option>
 			            				<?php } ?>
 			            			</select>
+			            		</td>
+			            	</tr>
+			            	<tr>
+			            		<td>
+			            			Nominal Modal
+			            		</td>
+			            		<td>
+			            			<input type="text" class="form-control rupiah" name="dt[pr_modal]"  value="">
 			            		</td>
 			            	</tr>
 			            </table>
@@ -150,15 +158,3 @@
 	</section><!-- /.content -->
 	
 </div><!-- /.content-wrapper -->
-<script>
-  $(function () {
-    $('#example1').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
-    });
-  });
-</script>

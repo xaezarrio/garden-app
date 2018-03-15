@@ -67,12 +67,12 @@
       <!-- Table row -->
       <div class="row">
         <div class="col-xs-12 table-responsive">
-          <table class="table table-striped table-bordered table-condensed">
+          <table class="table table-bordered table-condensed">
             <caption><strong>Item purchase </strong></caption>
             <thead>
             <tr class="bg-aqua">
-              <th>ITEM</th>
-              <th style="width: 30%">NOMINAL</th>
+              <th class="text-center">ITEM</th>
+              <th class="text-center" style="width: 30%">NOMINAL</th>
             </tr>
             </thead>
             <tbody>
@@ -87,22 +87,26 @@
             if($invoice['pajak2']==""){
               $invoice['pajak2']=0;
             }
+
+            $pajak1 = $this->mymodel->selectdataOne('pajak',array('id'=>$proyek['pr_pajak']));
+            $pajak2 = $this->mymodel->selectdataOne('pajak',array('id'=>$proyek['pr_pajak2']));
+
             ?>
             </tbody>
             <tfooter >
-              <tr>
+              <tr class="bg-info">
               <th>Sub Total</th>
               <th class="text-right"><?= number_format($invoice['subtotal']) ?></th>
             </tr>
-              <tr>
-              <th><?= $proyek['pr_pajak'] ?></th>
+              <tr class="bg-info">
+              <th><?= $pajak1['name'] ?></th>
               <th class="text-right"><?= number_format($invoice['pajak1']) ?></th>
             </tr>
-              <tr>
-              <th><?= $proyek['pr_pajak2'] ?></th>
+              <tr class="bg-info">
+              <th><?= $pajak2['name'] ?></th>
               <th class="text-right"><?= number_format($invoice['pajak2']) ?></th>
             </tr>
-              <tr class="bg-info">
+              <tr class="bg-blue">
               <th>Total</th>
               <th class="text-right"><?= number_format($invoice['total']) ?></th>
             </tr>
@@ -161,12 +165,12 @@
         <div class="col-xs-12 table-responsive">
           <table class="table table-striped table-bordered table-condensed">
             <thead>
-            <tr class="bg-aqua">
-              <th>DATE</th>
-              <th>TYPE</th>
-              <th>ACTIVITY</th>
-              <th>OUT</th>
-              <th>IN</th>
+            <tr class="bg-aqua ">
+              <th class="text-center">DATE</th>
+              <th class="text-center">TYPE</th>
+              <th class="text-center">ACTIVITY</th>
+              <th class="text-center">OUT</th>
+              <th class="text-center">IN</th>
 
 
             </tr>
@@ -178,7 +182,7 @@
               foreach ($ap->result() as $i => $v): 
                       
                 $sub = $this->mymodel->selectdataOne("aktivitas",array("id"=>$v->ap_idsubaktivitas));
-                      if($sub['kategori']=="masuk"){
+                      if($sub['kategori']=="Masuk"){
                         $masuk = $v->ap_nominal;
                         $keluar = 0;
                         $type = "IN";
@@ -245,16 +249,21 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Alert</h4>
       </div>
+      <form id="upload" enctype="multipart/form-data" action="<?= base_url('billing/updatestatus/'.$invoice['id']) ?>">
       <div class="modal-body">
+
         <h5 class="text-center"><b>Are you sure change invoice status ?</b></h5>
-        
+        <div class="show_error"></div>
+        <br>
+        <input type="file" name="gambar" class="form-control" required="">
       </div>
       <div class="modal-footer">
         <center>
         <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary btn-flat" onclick="changes()">Save changes</button>
+        <button type="submit" class="btn btn-primary btn-flat" id="send-btn">Save changes</button>
       </center> 
       </div>
+      </form>
     </div>
   </div>
 </div>
@@ -268,9 +277,54 @@
 
   function changes() {
     // body...
-    var url = "<?= base_url('billing/updatestatus/'.$invoice['id']) ?>";
+    var url = "";
     window.location.href = url;
     
   }
 
+
+    $("#upload").submit(function(){
+          var mydata = new FormData(this);
+          var form = $(this);
+          $.ajax({
+              type: "POST",
+              url: form.attr("action"),
+              data: mydata,
+              cache: false,
+              contentType: false,
+              processData: false,
+              beforeSend : function(){
+                  $("#send-btn").addClass("disabled").html("<i class='fa fa-spinner fa-spin'></i>  Processing...").attr('disabled',true);
+                  form.find(".show_error").slideUp().html("");
+
+              },
+              success: function(response, textStatus, xhr) {
+                  // alert(mydata);
+                 var str = response;
+                  if (str.indexOf("Success Input Data") != -1){
+                      form.find(".show_error").hide().html(response).slideDown("fast");
+                      setTimeout(function(){ 
+                          document.getElementById('upload').reset();
+                          $("#activity").modal('hide');
+                          // loaddatas();
+                          window.location.href = "<?= base_url('matters/payment/'.$invoice['proyek_id']) ?>";
+                      }, 1000);
+                      $("#send-btn").removeClass("disabled").html("Save changes").attr('disabled',false);;
+
+              
+                  }else{
+                      form.find(".show_error").hide().html(response).slideDown("fast");
+                      $("#send-btn").removeClass("disabled").html("Save changes").attr('disabled',false);;
+                      
+                      
+                  }
+              },
+              error: function(xhr, textStatus, errorThrown) {
+              console.log(xhr);
+              }
+          });
+          return false;
+          });
+
 </script>
+
