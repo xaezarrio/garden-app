@@ -22,9 +22,7 @@
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/style.css">
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/jquery-ui.min.css"></script>
 		<link rel="stylesheet" href="<?= base_url('assets');?>/css/jquery-ui.theme.min.css"></script>
-		<!-- script -->
-		<!-- -->
-		<!-- script -->
+
 
 		<script src="<?= base_url('assets');?>/js/select2/select2.full.min.js"></script>
 		<script src="<?= base_url('assets');?>/js/jquery-1.11.3.min.js"></script>
