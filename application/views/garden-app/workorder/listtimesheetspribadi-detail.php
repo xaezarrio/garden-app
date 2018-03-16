@@ -19,7 +19,7 @@ $saldo = $this->db->query($sql)->row()->saldo;
 			<th>Tanggal</th>
 			<th>Sub Aktivitas</th>
 			<th>Keterangan</th>
-			<th>Keluar</th>
+			<th>Nominal</th>
 		</tr>
 		<tr style="background: #ddd">
 			<th colspan="4">Saldo Awal</th>
@@ -34,7 +34,8 @@ $saldo = $this->db->query($sql)->row()->saldo;
 		$data = $this->mymodel->selectWhere('pengeluaran',array('kategori'=>'pribadi','YEAR(date)'=>$tahun,'MONTH(date)'=>$mn));
 		foreach ($data as $rec) {
 		$sub = $this->mymodel->selectdataOne('aktivitas',array('id'=>$rec['aktivitas_sub']));
-		 $total[] = $rec['nominal']; 
+		if ($sub['kategori']=="Keluar") {
+		$total[] = $rec['nominal']; 
 		 ?>
 		 <tr>
 		 	<td><?= $i ?></td>
@@ -43,7 +44,7 @@ $saldo = $this->db->query($sql)->row()->saldo;
 		 	<td><?= $rec['keterangan'] ?></td>
 		 	<td class="text-right"><?= number_format($rec['nominal']) ?></td>
 		 </tr>
-		<?php $i++;} ?>
+		<?php $i++;}} ?>
 	</tbody>
 	<tfoot>
 		<?php 

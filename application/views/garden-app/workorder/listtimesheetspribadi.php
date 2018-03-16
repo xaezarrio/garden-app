@@ -38,6 +38,19 @@
 		                  </div>
 		                  <div class="col-xs-2">
 		                    <div class="form-group">
+		                      <label>Kategori:</label>
+
+		                      <select class="form-control select2" id="kategori">
+		                          <option value="">Semua Kategori</option>
+		                          <option value="Masuk">Masuk</option>
+		                          <option value="Keluar">Keluar</option>
+
+		                        </select>
+		                      <!-- /.input group -->
+		                    </div>      
+		                  </div>
+		                  <div class="col-xs-2">
+		                    <div class="form-group">
 		                      <label>Bulan:</label>
 
 		                      <select class="form-control select2" id="bulan">
@@ -69,7 +82,7 @@
 		                      <!-- /.input group -->
 		                    </div>      
 		                  </div>
-		                  <div class="col-xs-2">
+		                  <div class="col-xs-1">
 		                    <div class="form-group">
 		                      <label>.</label>
 		                      <div class="input-group">
@@ -92,6 +105,7 @@
 			                  <th style="width: 30px;">No</th>
 			            		<th>Tanggal</th>
 			            		<th>Sub Aktivitas</th>
+			            		<th>Kategori</th>
 			            		<th>Keterangan</th>
 			            		<th>Nominal</th>
 			                  	<th style="width:80px;">Action</th>
@@ -125,6 +139,7 @@
 					'      <th style="width: 30px;">No</th>'+
 					'		<th>Tanggal</th>'+
 					'		<th>Sub Aktivitas</th>'+
+					'		<th>Kategori</th>'+
 					'		<th>Keterangan</th>'+
 					'		<th>Nominal</th>'+
 					'      	<th style="width:80px;">Action</th>'+
@@ -135,11 +150,11 @@
 					'</table>';
 		 $("#resettable").html(table);
 		 var sub = $("#sub").val();
-		 // var kategori = $("#kategori").val();
+		 var kategori = $("#kategori").val();
 		 var bulan = $("#bulan").val();
 		 var tahun = $("#tahun").val();
 
-		 var url = "?sub="+sub+"&bulan="+bulan+"&tahun="+tahun;
+		 var url = "?sub="+sub+"&bulan="+bulan+"&tahun="+tahun+"&kategori="+kategori;
 
 		 loaddata(url);
 	}
@@ -171,6 +186,7 @@
 		      {"data": "id","orderable": false},
 		      {"data": "date"},
 		      {"data": "sub"},
+		      {"data": "kategori"},
 		      {"data": "keterangan"},
 		      {"data": "nominal"},
 		      {   "data": "view",
@@ -179,7 +195,7 @@
 		    ],
 		  order: [[0, 'asc']],
 		  columnDefs : [
-		    { targets : [4],
+		    { targets : [5],
 		      render : function (data, type, row) {
 		        return convertToRupiah(row['nominal']);
 		      }

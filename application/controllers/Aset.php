@@ -103,43 +103,24 @@ class Aset extends CI_Controller {
         echo $this->datatables->generate();		
 	}
 
-	  public function json_asset()
- 
-  {
- 
-    $term = $this->input->get('term');
- 
-    $this->db->where("kode LIKE '%".$term."%'");
- 
-    $data = $this->mymodel->selectData('aset');
- 
-    foreach ($data as $rec) {
- 
-      # code...
- 
-      $json[] = $rec['kode']; 
- 
-    }
- 
-    echo json_encode($json);
- 
-  }
+	public function json_asset(){
+	    $term = $this->input->get('term');
+	    $this->db->where("kode LIKE '%".$term."%'");
+	    $data = $this->mymodel->selectData('aset');
+	    foreach ($data as $rec) {
+	      $json[] = $rec['kode']; 
+	    }
+	    echo json_encode($json);
+	}
  
 
  
-  public function json_detail($kode)
+  	public function json_detail($kode){
+	    $json = $this->mymodel->selectdataOne('aset',array('kode'=>$kode));
+	    echo json_encode($json);
+	}
  
-  {
- 
-    $json = $this->mymodel->selectdataOne('aset',array('kode'=>$kode));
- 
-    echo json_encode($json);
- 
-  }
- 
- 
-	public function js()
-	{
+	public function js(){
 		$this->load->view('garden-app/aset/aset-js');
 	}
 }

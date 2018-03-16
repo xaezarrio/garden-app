@@ -189,6 +189,8 @@ class Workorder extends CI_Controller {
 	public function listtimesheetskantor()
 	{
 		$this->data['page']="matters";
+		$this->data['bulan']= array(array("name"=>"01","month"=>"Januari"),array("name"=>"02","month"=>"Februari"),array("name"=>"03","month"=>"Maret"),array("name"=>"04","month"=>"April"),array("name"=>"05","month"=>"Mei"),array("name"=>"06","month"=>"Juni"),array("name"=>"07","month"=>"Juli"),array("name"=>"08","month"=>"Agustus"),array("name"=>"09","month"=>"September"),array("name"=>"10","month"=>"Oktober"),array("name"=>"11","month"=>"November"),array("name"=>"12","month"=>"Desember"));
+		$this->data['item'] = $this->mmodel->selectData("item");
 		
 		$this->render->admin('garden-app/workorder/listtimesheetskantor', $this->data);
 	}
@@ -252,6 +254,24 @@ class Workorder extends CI_Controller {
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['created_at'] = date('Y-m-d H:i:s');
         	$this->db->insert('pengeluaran',$data);
+
+        	$itemquery = $this->mmodel->selectWhere("item",array("i_nama"=>$data['item']));
+        	$cekitem = $itemquery->num_rows();	
+        	if ($cekitem>0) {
+        		$item = $this->mmodel->selectWhere("item", array("i_id"=>$itemquery->row()->i_id))->row();
+        		$it['i_id'] = $item->i_id;
+        		$it['i_stok'] = $data['qty'] + $item->i_stok;
+        		$it['i_satuan'] = $data['satuan_id'];
+        		$it['updated_at'] = $data['created_at'];
+        		$this->mmodel->updateData("item",$it,array("i_id"=>$it['i_id']));
+        	} else {
+        		$it['i_nama'] = $data['item'];
+        		$it['i_stok'] = $data['qty'];
+        		$it['i_satuan'] = $data['satuan_id'];
+        		$it['created_at'] = $data['created_at'];
+        		$this->db->insert('item', $it);
+        	}
+
         	$this->alert->alertsuccess('Success Input Data');
         }
 	}
@@ -304,16 +324,23 @@ class Workorder extends CI_Controller {
 	public function listtimesheetskantor_json()
 	{
 		$sub = $this->input->get('sub');
-		// $kategori = $this->input->get('kategori');
+		$item = $this->input->get('item');
 		$bulan = $this->input->get('bulan');
 		$tahun = $this->input->get('tahun');
+		$kategori = $this->input->get('kategori');
 		header('Content-Type: application/json');
-        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.name as sub,item, qty,pengeluaran.keterangan,pengeluaran.nominal');
+        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.name as sub,item,aktivitas.kategori as kategori, qty,pengeluaran.keterangan,pengeluaran.nominal');
         // $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'kantor'));
         if ($sub) {
         	$this->datatables->where('aktivitas.id', $sub);
+        }
+        if ($item) {
+        	$this->datatables->where('item', $item);
+        }
+        if ($kategori) {
+        	$this->datatables->where('aktivitas.kategori', $kategori);
         }
         if ($bulan) {
         	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);
@@ -340,9 +367,25 @@ class Workorder extends CI_Controller {
 		} else {
 			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/list-timesheets/pribadi')."';</script>";
 		}
-		
-
 	}
+
+	public function json_item(){
+	    $term = $this->input->get('term');
+	    $this->db->where("i_nama LIKE '%".$term."%'");
+	    $data = $this->mymodel->selectData('item');
+	    foreach ($data as $rec) {
+	      $json[] = $rec['i_nama']; 
+	    }
+	    echo json_encode($json);
+	}
+ 
+
+ 
+  	public function json_detail($nama){
+	    $json = $this->mmodel->selectWhere('item',array('i_nama'=>$nama))->row_array();
+	    echo json_encode($json);
+	}
+
 // -------------------------------------------------------------------
 
 	public function listtimesheetspribadi()
@@ -459,16 +502,19 @@ class Workorder extends CI_Controller {
 	public function listtimesheetspribadi_json()
 	{
 		$sub = $this->input->get('sub');
-		// $kategori = $this->input->get('kategori');
+		$kategori = $this->input->get('kategori');
 		$bulan = $this->input->get('bulan');
 		$tahun = $this->input->get('tahun');
 		header('Content-Type: application/json');
-        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal');
+        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.name as sub,aktivitas.kategori as kategori,pengeluaran.keterangan,pengeluaran.nominal');
         // $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'Pribadi'));
         if ($sub) {
         	$this->datatables->where('aktivitas.id', $sub);
+        }
+        if ($kategori) {
+        	$this->datatables->where('aktivitas.kategori', $kategori);
         }
         if ($bulan) {
         	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);

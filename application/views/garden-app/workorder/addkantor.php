@@ -45,7 +45,7 @@
 			            			Sub Aktivitas
 			            		</td>
 			            		<td>
-			            			<select class="form-control" name="dt[aktivitas_sub]">
+			            			<select class="form-control" name="dt[aktivitas_sub]" id="sub" onchange="subitem()">
 					    				<?php 
 					    					$parent = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Kantor'));
 					    					$sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$parent['id']));
@@ -56,21 +56,21 @@
 					    			</select>
 			            		</td>
 			            	</tr>
-			            	<tr>
+			            	<tr class="item">
 			            		<td>
 			            			Item
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[item]" placeholder="masukan item produk" class="form-control">
+			            			<input type="text" name="dt[item]" placeholder="masukan item produk" class="form-control" id="item" onkeyup="resets()">
 			            		</td>
 			            	</tr>
-			            	<tr>
+			            	<tr class="item">
 			            		<td>
 			            			QTY
 			            		</td>
 			            		<td>
 			            			<input type="number" name="dt[qty]" class="form-control" style="display: inline;width: 100px;">
-			            			<select class="form-control" style="display: inline;width: 100px;" name="dt[satuan_id]">
+			            			<select class="form-control" style="display: inline;width: 100px;" name="dt[satuan_id]" id="satuan" >
 					    				<?php 
 					    					$satuan = $this->mymodel->selectData('satuan');
 					    					foreach ($satuan as $st) {
@@ -135,6 +135,37 @@
 </div><!-- /.content-wrapper -->
 
 <script type="text/javascript">
+
+	$( "#item" ).autocomplete({
+        source: "<?= base_url('workorder/json_item'); ?>",
+        select: function (event, ui) {
+          var label = ui.item.label;
+          var value = ui.item.value;
+          document.valueSelectedForAutocomplete = value;
+          getdetail(value)
+        }
+      });
+
+      function getdetail(kode) {
+        // body...
+        $.getJSON( "<?= base_url('workorder/json_detail/'); ?>"+kode, function( data ) {
+         $("#satuan").val(data.i_satuan);   
+      });
+      }
+	function subitem() {
+		var sub = $("#sub").val();
+		if (sub=="78") {
+			$('.item').hide();
+		} else {
+			$('.item').show();
+		}
+	}
+    subitem();
+ 
+    function resets() {
+        $("#satuan").val($("#satuan option:first").val());
+    }
+
   function loaddata() {
     var date = $("#date").val();
     $("#table").load("<?= base_url('workorder/list-timesheets/kantor/detail/') ?>?date="+date);
