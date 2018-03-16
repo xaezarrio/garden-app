@@ -19,7 +19,7 @@
 			            			Tanggal
 			            		</td>
 			            		<td>
-			            			<input type="text" name="tt[date]" class="form-control tgl" id="date" value="<?= date('Y-m-d') ?>">
+			            			<input type="text" name="tt[date]" class="form-control tgl" id="date" value="<?= date('Y-m-d') ?>" required>
 			  
 			            		</td>
 			            	</tr>
@@ -29,7 +29,7 @@
 			            			Proyek
 			            		</td>
 			            		<td>
-			            			<select class="form-control" id="" name="tt[proyek_id]" id="proyek" onchange="loaddata();">
+			            			<select class="form-control" id="" name="tt[proyek_id]" id="proyek" onchange="loaddata();" required>
 			            				<option value="">--Pilih Proyek--</option>
 					    				<?php 
 					    					$proyek = $this->mymodel->selectData('proyek');
@@ -45,7 +45,7 @@
 			            			Karyawan
 			            		</td>
 			            		<td>
-			            			<select class="form-control" name="tt[karyawan_id]">
+			            			<select class="form-control" name="tt[karyawan_id]" required>
 			            				<option value="">--Pilih Karyawan--</option>
 					    				<?php 
 					    					$karyawan = $this->mymodel->selectData('karyawan');
@@ -61,7 +61,7 @@
 			            			Asset
 			            		</td>
 			            		<td>
-			            			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]">
+			            			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]" required>
 					    				<?php 
 					    					$satuan = $this->mymodel->selectData('aset');
 					    					foreach ($satuan as $st) {
@@ -69,7 +69,7 @@
 					    					<option value="<?= $st['id'] ?>"><?= $st['name'] ?></option>
 					    				<?php } ?>
 					    			</select>
-			            			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;">
+			            			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;" required>
 			            			<button type="button" class="btn btn-primary btn-flat" style="display: inline;float: left;" id="add-aset"><i class="fa fa-plus"></i></button>
 			            		</td>
 			            	</tr>
@@ -78,7 +78,7 @@
 			            			Deskripsi
 			            		</td>
 			            		<td>
-			            			<textarea class="form-control" name="tt[desc]"></textarea>
+			            			<textarea class="form-control" name="tt[desc]" required></textarea>
 			            		</td>
 			            	</tr>
 			            </table>
@@ -145,7 +145,7 @@
     			Asset\
     		</td>\
     		<td>\
-    			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]">\
+    			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]" required>\
     				<?php 
     					$satuan = $this->mymodel->selectData('aset');
     					foreach ($satuan as $st) {
@@ -153,7 +153,7 @@
     					<option value="<?= $st['id'] ?>"><?= $st['name'] ?></option>\
     				<?php } ?>\
     			</select>\
-    			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;">\
+    			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;" required>\
     			<button type="button" class="btn btn-danger btn-flat" style="display: inline;float: left;" id="del-aset"><i class="fa fa-minus"></i></button>\
     		</td>\
     	</tr>');
