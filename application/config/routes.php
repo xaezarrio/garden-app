@@ -110,6 +110,15 @@ $route['aset/transaksi/out/edit/(:any)'] = 'aset/transaksi_out_edit/$1';
 $route['aset/transaksi/out/edit/action/(:any)'] = 'aset/transaksi_out_editaction/$1';
 $route['aset/transaksi/out/delete/(:any)'] = 'aset/transaksi_out_delete/$1';
 
+$route['aset/transaksi/in'] = 'aset/transaksi_in';
+$route['aset/transaksi/in/json'] = 'aset/transaksi_in_json';
+$route['aset/transaksi/in/add'] = 'aset/transaksi_in_add';
+$route['aset/transaksi/in/add/action'] = 'aset/transaksi_in_addaction';
+$route['aset/transaksi/in/add/detail'] = 'aset/transaksi_in_detail';
+$route['aset/transaksi/in/edit/(:any)'] = 'aset/transaksi_in_edit/$1';
+$route['aset/transaksi/in/edit/action/(:any)'] = 'aset/transaksi_in_editaction/$1';
+$route['aset/transaksi/in/delete/(:any)'] = 'aset/transaksi_in_delete/$1';
+
 //===================================
 $route['master/toko/json'] = 'master/tokojson';
 $route['master/toko/js'] = 'master/toko_js';

@@ -4,14 +4,14 @@
 		<div class="container">
 			<div class="row no_margin">
 				<h3 class="jdl_page">
-				TAMBAH TRANSAKSI KELUAR - ASET
+				TAMBAH TRANSAKSI MASUK - ASET
 				</h3>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="box box-primary">
 					  <div class="box-header with-border">	
-						<form id="upload" action="<?= base_url("aset/transaksi/out/add/action/") ?>" method="POST">
+						<form id="upload" action="<?= base_url("aset/transaksi/in/add/action/") ?>" method="POST">
 							<div class="show_error"></div>
 						<table class="table table-bordered table-hover table-aset" style="width:50%">
 			            	<tr>
@@ -119,7 +119,7 @@
   function loaddata() {
     var date = $("#date").val();
     var proyek = $("select[name='tt[proyek_id]']").val();
-    $("#table").load("<?= base_url('aset/transaksi/out/add/detail') ?>?date="+date+"&proyek="+proyek);
+    $("#table").load("<?= base_url('aset/transaksi/in/add/detail') ?>?date="+date+"&proyek="+proyek);
   }
   loaddata();
 
