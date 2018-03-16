@@ -123,4 +123,109 @@ class Aset extends CI_Controller {
 	public function js(){
 		$this->load->view('garden-app/aset/aset-js');
 	}
+
+	public function transaksi_out()
+	{
+		$this->data['page']="aset";
+		
+		$this->render->admin('garden-app/aset/transaksi-out', $this->data);		
+	}
+
+	public function transaksi_out_json()
+	{
+		$sub = $this->input->get('sub');
+		// $kategori = $this->input->get('kategori');
+		$bulan = $this->input->get('bulan');
+		$tahun = $this->input->get('tahun');
+
+		header('Content-Type: application/json');
+        $this->datatables->select('aset_transaksi.id , aset_transaksi.date, proyek.pr_nama , karyawan.name as nama_karyawan , aset_transaksi.desc,
+								   (SELECT SUM(price) FROM aset_transaksi_detail WHERE aset_transaksi_detail.transaksi_id = aset_transaksi.id) AS price_aset ');
+        $this->datatables->join('proyek','proyek.pr_id=aset_transaksi.proyek_id','left');
+        $this->datatables->join('karyawan','karyawan.id=aset_transaksi.karyawan_id','left');
+        $this->datatables->where(array('aset_transaksi.tipe'=>'OUT'));
+        // if ($sub) {
+        // 	$this->datatables->where('aktivitas.id', $sub);
+        // }
+        // if ($bulan) {
+        // 	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);
+        // }
+        // if ($tahun) {
+        // 	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
+        // }
+        $this->datatables->from('aset_transaksi');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        echo $this->datatables->generate();
+	}
+
+	public function transaksi_out_add()
+	{
+		$this->data['page']="aset";
+		
+		$this->render->admin('garden-app/aset/addout', $this->data);		
+	}
+
+	public function transaksi_out_addaction(){
+		$tt = $this->input->post('tt');
+		$tt['created_at'] = date('Y-m-d H:i:s');	
+		$tt['tipe'] = 'OUT';
+		
+		$str = $this->db->insert('aset_transaksi', $tt);
+		$idt = $this->db->insert_id();
+
+		$td = $this->input->post('td');
+		for ($i=0; $i < count($td['aset_id']) ; $i++) { 
+			$aset = $this->mymodel->selectDataone('aset',array('id'=>$td['aset_id'][$i]));
+			$arraytrans = array(
+				'transaksi_id' => $idt,
+				'aset_id' => $td['aset_id'][$i],
+				'qty' => $td['qty'][$i],
+				'price' => $aset['price'],
+			);
+			// print_r($arraytrans);
+			$this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
+		}
+		redirect('aset/transaksi/out/add','refresh');
+	}
+
+	public function transaksi_out_detail()
+	{
+		$this->data['page']="aset";
+		
+		$this->load->view('garden-app/aset/transaksi-out-detail', $this->data);
+	}
+
+
+	public function transaksi_out_delete($id)
+	{
+		$this->mymodel->deleteData('aset_transaksi',array('id'=>$id));
+		$this->mymodel->deleteData('aset_transaksi_detail',array('transaksi_id'=>$id));
+		redirect('aset/transaksi/out');
+	}
+
+	public function transaksi_out_edit($id){
+		$this->data['trans'] = $this->mymodel->selectDataone('aset_transaksi',array('id'=>$id));
+		$this->data['trans_detail'] = $this->mymodel->selectWhere('aset_transaksi_detail',array('transaksi_id'=>$id));
+		$this->render->admin('garden-app/aset/editout', $this->data);
+	}
+
+	public function transaksi_out_editaction($id){
+		$this->mymodel->deleteData('aset_transaksi_detail',array('transaksi_id'=>$id));
+		$tt = $this->input->post('tt');
+		$str = $this->mymodel->updateData('aset_transaksi', $tt, array('id'=>$id));
+		$td = $this->input->post('td');
+		for ($i=0; $i < count($td['aset_id']) ; $i++) {
+			$aset = $this->mymodel->selectDataone('aset',array('id'=>$td['aset_id'][$i]));
+			$arraytrans = array(
+				'transaksi_id' => $id,
+				'aset_id' => $td['aset_id'][$i],
+				'qty' => $td['qty'][$i],
+				'price' => $aset['price'],
+			);
+			// print_r($arraytrans);
+			$this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
+		}
+		redirect('aset/transaksi/out/edit/'.$id,'refresh');
+	}
+	
 }

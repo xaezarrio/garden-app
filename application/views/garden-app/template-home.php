@@ -167,7 +167,7 @@
 		                    <a href="<?= base_url('aset/registrasi') ?>"> <i class="fa fa-sign-in"></i> Registrasi Aset</a>
 		                   </li>
 		                   <li>
-		                    <a href="<?= base_url('billing/collections') ?>"> <i class="fa fa-upload"></i> Transaksi Keluar</a>
+		                    <a href="<?= base_url('aset/transaksi/out') ?>"> <i class="fa fa-upload"></i> Transaksi Keluar</a>
 		                   </li>
 		                   <li>
 		                    <a href="<?= base_url('billing/collections') ?>"> <i class="fa fa-download"></i> Transaksi masuk</a>

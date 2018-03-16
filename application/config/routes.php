@@ -101,6 +101,15 @@ $route['master/karyawan/delete/(:any)'] = 'master/karyawan_delete/$1';
 $route['aset/registrasi/action'] = 'aset/registrasi_action';
 $route['aset/registrasi/edit/(:any)'] = 'aset/registrasi_edit/$1';
 
+$route['aset/transaksi/out'] = 'aset/transaksi_out';
+$route['aset/transaksi/out/json'] = 'aset/transaksi_out_json';
+$route['aset/transaksi/out/add'] = 'aset/transaksi_out_add';
+$route['aset/transaksi/out/add/action'] = 'aset/transaksi_out_addaction';
+$route['aset/transaksi/out/add/detail'] = 'aset/transaksi_out_detail';
+$route['aset/transaksi/out/edit/(:any)'] = 'aset/transaksi_out_edit/$1';
+$route['aset/transaksi/out/edit/action/(:any)'] = 'aset/transaksi_out_editaction/$1';
+$route['aset/transaksi/out/delete/(:any)'] = 'aset/transaksi_out_delete/$1';
+
 //===================================
 $route['master/toko/json'] = 'master/tokojson';
 $route['master/toko/js'] = 'master/toko_js';
