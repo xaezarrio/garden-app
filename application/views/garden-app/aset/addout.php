@@ -35,7 +35,7 @@
 					    					$proyek = $this->mymodel->selectData('proyek');
 					    					foreach ($proyek as $pr) {
 					    				?>
-					    					<option value="<?= $pr['pr_id'] ?>"><?= $pr['pr_spk'] ?> - <?= $pr['pr_nama'] ?></option>
+					    					<option value="<?= $pr['pr_id'] ?>" <?=($pr['pr_id']==@$_GET['proyek'])?'selected':'';?>><?= $pr['pr_spk'] ?> - <?= $pr['pr_nama'] ?></option>
 					    				<?php } ?>
 					    			</select>
 			            		</td>

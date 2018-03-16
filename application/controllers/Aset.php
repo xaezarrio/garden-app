@@ -185,7 +185,7 @@ class Aset extends CI_Controller {
 			// print_r($arraytrans);
 			$this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
 		}
-		redirect('aset/transaksi/out/add','refresh');
+		redirect('aset/transaksi/out/add/?proyek='.$tt["proyek_id"],'refresh');
 	}
 
 	public function transaksi_out_detail()
@@ -291,7 +291,7 @@ class Aset extends CI_Controller {
 			// print_r($arraytrans);
 			$this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
 		}
-		redirect('aset/transaksi/in/add','refresh');
+		redirect('aset/transaksi/in/add?proyek='.$tt["proyek_id"],'refresh');
 	}
 
 	public function transaksi_in_detail()
