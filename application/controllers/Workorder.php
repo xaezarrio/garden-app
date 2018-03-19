@@ -90,10 +90,50 @@ class Workorder extends CI_Controller {
 			$data['kategori'] = "Pegawai";
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['created_at'] = date('Y-m-d H:i:s');
-        	print_r($data);
-        	$count = $this->mymodel->selectWhere('pengeluaran',array('month(date)'=>$m,'year(date)'=>$y));
-        	// $this->db->insert('pengeluaran',$data);
-        	// $this->alert->alertsuccess('Success Input Data');
+        	$count = $this->mymodel->selectWhere('pengeluaran',array('month(date)'=>$m,'year(date)'=>$y,'karyawan_id'=>$_POST['dt']['karyawan_id']));
+        	$cnt = count($count);
+        	if($cnt==0){
+        		
+				$aktv1 = $this->mymodel->selectdataOne('aktivitas',array('name'=>"Pegawai"));
+        		$aktv_sub1 = $this->mymodel->selectdataOne('aktivitas',array('parent'=>$aktv1['id'],'name'=>'Gaji'));
+        		$kar = $this->mymodel->selectdataOne('karyawan',array('id'=>$_POST['dt']['karyawan_id']));
+        		$dt_gaji = array ('date' =>  $y."-".$m."-01",
+        						'aktivitas_id' => $aktv1['id'],
+        						'aktivitas_sub' => $aktv_sub1['id'] ,
+        						'nominal' => $kar['sallary'] ,
+        						'karyawan_id' => $kar['id'] ,
+        						'keterangan' => "Gaji Pokok Bulanan",
+        						'file' => "" ,
+        						'user_id' => 0,
+        						'kategori' => 'Pegawai' ,
+        						'created_at' =>  date('Y-m-d H:i:s')
+        					);
+        		$this->db->insert('pengeluaran', $dt_gaji);
+
+        		$aktv = $this->mymodel->selectdataOne('aktivitas',array('name'=>"Koperasi"));
+        		$aktv_sub = $this->mymodel->selectdataOne('aktivitas',array('parent'=>$aktv['id'],'name'=>'Simpan'));
+
+
+        		$dt_koperasi = array ('date' =>  $y."-".$m."-01",
+	        						'aktivitas_id' => $aktv_sub['id'],
+	        						'nominal' => '20000' ,
+	        						'karyawan_id' => $kar['id'] ,
+	        						'desc' => "Simpanan perbulan",
+	        						'user_id' => 0,
+	        						// 'type' => 'Simpan' ,
+	        						'created_at' =>  date('Y-m-d H:i:s')
+	        					);
+
+        		$this->db->insert('koperasi', $dt_koperasi);
+
+        	
+
+        	}
+
+
+
+        	$this->db->insert('pengeluaran',$data);
+        	$this->alert->alertsuccess('Success Input Data');
         }
 	}
 

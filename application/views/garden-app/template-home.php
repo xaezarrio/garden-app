@@ -182,10 +182,10 @@
 		                </a>
 		                <ul class="dropdown-menu">
 						   <li>
-		                    <a href="<?= base_url('koperasi/simpan') ?>"> <i class="fa  fa-sign-in"></i> Simpan </a>
+		                    <a href="<?= base_url('koperasi/simpan') ?>"> <i class="fa  fa-sign-in"></i> Simpan / Pinjam</a>
 		                   </li>
 		                   <li>
-		                    <a href="<?= base_url('koperasi/pinjam') ?>"> <i class="fa  fa-sign-out"></i> Pinjam</a>
+		                    <a href="<?= base_url('koperasi') ?>"> <i class="fa  fa-users"></i> List Karyawan</a>
 		                   </li>
 		                  
 

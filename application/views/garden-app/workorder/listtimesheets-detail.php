@@ -14,22 +14,11 @@ $mn = date('m',$a);
 		<th style="width: 30px;">No</th>
 		<th>Tanggal</th>
 		<th>Sub Aktivitas</th>
-		<!-- <th>Item</th> -->
-		<!-- <th>Nominal</th> -->
 		<th>Keterangan</th>
 		<th>Keluar</th>
 		<th>Masuk</th>
 	</thead>
 	<tbody>
-		<tr style="background: #ddd">
-			<td colspan="4">Gaji Pokok</td>
-			<td>
-				0
-			</td>
-			<td class="text-right">
-				<?= number_format($karyawan['sallary']) ?>
-			</td>
-		</tr>
 		<?php 
 		$mm =array();
 		$kl =array();
@@ -69,10 +58,10 @@ $mn = date('m',$a);
 			<td colspan="6"></td>
 		</tr>
 		<?php 
-		$gaji = $karyawan['sallary'];
+	
 		$uangmasuk = array_sum($mm);
 		$uangkeluar = array_sum($kl);
-		$sisagaji = ($uangmasuk+$karyawan['sallary']) - $uangkeluar;
+		$sisagaji = ($uangmasuk) - $uangkeluar;
 
 		?>
 
@@ -83,7 +72,7 @@ $mn = date('m',$a);
 				<?= number_format($uangkeluar) ?>
 			</td>
 			<td class="text-right">
-				<?= number_format($uangmasuk+$karyawan['sallary']) ?>
+				<?= number_format($uangmasuk) ?>
 			</td>
 		</tr>
 		<tr style="background: #ddd;font-weight: bold;color:blue">

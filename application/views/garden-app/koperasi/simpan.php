@@ -3,7 +3,7 @@
       <section class="content">
       <div class="container">
     <div class="row no_margin">
-      <h3 class="jdl_page">ADD SIMPAN</h3>
+      <h3 class="jdl_page">ADD SIMPAN / PINJAM</h3>
     </div>
         <div class="row">      
           <div class="col-md-12">
@@ -11,12 +11,12 @@
             <div class="box box-primary">
               <div class="box-header with-border">
                 <!-- <h3 class="box-title">New Tickets</h3> -->
-                <b>Data Simpan</b>
+                <b>Data Simpan/Pinjam</b>
 
               </div>
               <!-- /.box-header -->
               <!-- form start -->
-              <form class="form-horizontal" id="upload" action="<?= base_url('billing/action-invoice/add') ?>">
+              <form class="form-horizontal" id="upload" action="<?= base_url('koperasi/simpan/add') ?>">
                 <div class="box-body">
                   <div class="show_error"></div>
                   <div class="row">
@@ -39,6 +39,23 @@
                          </select>
                         </td>
                       </tr>
+                      <tr>
+                        <td style="width: 140px;">Aktivitas</td>
+                        <td>
+                         <select class="form-control" name="dt[aktivitas_id]" >
+                          <option value="">Pilih Aktivitas . . </option>
+                            <?php 
+                           $aktv = $this->mymodel->selectdataOne('aktivitas',array('name'=>"Koperasi"));
+                           $aktv_sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$aktv['id']));
+                                foreach ($aktv_sub as $akt) {
+                            ?>
+                              <option value="<?= $akt['id'] ?>"><?= $akt['name'] ?></option>
+                            <?php
+                                }
+                            ?>
+                         </select>
+                        </td>
+                      </tr>
 
 
                       <tr>
@@ -53,18 +70,20 @@
                       <tr>
                         <td style="width: 140px;">Nominal</td>
                         <td>
-                          <input type="text" name="dt[nominal]" class="form-control rupiah">
+                          <input type="text" name="dt[nominal]" class="form-control rupiah" id="nominal">
                           
                         </td>
                       </tr>
                       <tr>
-                        <td>Desc</td>
+                        <td>Description</td>
                         <td>
-                          <input type="text" name="dt[desc]" class="form-control">
+                          <input type="text" name="dt[desc]" class="form-control" id="desc">
                         </td>
 
                       </tr>
                     </table>
+                    <button type="submit" class="btn btn-primary" id="send-btn"><i class="fa fa-save"></i> Simpan </button>                 
+
                     </div>
                   </div>
 
@@ -74,6 +93,7 @@
                       <div id="loading">
                         <h4 class="text-center"><i class="fa fa-spinner fa-spin"></i>  Loading...</h4>
                       </div>
+                      <div class="errors"></div>
                       <div id="load-data"></div>
                     </div>
                   </div>
@@ -82,7 +102,6 @@
                 </div>
                 <div class="box-footer">
                   <div class="pull-right">
-                    <button type="submit" class="btn btn-primary" id="send-btn"><i class="fa fa-save"></i> Simpan </button>                 
                   </div>
                 </div>
             </form>
@@ -135,8 +154,15 @@
               if (str.indexOf("Success Send Data") != -1){
                   form.find(".show_error").hide().html(response).slideDown("fast");
                   $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> Simpan').attr('disabled',false);
-                   $('#upload')[0].reset();
-              
+                   // $('#upload')[0].reset();
+                  $("#nominal").val('');
+                  $("#desc").val('');
+                  setTimeout(function () {
+                    // body...
+                  loaddata();
+                  $(".show_error").slideUp();
+                  },1000);
+
               }else{
                   form.find(".show_error").hide().html(response).slideDown("fast");
                   $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> Simpan').attr('disabled',false);
@@ -158,5 +184,41 @@
 
         }
     });
+
+
+  function deletedata(id) {
+    if(confirm('Apakah anda yakin ?')){
+      $.ajax({
+            type: "POST",
+            url: "<?= base_url('koperasi/delete/') ?>"+id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend : function(){
+                  $(".errors").hide().html("").slideDown("fast");
+            },
+            success: function(response, textStatus, xhr) {
+                // alert(mydata);
+               var str = response;
+                if (str.indexOf("Success Delete Data") != -1){
+                    $(".errors").show().html(response).slideDown("fast");
+                        loaddata(); 
+                      setTimeout(function () {
+                        $(".errors").slideUp();
+                      },1000);
+
+
+                }else{
+                    $(".errors").show().html(response).slideDown("fast");
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+            console.log(xhr);
+            }
+        });
+    }else{
+
+    }
+  }
 
   </script>
