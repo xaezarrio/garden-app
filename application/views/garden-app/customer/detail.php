@@ -136,41 +136,36 @@
 							      <th>Invoice</th>
 							      <th>Termin</th>
 							      <th>Nominal</th>
+							      <th>Status</th>
+
 							    </tr>
 							  </thead>
-							  <tbody class="hide">
-							    <tr>
-							      <td>
-							      	Taman Kota
-							      </td>
-							      <td>
-							      	<a href="<?= base_url('billing/invoice') ?>">INV025</a><br>
-							      	12<?= date(' M Y'); ?> s/d 21<?= date(' M Y'); ?>
-							      </td>
-							      <td>
-							      	1
-							      </td>
-							      <td>
-							      	<?= number_format(2900) ?>
-							      </td>
-							      	
-							    </tr>
-							    <tr>
-							      <td>
-							      	Taman Kota
-							      </td>
-							      <td>
-							      	<a href="<?= base_url('billing/invoice') ?>">INV026</a><br>
-							      	12<?= date(' M Y'); ?> s/d 21<?= date(' M Y'); ?>
-							      </td>
-							      <td>
-							      	2
-							      </td>
-							      <td>
-							      	<?= number_format(2900) ?>
-							      </td>
-							      	
-							    </tr>
+							  <tbody class="">
+							  	<?php 
+
+			            		$pry = $this->mymodel->selectWhere('proyek',array('pr_idpelanggan'=> $p->p_id));
+			            		foreach ($pry as $p) {
+			            		$inv = $this->mymodel->selectwhere('invoice',array('proyek_id'=>$p['pr_id']));
+			            		foreach ($inv as $invo) {
+			            		$no =  sprintf("%03d", $invo['id']);
+			            		
+			            	?>
+			            	<tr>
+			            		<td>
+			            			<?= $p['pr_nama'] ?>
+			            		</td>
+			            		<td>
+			            			<a href="<?= base_url('billing/detail-invoice/'.$invo['id']) ?>">INV<?= $no ?> </a>
+			            		</td>
+			            		<td>
+			            			<?= $invo['termin'] ?>
+			            		</td>
+			            		<td style="color: green" class="text-right"><?= number_format($invo['total']) ?></td>
+			            		<td>
+			            			<?= $invo['status'] ?>	
+			            		</td>
+			            	</tr>
+			            	<?php } } ?>
 							    
 							  </tbody>
 							</table>

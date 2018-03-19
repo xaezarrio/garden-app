@@ -166,13 +166,13 @@
 			            		$a = array();
 			            		foreach ($file as $fl) {
 			            			$date = strtotime($fl['created_at']);
-			            			$date = date('Y-m-d',$date);
+			            			$date = date('Y-m-d H:i:s',$date);
 			            			$a[] = $date;
 			            		}
 
 			            		$d = array_unique($a);
 			            		foreach ($d as $dt) {
-				            		$files = $this->mymodel->selectWhere('file',array('date(created_at)'=>$dt,'table'=>'proyek','table_id'=>$matters['pr_id']));
+				            		$files = $this->mymodel->selectWhere('file',array('created_at'=>$dt,'table'=>'proyek','table_id'=>$matters['pr_id']));
 				            	
 				            		$json[] = array(			            				
 				            						'desc'=>@$files[0]['desc'],

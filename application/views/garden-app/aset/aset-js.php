@@ -65,7 +65,7 @@
 		      "orderable": false
 		      }
 		    ],
-		  order: [[0, 'asc']],
+		  order: [[1, 'asc']],
 		  columnDefs : [
 		    { targets : [4],
 		      render : function (data, type, row) {

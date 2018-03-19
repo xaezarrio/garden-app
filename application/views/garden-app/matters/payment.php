@@ -38,6 +38,9 @@
 			            			Subject
 			            		</td>
 			            		<td>
+			            			Download
+			            		</td>
+			            		<td>
 			            			Status 
 			            		</td>
 			            		<td>
@@ -49,6 +52,8 @@
 
 			            		$inv = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id));
 			            		foreach ($inv as $invo) {
+								$file = $this->mymodel->selectdataOne("file",array("table"=>'invoice',"table_id"=>$invo['id']));
+
 			            		$no =  sprintf("%03d", $invo['id']);
 			            		if($invo['status']=="Lunas"){
 			            			$class= "success";
@@ -63,6 +68,10 @@
 			            		<td><?= $invo['date']; ?></td>
 			            		<td>
 			            			<?= $invo['subject']; ?>
+			            		</td>
+			            		<td>
+			            				<a href="<?= base_url($file['dir']) ?>" target="_blank"><i class="fa fa-download"></i> Download</a>
+			            			
 			            		</td>
 			            		<td>
 			            			<label class="label label-<?= $class ?>"><?= $invo['status'] ?></label>

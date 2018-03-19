@@ -99,7 +99,7 @@ class Aset extends CI_Controller {
 		header('Content-Type: application/json');
         $this->datatables->select('id,kode,name,stock,price');
         $this->datatables->from('aset');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <!--a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a--> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
         echo $this->datatables->generate();		
 	}
 

@@ -30,6 +30,7 @@
 			            		<th>Aktivitas</th>
 			            		<th>Sub Aktivitas</th>
 			            		<th>Keterangan</th>
+			            		<th>Download</th>
 			            		<th>Masuk</th>
 			            		<th>Keluar</th>
 
@@ -40,6 +41,8 @@
 			            		$k = 0;
 			            		foreach ($ap->result() as $i => $v): 
 			            		
+								$file = $this->mymodel->selectdataOne("file",array("table"=>'aktivitas_proyek',"table_id"=>$v->ap_id));
+								// print_r($file)
 								$sub = $this->mymodel->selectdataOne("aktivitas",array("id"=>$v->ap_idsubaktivitas));
 			            		if($sub['kategori']=="Masuk"){
 			            			$masuk = $v->ap_nominal;
@@ -53,6 +56,8 @@
 			            		}
 			 					$m += $masuk;
 			 					$k += $keluar;
+
+
 			            		?>
 			 
 			            		<tr>
@@ -63,6 +68,9 @@
 			            			<?php ?>
 			            			<td><?= $sub['name'] ?></td>
 			            			<td><?= $v->ap_keterangan ?></td>
+			            			<td>
+			            				<a href="<?= base_url($file['dir']) ?>" target="_blank"><i class="fa fa-download"></i> Download</a>
+			            			</td>
 			            			<td class="text-right"><?= number_format($masuk) ?></td>
 			            			<td class="text-right"><?= number_format($keluar) ?></td>
 
@@ -70,7 +78,7 @@
 			            		<?php endforeach;
 			            		 ?>
 			            		<tr style="background: #ddd;font-weight: bold">
-			            			<td colspan="5">Total</td>
+			            			<td colspan="6">Total</td>
 
 			            			<td class="text-right">
 			            				<?= number_format($m) ?>
@@ -80,15 +88,70 @@
 			            			</td>
 			            		</tr>
 			            		<tr style="background: #aaa;font-weight: bold">
-			            			<td colspan="7"></td>
+			            			<td colspan="8"></td>
 			            		</tr>
 			            		<tr style="background: #ddd;font-weight: bold;color:blue">
-			            			<td colspan="6">Margin</td>
+			            			<td colspan="7">Margin</td>
 
 			            			<td class="text-right">
 			            				<?= number_format(0) ?>
 			            			</td>
 			            		</tr>
+			            	</tbody>
+			            </table>
+			            
+			          </div>
+			          <!-- END OF BODY -->
+			        </div> 
+			        <!-- end of box  -->
+
+
+
+			            <div class="box box-primary">
+					   <div class="box-header with-border">	
+						<h4><b>Aset</b></h4>
+					  </div>
+					  <div class="box-body table-responsive">
+			            <table class="table table-bordered table-striped">
+			            	<thead>
+			            	<tr>
+			            		<th style="width: 30px;">No</th>
+			            		<th>Tanggal</th>
+			            		<th>Karyawan</th>
+			            		<th>Aset</th>
+			            		<th>Qty</th>
+			            		<th>Masuk</th>
+			            		<th>Keluar</th>
+			            		<th>Keterangan</th>
+			            	</tr>	
+			            	</thead>
+			            	<tbody>
+		            		<?php 
+		            			$at = $this->mymodel->selectWhere('aset_transaksi',array('proyek_id'=>$id));
+			            		foreach ($at as $astr) {
+			            			$karyawan = $this->mymodel->selectdataOne('karyawan',array('id'=>$astr['karyawan_id']));  
+		            				$ad = $this->mymodel->selectWhere('aset_transaksi_detail',array('transaksi_id'=>$astr['id']));
+		            				$i = 1;
+		            				foreach ($ad as $detail) {
+			            			$aset = $this->mymodel->selectdataOne('aset',array('id'=>$detail['aset_id']));  
+			            			
+		            		?>
+
+			            		<tr>
+			            			<td><?= $i; ?></td>
+			            			<td><?= $astr['date'] ?></td>
+			            			<td><?= $karyawan['name'] ?></td>
+			            			<td><?= $aset['name'] ?></td>
+			            			<td><?=  $detail['qty'] ?></td>
+			            			<td><label class="label label-danger">belum</label></td>
+			            			<td><label class="label label-danger">belum</label></td>
+			            			<td><?= $astr['desc'] ?></td>
+
+
+			            		</tr>
+			            	<?php
+			            	$i++; }	
+			            		} ?>
 			            	</tbody>
 			            </table>
 			            
@@ -227,30 +290,7 @@
 			          
 			         
 			        </div>
-			        <!-- end of box -->
-			        <div class="box box-primary">
-					   <div class="box-header with-border">	
-						<b>Dokumen</b>
-						<button class="btn btn-primary btn-flat pull-right btn-xs"><i class="fa fa-file-text"></i> Add File</button>
-					  </div>
-					  <div class="box-body">
-			            
-			            <table class="table table-bordered table-hover table-striped">
-
-			            	<tr>
-			            		<td>
-			            			<a href="#">Download - Engagement Letter (ZIP)</a><br>
-			            			<b>Description :</b><br>
-			            			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  <br>
-			            			<div>1. Update by Super Admin <a href="#">(2 files)</a></div>
-			            			<div>2. Update by Lawyer <a href="#">(1 files)</a></div>
-			            		</td>
-			            	</tr>
-			            </table>
-			          </div>
-			          <!-- END OF BODY -->
-			        </div> 
-			        <!-- end of box  -->
+	
 
 				</div>
 				<!-- end col -->
