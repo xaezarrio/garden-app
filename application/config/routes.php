@@ -181,3 +181,7 @@ $route['billing/invoice/json-collections'] = 'billing/json_collections';
 
 
 //================================
+
+
+
+$route['koperasi/data'] = 'koperasi/data_koperasi';
