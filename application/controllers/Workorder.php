@@ -83,17 +83,11 @@ class Workorder extends CI_Controller {
 
 			$a = strtotime($_POST['dt']['date']);
         	$data['date'] = date('Y-m-d',$a);
-        	$m = date('m',$a);
-        	$y = date('Y',$a);
-
-
 			$data['kategori'] = "Pegawai";
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['created_at'] = date('Y-m-d H:i:s');
-        	print_r($data);
-        	$count = $this->mymodel->selectWhere('pengeluaran',array('month(date)'=>$m,'year(date)'=>$y));
-        	// $this->db->insert('pengeluaran',$data);
-        	// $this->alert->alertsuccess('Success Input Data');
+        	$this->db->insert('pengeluaran',$data);
+        	$this->alert->alertsuccess('Success Input Data');
         }
 	}
 

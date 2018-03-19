@@ -118,6 +118,7 @@ $route['aset/transaksi/in/add/detail'] = 'aset/transaksi_in_detail';
 $route['aset/transaksi/in/edit/(:any)'] = 'aset/transaksi_in_edit/$1';
 $route['aset/transaksi/in/edit/action/(:any)'] = 'aset/transaksi_in_editaction/$1';
 $route['aset/transaksi/in/delete/(:any)'] = 'aset/transaksi_in_delete/$1';
+$route['aset/transaksi/changeMin'] = 'aset/changeMin';
 
 //===================================
 $route['master/toko/json'] = 'master/tokojson';
@@ -181,7 +182,3 @@ $route['billing/invoice/json-collections'] = 'billing/json_collections';
 
 
 //================================
-
-
-
-$route['koperasi/data'] = 'koperasi/data_koperasi';
