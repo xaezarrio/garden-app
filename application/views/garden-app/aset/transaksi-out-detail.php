@@ -36,7 +36,7 @@ $mn = date('m',$a);
 		foreach ($data as $rec) {
 		$proyek = $this->mymodel->selectdataOne('proyek',array('pr_id'=>$rec['proyek_id']));
 		$karyawan = $this->mymodel->selectdataOne('karyawan',array('id'=>$rec['karyawan_id']));
-		$total_d = $this->db->query("SELECT SUM(price) AS total FROM aset_transaksi_detail WHERE transaksi_id = '".$rec['id']."' ")->row();
+		$total_d = $this->db->query("SELECT SUM(price*qty) AS total FROM aset_transaksi_detail WHERE transaksi_id = '".$rec['id']."' ")->row();
 		 ?>
 		 <tr>
 		 	<td><?= $i ?></td>

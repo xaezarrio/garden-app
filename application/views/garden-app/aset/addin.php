@@ -61,7 +61,8 @@
 			            			Asset
 			            		</td>
 			            		<td>
-			            			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]" required>
+			            			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]" id="idaset" required>
+			            				<option value="">--Pilih Aset--</option>
 					    				<?php 
 					    					$satuan = $this->mymodel->selectData('aset');
 					    					foreach ($satuan as $st) {
@@ -69,7 +70,7 @@
 					    					<option value="<?= $st['id'] ?>"><?= $st['name'] ?></option>
 					    				<?php } ?>
 					    			</select>
-			            			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;" required>
+			            			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;" required id="qtyaset">
 			            			<button type="button" class="btn btn-primary btn-flat" style="display: inline;float: left;" id="add-aset"><i class="fa fa-plus"></i></button>
 			            		</td>
 			            	</tr>
@@ -145,7 +146,8 @@
     			Asset\
     		</td>\
     		<td>\
-    			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]" required>\
+    			<select class="form-control" style="margin-right:5px;width: 200px;float: left;" name="td[aset_id][]" id="idaset" required>\
+					<option value="">--Pilih Aset--</option>\
     				<?php 
     					$satuan = $this->mymodel->selectData('aset');
     					foreach ($satuan as $st) {
@@ -153,7 +155,7 @@
     					<option value="<?= $st['id'] ?>"><?= $st['name'] ?></option>\
     				<?php } ?>\
     			</select>\
-    			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;" required>\
+    			<input type="number" name="td[qty][]" placeholder="Qty" class="form-control" style="margin-right:5px;width: 100px;float: left;" required id="qtyaset">\
     			<button type="button" class="btn btn-danger btn-flat" style="display: inline;float: left;" id="del-aset"><i class="fa fa-minus"></i></button>\
     		</td>\
     	</tr>');
@@ -167,4 +169,24 @@
 		}
 	});
 
+	$('.table-aset').on('change','#idaset',function() {
+		var val = $(this).val();
+		var idnya = $(this);
+		$.ajax({
+            type: 'POST',
+            url: '<?=base_url('aset/transaksi/changeMin')?>',
+            data: {id:val},
+            dataType: 'json',
+            beforeSend: function(){
+              $(idnya).parent().find("#qtyaset").attr('disabled',true);
+            },
+            complete: function(){
+              $(idnya).parent().find("#qtyaset").attr('disabled',false);
+            },
+            success: function(result){  
+            	var stock = result;
+				$(idnya).parent().find("#qtyaset").attr('max',Number(stock));
+            }
+          });
+	});
 </script>

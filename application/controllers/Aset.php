@@ -140,7 +140,7 @@ class Aset extends CI_Controller {
 
 		header('Content-Type: application/json');
         $this->datatables->select('aset_transaksi.id , aset_transaksi.date, proyek.pr_nama , karyawan.name as nama_karyawan , aset_transaksi.desc,
-								   (SELECT SUM(price) FROM aset_transaksi_detail WHERE aset_transaksi_detail.transaksi_id = aset_transaksi.id) AS price_aset ');
+								   (SELECT SUM(price*qty) FROM aset_transaksi_detail WHERE aset_transaksi_detail.transaksi_id = aset_transaksi.id) AS price_aset ');
         $this->datatables->join('proyek','proyek.pr_id=aset_transaksi.proyek_id','left');
         $this->datatables->join('karyawan','karyawan.id=aset_transaksi.karyawan_id','left');
         $this->datatables->where(array('aset_transaksi.tipe'=>'OUT'));
@@ -176,6 +176,8 @@ class Aset extends CI_Controller {
 		$td = $this->input->post('td');
 		for ($i=0; $i < count($td['aset_id']) ; $i++) { 
 			$aset = $this->mymodel->selectDataone('aset',array('id'=>$td['aset_id'][$i]));
+			$aset_detail = $this->mymodel->selectWhere('aset_detail',array('aset_id'=>$td['aset_id'][$i]));
+			$qty_new = $aset['stock'] - $td['qty'][$i];
 			$arraytrans = array(
 				'transaksi_id' => $idt,
 				'aset_id' => $td['aset_id'][$i],
@@ -183,7 +185,8 @@ class Aset extends CI_Controller {
 				'price' => $aset['price'],
 			);
 			// print_r($arraytrans);
-			$this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
+			$hasil = $this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
+			$this->mymodel->updateData('aset',array('stock'=>$qty_new),array('id'=>$td['aset_id'][$i]));
 		}
 		redirect('aset/transaksi/out/add/?proyek='.$tt["proyek_id"],'refresh');
 	}
@@ -215,6 +218,7 @@ class Aset extends CI_Controller {
 		$tt['updated_at'] = date('Y-m-d H:i:s');
 		$str = $this->mymodel->updateData('aset_transaksi', $tt, array('id'=>$id));
 		$td = $this->input->post('td');
+
 		for ($i=0; $i < count($td['aset_id']) ; $i++) {
 			$aset = $this->mymodel->selectDataone('aset',array('id'=>$td['aset_id'][$i]));
 			$arraytrans = array(
@@ -246,7 +250,7 @@ class Aset extends CI_Controller {
 
 		header('Content-Type: application/json');
         $this->datatables->select('aset_transaksi.id , aset_transaksi.date, proyek.pr_nama , karyawan.name as nama_karyawan , aset_transaksi.desc,
-								   (SELECT SUM(price) FROM aset_transaksi_detail WHERE aset_transaksi_detail.transaksi_id = aset_transaksi.id) AS price_aset ');
+								   (SELECT SUM(price*qty) FROM aset_transaksi_detail WHERE aset_transaksi_detail.transaksi_id = aset_transaksi.id) AS price_aset ');
         $this->datatables->join('proyek','proyek.pr_id=aset_transaksi.proyek_id','left');
         $this->datatables->join('karyawan','karyawan.id=aset_transaksi.karyawan_id','left');
         $this->datatables->where(array('aset_transaksi.tipe'=>'IN'));
@@ -282,6 +286,8 @@ class Aset extends CI_Controller {
 		$td = $this->input->post('td');
 		for ($i=0; $i < count($td['aset_id']) ; $i++) { 
 			$aset = $this->mymodel->selectDataone('aset',array('id'=>$td['aset_id'][$i]));
+			$aset_detail = $this->mymodel->selectWhere('aset_detail',array('aset_id'=>$td['aset_id'][$i]));
+			$qty_new = $aset['stock'] - $td['qty'][$i];
 			$arraytrans = array(
 				'transaksi_id' => $idt,
 				'aset_id' => $td['aset_id'][$i],
@@ -289,7 +295,8 @@ class Aset extends CI_Controller {
 				'price' => $aset['price'],
 			);
 			// print_r($arraytrans);
-			$this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
+			$hasil = $this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
+			$this->mymodel->updateData('aset',array('stock'=>$qty_new),array('id'=>$td['aset_id'][$i]));
 		}
 		redirect('aset/transaksi/in/add?proyek='.$tt["proyek_id"],'refresh');
 	}
@@ -333,6 +340,12 @@ class Aset extends CI_Controller {
 			$this->mymodel->insertData('aset_transaksi_detail',$arraytrans);
 		}
 		redirect('aset/transaksi/in/edit/'.$id,'refresh');
+	}
+
+	public function changeMin(){
+		$id = $this->input->post('id');
+		$aset = $this->mymodel->selectDataone('aset',array('id'=>$id));
+		echo $aset['stock'];
 	}
 	
 }
