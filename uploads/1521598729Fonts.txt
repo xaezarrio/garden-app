@@ -1,0 +1,14 @@
+Fonts used in this design;
+
+Font: Antonio, 
+Author: Vernon Adams, 
+Url: http://www.fontsquirrel.com/fonts/antonio; 
+
+Font: Source Sans Pro, 
+Author: Adobe, 
+Url: http://www.fontsquirrel.com/fonts/source-sans-pro; 
+
+Font: Advent Pro, 
+Author: Andreas Kalpakidis, 
+Url: https://www.fontsquirrel.com/fonts/advent-pro; 
+

@@ -5,6 +5,12 @@ class Koperasi extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
+
 	}
 
 	public function index()
@@ -39,7 +45,7 @@ class Koperasi extends CI_Controller {
         	$dt = $this->input->post('dt'); 
         	$dt['nominal'] = str_replace(",", '', $dt['nominal']);
         	$dt['created_at'] = date("Y-m-d H:i:s");
-        	$dt['user_id'] = 0;
+        	$dt['user_id'] = user_id;
         	// print_r($dt);
         	$this->db->insert('koperasi', $dt);
         	$this->alert->alertsuccess('Success Send Data');	
@@ -75,7 +81,7 @@ class Koperasi extends CI_Controller {
         	$this->datatables->where("date_format(koperasi.date, '%Y') =", $tahun);
         }
         $this->datatables->from('koperasi');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="detail($1)"  class="btn btn-sm btn-info"><span class="txt-white fa fa-user"></span></a><a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="detail($1)"  class="btn btn-xs btn-info"><span class="txt-white fa fa-user"></span> Detail</a><!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
 
 
         echo $this->datatables->generate();

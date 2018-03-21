@@ -15,9 +15,22 @@
 			          <div class="box-body">
 			            <table class="table table-bordered table-hover">
 			            	<tr>
+			            		<td style="width: 180px;">Perusahaan</td>
+			            		<td>
+			            			<select class="form-control select2" name="dt[pr_idperusahaan]">
+			            				<option value=""> Choose Perusahaan .. </option>
+			            				<?php foreach ($perusahaan->result() as $pr): ?>
+			            					<option value="<?= $pr->id ?>"><?= $pr->name ?></option>
+			            				<?php endforeach ?>
+			            			</select>
+			            		</td>
+			            	</tr>
+			            	<tr>
 			            		<td style="width: 180px;">Pelanggan</td>
 			            		<td>
 			            			<select class="form-control select2" name="dt[pr_idpelanggan]" required="">
+			            				<option value=""> Choose Pelangan .. </option>
+			            			
 			            				<?php foreach ($pelanggan->result() as $p): ?>
 			            					<option value="<?= $p->p_id ?>"><?= $p->p_nama_perusahaan ?> / <?= $p->p_alamat ?></option>
 			            				<?php endforeach ?>
@@ -103,7 +116,7 @@
 			            				<option value="<?= $pjk['id'] ?>"><?= $pjk['name'] ?></option>
 			            				<?php } ?>
 			            			</select>
-			            			<select class="form-control" name="dt[pr_pajak2]" required="">
+			            			<select class="form-control" name="dt[pr_pajak2]" >
 			            				<option value="">-</option>
 			            				<?php 
 			            					foreach ($pajak as $pjk) {
@@ -113,29 +126,7 @@
 			            			</select>
 			            		</td>
 			            	</tr>
-			            	<tr>
-			            		<td>
-			            			Sumber Modal
-			            		</td>
-			            		<td>
-			            			<select class="form-control" name="dt[pr_sumber]" required="">
-			            				<?php 
-			            					$modal = $this->mymodel->selectData('modal');
-			            					foreach ($modal as $mdl) {
-			            				?>
-			            				<option value="<?= $mdl['id'] ?>"><?= $mdl['name'] ?></option>
-			            				<?php } ?>
-			            			</select>
-			            		</td>
-			            	</tr>
-			            	<tr>
-			            		<td>
-			            			Nominal Modal
-			            		</td>
-			            		<td>
-			            			<input type="text" class="form-control rupiah" name="dt[pr_modal]"  value="">
-			            		</td>
-			            	</tr>
+			            	
 			            </table>
 			            <a href="<?= base_url('matters/detail') ?>">
 				        <button type="submit" class="btn btn-primary btn-block btn-flat"><i class="fa fa-save"></i> SIMPAN PROYEK</button>

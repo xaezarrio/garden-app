@@ -96,9 +96,9 @@ $koperasi = $this->mymodel->selectWhere('koperasi',array('karyawan_id'=>$id_kary
 			<td class="text-right"><?= number_format($in); ?></td>
 			<td class="text-right"><?= number_format($out); ?></td>
 			<td class="text-center">
-			<?php if($date==date('Y-m-d')){ ?> 
+			<?php //if($date==date('Y-m-d')){ ?> 
 				<i class="fa fa-remove text-danger" onclick="deletedata(<?= $data['id'] ?>)"></i>
-			<?php } ?>
+			<?php //} ?>
 			</td>
 		</tr>
 <?php $i++; } ?>

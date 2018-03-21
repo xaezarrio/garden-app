@@ -12,6 +12,12 @@ class Master extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
+
 		
 	}
 	
@@ -111,7 +117,7 @@ class Master extends CI_Controller {
         // $this->datatables->join('role','user.role_id=role.id','left');
         // $this->datatables->where(array('status'=>0));
         $this->datatables->from('costcenter');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();
 	}
 	public function costcenter_js()
@@ -189,7 +195,7 @@ class Master extends CI_Controller {
         // $this->datatables->join('role','user.role_id=role.id','left');
         // $this->datatables->where(array('status'=>0));
         $this->datatables->from('karyawan');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();
 	}
 	public function karyawan_js()
@@ -281,7 +287,7 @@ class Master extends CI_Controller {
         // $this->datatables->join('role','user.role_id=role.id','left');
         // $this->datatables->where(array('status'=>0));
         $this->datatables->from('toko');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();
 	}
 	public function toko_js()
@@ -363,7 +369,7 @@ class Master extends CI_Controller {
         // $this->datatables->join('role','user.role_id=role.id','left');
         // $this->datatables->where(array('status'=>0));
         $this->datatables->from('perusahaan');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();
 	}
 	public function perusahaan_js()

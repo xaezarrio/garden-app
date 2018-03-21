@@ -3,7 +3,7 @@
 	<section class="content">
 		<div class="container">
 			<div class="row no_margin">
-				<h3 class="jdl_page">Edit Aset</h3>
+				<h3 class="jdl_page">Detail Aset</h3>
 			</div>
 			<div class="row">
 				<div class="col-xs-8">
@@ -11,7 +11,8 @@
 					  <div class="box-header with-border">	
 						<b>Data Aset</b>
 					  </div>	
-					  <form id="upload" action="<?= base_url("aset/registrasi/action") ?>">
+					  <form id="upload" action="<?= base_url("aset/registrasi/action_edit") ?>">
+					  	<input type="hidden" name="id" value="<?=$aset['id']?>">
 			          <div class="box-body">
 			          	<div class="show_error"></div>
 			            <table class="table table-bordered table-hover">
@@ -20,7 +21,7 @@
 			            			Kode
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[kode]" class="form-control" style="width: 300px" value="<?= $aset['kode'] ?>"> 
+			            			<input type="text" name="dt[kode]" class="form-control" style="width: 300px" value="<?= $aset['kode'] ?>" readonly=""> 
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -28,7 +29,7 @@
 			            			Nama
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[name]" class="form-control" style="width: 400px" value="<?= $aset['name'] ?>">
+			            			<input type="text" name="dt[name]" class="form-control" style="width: 400px" value="<?= $aset['name'] ?>" >
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -36,7 +37,16 @@
 			            			Stok
 			            		</td>
 			            		<td>
-			            			<input type="number" name="stock" class="form-control" style="width: 200px" value="<?= $aset['stock'] ?>">
+			            			<input type="number" name="" class="form-control" style="width: 200px" value="<?= $aset['stock'] ?>" readonly="">
+			            		</td>
+			            	</tr>
+			            	<tr>
+			            		<td>
+			            			Adjusment (-/+)
+			            		</td>
+			            		<td>
+			            			<input type="number" name="adj" class="form-control" style="width: 100px" value="">
+			            			<small>* Kosongi Jika Tidak melakukan Adjusment</small>
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -44,14 +54,14 @@
 			            			Harga
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[price]" class="form-control rupiah" style="width: 200px" value="<?= number_format($aset['price']) ?>">
+			            			<input type="text" name="" class="form-control rupiah" style="width: 200px" value="<?= number_format($aset['price']) ?>" readonly="">
 			            		</td>
 			            	</tr>
 			            </table>
 			          </div>
 			          <!-- end body -->
 			          <div class="box-footer ">
-			          	 <button type="submit" class="btn btn-info pull-right" id="send-btn"> <i class="fa fa-save"></i> Update Registrasi</button>
+			          	 <button type="submit" class="btn btn-info pull-right" id="send-btn"> <i class="fa fa-save"></i> Simpan</button>
 			          </div>
 			          </form>
 
@@ -86,7 +96,12 @@
 			          				<td><?= $det['date'] ?></td>
 			          				<td><?= $det['stock'] ?></td>
 			          				<td><?= number_format($det['price']) ?></td>
-			          				<td>Admin</td>
+			          				<?php 
+			          					$user = $this->mymodel->selectdataOne('user',array('id'=>$det['user_id']));
+			          				?>
+			          				<td>
+			          					<?= $user['name'] ?>
+			          				</td>
 			          			</tr>
 			          			<?php $i++; } ?>
 			          		</tbody>
@@ -125,12 +140,12 @@
                var str = response;
                 if (str.indexOf("Success Input Data") != -1 || str.indexOf("Success Update Data") != -1){
                     form.find(".show_error").hide().html(response).slideDown("fast");
-                    $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> Update Registrasi').attr('disabled',false);
+                    $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> Simpan').attr('disabled',false);
                     window.location.href = '<?= base_url('aset') ?>';
             
                 }else{
                     form.find(".show_error").hide().html(response).slideDown("fast");
-                    $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> Update Registrasi').attr('disabled',false);
+                    $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> Simpan').attr('disabled',false);
                 }
             },
             error: function(xhr, textStatus, errorThrown) {

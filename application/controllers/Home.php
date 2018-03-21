@@ -12,7 +12,12 @@ class Home extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
+
 	}
 	
 	public function index()

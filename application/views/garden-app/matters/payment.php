@@ -161,7 +161,20 @@
 			            			Modal
 			            		</td>
 			            		<td>
-			            			<?= $matters->pr_sumber ?> | <?= number_format($matters->pr_modal) ?>
+			            			<?php $sumber =  json_decode($matters->pr_sumber) ?> <?php $nominal = json_decode($matters->pr_modal) ?>
+
+			            			<p><b>Total : <?= number_format(array_sum($nominal)) ?></b></p>
+			            			
+			            			<ul>
+			            			<?php 
+			            				$i=0;
+			            				foreach ($sumber as $sbr) {
+			            					$sbrr = $this->mymodel->selectdataOne('modal',array('id'=>$sbr));
+			            					echo "<li>".$sbrr['name']." | ".number_format($nominal[$i])."</li>";
+			            				$i++;}
+			            			?>
+			            			</ul>
+			            			
 			            		</td>
 			            	</tr>
 			            	<tr>

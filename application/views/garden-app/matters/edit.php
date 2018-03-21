@@ -7,18 +7,32 @@
 			</div>
 			<div class="row">
 				<div class="col-md-7">
+					  <form action="<?= base_url('matters/save_edit'); ?>" method="post" accept-charset="utf-8">
+
 					<div class="box box-primary">
 					  <div class="box-header with-border">	
 						<b>Informasi Proyek</b>
 					  </div>
-					  <form action="<?= base_url('matters/save_edit'); ?>" method="post" accept-charset="utf-8">
 					  	<input type="hidden" name="id" value="<?= $matters['pr_id'] ?>">
 			          <div class="box-body">
 			            <table class="table table-bordered table-hover">
 			            	<tr>
+			            		<td style="width: 180px;">Perusahaan</td>
+			            		<td>
+			            			<select class="form-control select2" name="dt[pr_idperusahaan]">
+			            				<option value=""> Choose Perusahaan .. </option>
+			            				<?php foreach ($perusahaan->result() as $pr): ?>
+			            					<option value="<?= $pr->id ?>" <?php if($matters['pr_idperusahaan']==$pr->id){ echo "selected"; } ?>><?= $pr->name ?></option>
+			            				<?php endforeach ?>
+			            			</select>
+			            		</td>
+			            	</tr>
+			            	<tr>
 			            		<td style="width: 180px;">Pelanggan</td>
 			            		<td>
 			            			<select class="form-control select2" name="dt[pr_idpelanggan]">
+			            				<option value=""> Choose Pelangan .. </option>
+
 			            				<?php foreach ($pelanggan->result() as $p): ?>
 			            					<option value="<?= $p->p_id ?>" <?php if($matters['pr_idpelanggan']==$p->p_id){ echo "selected"; } ?>><?= $p->p_nama_perusahaan ?> / <?= $p->p_alamat ?></option>
 			            				<?php endforeach ?>
@@ -114,50 +128,129 @@
 			            			</select>
 			            		</td>
 			            	</tr>
-			            	<tr>
-			            		<td>
-			            			Sumber Modal
-			            		</td>
-			            		<td>
-			            			<select class="form-control" name="dt[pr_sumber]">
-			            				<?php 
-			            					$modal = $this->mymodel->selectData('modal');
-			            					foreach ($modal as $mdl) {
-			            				?>
-			            				<option value="<?= $mdl['id'] ?>" <?php if($mdl['id']==$matters['pr_sumber']){ echo "selected"; } ?>><?= $mdl['name'] ?></option>
-			            				<?php } ?>
-			            			</select>
-			            		</td>
-			            	</tr>
-			            	<tr>
-			            		<td>
-			            			Nominal Modal
-			            		</td>
-			            		<td>
-			            			<input type="text" class="form-control rupiah" name="dt[pr_modal]"  value="<?= $matters['pr_modal'] ?>">
-			            		</td>
-			            	</tr>
+
 			            </table>
-			            <a href="<?= base_url('matters/detail') ?>">
-				        <button type="submit" class="btn btn-primary btn-block btn-flat"><i class="fa fa-save"></i> SIMPAN PROYEK</button>
-				    	</a>
+			            <br>
+		            	
+		            	
 			          </div>
-					  </form>	
+			          
+				     
 			          <!-- end body -->
 			          
 			         
 			        </div>
+			        <div class="box box-primary">
+			          	<div class="box-header">
+			          		
+			          	</div>
+			          	<div class="box-body">
+			          		<table class="table table-condensed">
+					  		<thead>
+						  		<tr>
+						  			<th>Sumber</th>
+
+						  			<th>Nominal</th>
+						  			<th>Bunga</th>
+
+						  			<th></th>
+						  		</tr>	
+					  		</thead>
+					  		<tbody id="sumber-modal">
+					  			<?php 
+					  				$sumber = json_decode($matters['pr_sumber']);
+					  				$nominal = json_decode($matters['pr_modal']);
+					  				$bunga = json_decode($matters['pr_bunga']);
+
+					  				$i=0;
+					  				foreach ($sumber as $sm) {
+
+					  			?>
+
+								<tr id="mdl<?= $i ?>">
+					  				<td>
+					  					<select class="form-control" name="modal[]">
+					  						<option value="">Choose Modal</option>
+					  						<?php 
+					  						$modal = $this->mymodel->selectData('modal');
+					  						foreach ($modal as $mood) {
+					  						?>
+					  						<option value="<?= $mood['id'] ?>" <?php if($sm==$mood['id']){ echo "selected";} ?>><?= $mood['name'] ?></option>
+					  						<?php } ?>
+					  					</select>
+					  				</td>
+					  				
+					  				<td>
+					  					<input type="text" name="nominal[]" class="form-control rupiah text-right nominal"  value="<?= number_format($nominal[$i]) ?>"  onchange="hitung()">
+					  				</td>
+					  				<td>
+					  					<input type="text" name="bunga[]" class="form-control rupiah text-right nominal"  value="<?= number_format($bunga[$i]) ?>" onchange="hitung()">
+					  				</td>
+					  				<td>
+					  					<a class="btn btn-success btn-danger" onclick="removemodal(<?= $i ?>)" ><i class="fa fa-remove"></i></a>
+					  				</td>
+					  			</tr>
+					  			<?php
+					  				$i++;}
+					  			?>
+					  			<tr>
+					  				<td>
+					  					<select class="form-control" name="modal[]">
+					  						<option value="">Choose Modal</option>
+					  						<?php 
+					  						$modal = $this->mymodel->selectData('modal');
+					  						foreach ($modal as $mood) {
+					  						?>
+					  						<option value="<?= $mood['id'] ?>"><?= $mood['name'] ?></option>
+					  						<?php } ?>
+					  					</select>
+					  				</td>
+					  				<td>
+					  					<input type="text" name="bunga[]" class="form-control rupiah text-right nominal"  onchange="hitung()">
+					  				</td>
+					  				<td>
+					  					<input type="text" name="nominal[]" class="form-control rupiah text-right nominal"  onchange="hitung()">
+					  				</td>
+					  				
+					  				<td>
+					  					<a class="btn btn-success btn-flat" onclick="addsumber(<?= count($sumber) ?>)" id="plus-modal"><i class="fa fa-plus"></i></a>
+					  				</td>
+					  			</tr>
+					  		</tbody>
+					  		<tfoot>
+					  			<tr>
+					  				<th >Total</th>
+					  				<th></th>
+
+					  				<th class="text-right" id="total-modal">0</th>
+					  				<th></th>
+
+					  			</tr>
+					  		</tfoot>
+					  		
+					  	</table>
+			          	</div>
+
+			          </div>
+			             <button type="submit" class="btn btn-primary btn-block btn-flat"><i class="fa fa-save"></i> SIMPAN PROYEK</button>
+
+					  </form>	
 			        <!-- end of box -->
 
 
 				</div>
-	           	<form id="upload" action="<?= base_url("matters/savedocument") ?>" enctype="multipart/form-data">
 				<!-- end col -->
 				<div class="col-xs-5">
+
+
+
+	           		<form id="upload" action="<?= base_url("matters/savedocument") ?>" enctype="multipart/form-data">
+
 					<div class="box box-primary">
 					   <div class="box-header with-border">	
 						<b>Document</b>
 					  </div>
+					  
 					  <div class="box-body">
 					  	<div class="show_error"></div>
 			         
@@ -176,7 +269,8 @@
 				            	
 				            		$json[] = array(			            				
 				            						'desc'=>@$files[0]['desc'],
-				            						'file'=>$files
+				            						'file'=>$files,
+				            						// 'user'=>$files['user_id']
 				            					);
 			            		}
 
@@ -209,14 +303,16 @@
 			            			<?= $i ?>
 			            		</td>
 			            		<td>
-			            			<a href="#">Download - Engagement Letter (ZIP)</a><br>
+			            			<!-- <a href="#">Download - Engagement Letter (ZIP)</a><br> -->
 			            			<b>Description :</b><br>
 			            			<?= $rec['desc'] ?> <br>
 			            			<?php 
 			            				$j = 1;
 			            				foreach ($rec['file'] as $val) {
+			            					$user = $this->mymodel->selectdataOne('user',array('id'=>$val['user_id']));
+			            				
 			            			?>
-			            			<div><?= $j ?>. Created by Super Admin <a href="<?= base_url($val['dir']) ?>" target="_blank"><?= $val['name'] ?></a></div>
+			            			<div><?= $j ?>. Created by <?= $user['name'] ?> <a href="<?= base_url($val['dir']) ?>" target="_blank"><?= $val['name'] ?></a></div>
 			            			<?php $j++;} ?>
 			            		</td>
 			            	</tr>
@@ -228,8 +324,9 @@
 			        <a href="<?= base_url('matters/detail') ?>">
 			        <button class="btn btn-primary btn-block btn-flat" id="send-btn"><i class="fa fa-save"></i> SAVE and ADD PROCEDURES</button>
 			    	</a>
-			    </div>
 				</form>
+
+			    </div>
 				<!-- end col -->
 			</div>
 			<!-- end row -->
@@ -286,4 +383,64 @@
         });
         return false;
         });
+
+
+  function addsumber(no) {
+  	var ids = no+1;
+  	var html = '<tr id="mdl'+ids+'">'+
+	  			'	<td>'+
+	  			'		<select class="form-control" name="modal[]">'+
+	  			'			<option value="">Choose Modal</option>'+
+	  						<?php 
+	  						$modal = $this->mymodel->selectData('modal');
+	  						foreach ($modal as $mood) {
+	  						?>
+	  			'			<option value="<?= $mood['id'] ?>"><?= $mood['name'] ?></option>'+
+	  						<?php } ?>
+	  			'		</select>'+
+	  			'	</td>'+
+	  			'	<td>'+
+	  			'		<input type="text" name="nominal[]" class="form-control rupiah text-right nominal" onchange="hitung()">'+
+	  			'	</td>'+
+	  			'	<td>'+
+	  			'		<input type="text" name="bunga[]" class="form-control rupiah text-right nominal" onchange="hitung()">'+
+	  			'	</td>'+
+	  			'	<td>'+
+	  			'		<a class="btn btn-danger btn-flat" onclick="removemodal('+ids+')"><i class="fa fa-remove"></i></a>'+
+	  			'	</td>'+
+	  			'</tr>';
+	 $("#sumber-modal").prepend(html);
+	 $(".rupiah").maskMoney({thousands:',', allowZero:false , precision:0});
+
+	 $("#plus-modal").attr('onclick','addsumber('+ids+')');
+
+   	
+
+
+
+
+  }
+
+  function removemodal(id) {
+  	$("#mdl"+id).remove();
+  }
+
+	function convertToAngka(rupiah){
+		return parseInt(rupiah.replace(/,,*|[^0-9]/g, ''), 10);
+	}
+
+  function hitung() {
+  	// body...
+	  	var sum = 0;
+	    $('.nominal').each(function(){
+	        var nom = convertToAngka(this.value);
+
+	        if(isNaN(nom)){
+	          nom = 0;
+	        }
+	        sum += parseFloat(nom);
+	    });
+	    $("#total-modal").html(convertToRupiah(sum));
+  }
+  hitung()
 </script>

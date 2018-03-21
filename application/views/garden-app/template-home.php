@@ -1,3 +1,19 @@
+<?php 
+
+    if($this->session->userdata('session_garden')==false) {
+            redirect('login/');
+    }
+   $role = $this->session->userdata('role');
+   $uri = $this->uri->segment(1);
+   if($role==3){
+   		if($uri=="" OR $uri=="matters" OR $uri =="workorder"OR $uri =="report"OR $uri =="billing"){
+   			// return true;
+   		}else{
+   			redirect('');
+   		}
+   }
+
+ ?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -85,6 +101,10 @@
 		        <nav class="navbar navbar-static-top" role="navigation">
 		          <div class="navbar-custom-menu navbar-left">
 		            <ul class="nav navbar-nav">
+		               <?php 
+					   if($role!=3){
+
+		               ?>
 		              <li class="dropdown">
 		                <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-users"></i> Pelanggan <span class="caret"></span></a>
 		                <ul class="dropdown-menu">
@@ -96,6 +116,7 @@
 		                   </li>
 						</ul>
 		              </li>
+		              <?php } ?>
 		              <li class="dropdown">
 		                <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown">
 		                <i class="fa fa-table"></i> 
@@ -127,9 +148,13 @@
 						   <li>
 		                     <a href="<?= base_url('workorder/list-timesheets/pegawai') ?>"> <i class="fa fa-user-plus"></i> Pegawai </a>
 		                   </li>
+		                   <?php 
+							   if($role!=3){
+		                    ?>
 						   <li>
 		                    <a href="<?= base_url('workorder/list-timesheets/pribadi') ?>"> <i class="fa fa-tags"></i> Pribadi</a>
 		                   </li>
+		                   <?php } ?>
 		                   <li>
 		                    <a href="<?= base_url('workorder/list-timesheets/kantor') ?>"> <i class="fa fa-book"></i> Kantor</a>
 		                   </li>
@@ -143,7 +168,7 @@
 		                </a>
 		                <ul class="dropdown-menu">
 						   <li>
-		                    <a href="<?= base_url('billing/invoice') ?>"> <i class="fa fa-file-text-o"></i> Proyek </a>
+		                    <a href="<?= base_url('report/proyek') ?>"> <i class="fa fa-file-text-o"></i> Proyek </a>
 		                   </li>
 						   <li>
 		                    <a href="<?= base_url('billing/invoice') ?>"> <i class="fa fa-file-text-o"></i> Per Aktivitas </a>
@@ -154,6 +179,10 @@
 
 						</ul>
 		              </li>
+		              <?php 
+					   if($role!=3){
+
+		               ?>
 		              <li class="dropdown">
 		                <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa  fa-cubes"></i> 
 		                Manajemen Aset  
@@ -185,7 +214,7 @@
 		                    <a href="<?= base_url('koperasi/simpan') ?>"> <i class="fa  fa-sign-in"></i> Simpan / Pinjam</a>
 		                   </li>
 		                   <li>
-		                    <a href="<?= base_url('koperasi') ?>"> <i class="fa  fa-users"></i> List Karyawan</a>
+		                    <a href="<?= base_url('koperasi') ?>"> <i class="fa  fa-users"></i> List Transaksi</a>
 		                   </li>
 		                  
 
@@ -198,6 +227,9 @@
 		                <span class="caret"></span>
 		                </a>
 		                <ul class="dropdown-menu">
+						   <li>
+		                    <a href="<?= base_url('user') ?>"> <i class="fa fa-users"></i> Users </a>
+		                   </li>
 						   <li>
 		                    <a href="<?= base_url('master/aktivitas/1') ?>"> <i class="fa fa-file-text-o"></i> Aktivitas </a>
 		                   </li>
@@ -217,7 +249,7 @@
 						</ul>
 		              </li>
 		              
-		              
+		              <?php } ?>
 		              
 		              
 		            </ul>

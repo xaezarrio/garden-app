@@ -12,6 +12,13 @@ class Matters extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
+		
+
 		
 	}
 	
@@ -20,12 +27,16 @@ class Matters extends CI_Controller {
 		$this->data['page']="matters";
 		$this->data['pelanggan'] = $this->mmodel->selectData("pelanggan");
 		$this->data['cost'] = $this->mmodel->selectData("costcenter");
+		$this->data['perusahaan'] = $this->mmodel->selectData("perusahaan");
 		
 		$this->render->admin('garden-app/matters/add', $this->data);
 	}
 	public function listmatters()
 	{
 		$this->data['page']="matters";
+		if(role==3){
+			$this->db->where(array('created_by'=>user_id));
+		}
 		$this->data['matters']=$this->mmodel->selectData("proyek");
 
 		$this->render->admin('garden-app/matters/list', $this->data);
@@ -34,6 +45,8 @@ class Matters extends CI_Controller {
 	{
 		$this->data['page']="matters";
 		$this->data['pelanggan'] = $this->mmodel->selectData("pelanggan");
+		$this->data['perusahaan'] = $this->mmodel->selectData("perusahaan");
+
 		$this->data['matters']=$this->mymodel->selectdataOne("proyek",array("pr_id"=>$id));
 
 		$this->data['cost'] = $this->mmodel->selectData("costcenter");
@@ -63,7 +76,7 @@ class Matters extends CI_Controller {
 		$param['ap_nominal'] = str_replace(",", "",$param['ap_nominal']);
 	        $dir  = "webfile/aktivitas-proyek/";
 			$config['upload_path']          = $dir;
-			$config['allowed_types']        = 'gif|jpg|png';
+			$config['allowed_types']        = '*';
 			// $config['max_size']             = 100;
 			$config['max_width']            = 500;
 			$config['max_height']           = 500;
@@ -74,6 +87,9 @@ class Matters extends CI_Controller {
 				$error = $this->upload->display_errors();
 				$this->alert->alertdanger($error);		
 			}else{
+				$param['created_at'] = date('Y-m-d H:i:s');
+				$param['user_id'] = user_id;
+				
 			   	$str = $this->db->insert('aktivitas_proyek', $param);
 			   	$last_id = $this->db->insert_id();
 			   	$image = $this->upload->data();
@@ -85,7 +101,7 @@ class Matters extends CI_Controller {
 			   				'dir'=> $dir.$image['file_name'],
 			   				'table'=> 'aktivitas_proyek',
 			   				'table_id'=> $last_id,
-			   				'user_id'=> 0 ,
+			   				'user_id'=> user_id ,
 			   				'desc'=>"",
 			   				'created_at'=>date('Y-m-d H:i:s')
 
@@ -103,6 +119,16 @@ class Matters extends CI_Controller {
 		// redirect('matters/detail/'.$param['ap_idproyek']);
 	}
 
+	public function delete_aktivitas($id)
+	{
+		$aktpro = $this->mymodel->selectdataOne('aktivitas_proyek',array('ap_id'=>$id));
+		$file = $this->mymodel->selectdataOne('file',array('table_id'=>$id,'table'=>'aktivitas_proyek'));
+		@unlink($file['dir']);
+		$this->mymodel->deleteData('aktivitas_proyek',array('ap_id'=>$id));
+		$this->mymodel->deleteData('file',array('id'=>$file['id']));
+		redirect('matters/detail/'.$aktpro['ap_idproyek']);
+	}
+
 	public function payment($id)
 	{
 		$this->data['page']="matters";
@@ -118,7 +144,7 @@ class Matters extends CI_Controller {
 
 		$param['pr_status'] = "open";
 		$param['created_at'] = date("Y-m-d H:i:s");
-		$param['created_by'] = "";
+		$param['created_by'] = user_id;
 		$query = $this->mmodel->insertData("proyek",$param);
 		redirect('matters/list-matters');
 	}
@@ -127,9 +153,31 @@ class Matters extends CI_Controller {
 		$id = $this->input->post('id');
 		$param = $this->input->post('dt');
 		$param['pr_nilai_kontrak'] = str_replace(",", "", $param['pr_nilai_kontrak']);
-		$param['pr_modal'] = str_replace(",", "", $param['pr_modal']);
+		// $param['pr_modal'] = str_replace(",", "", $param['pr_modal']);
 		$param['update_at'] = date("Y-m-d H:i:s");
 		$param['update_by'] = "";
+
+		$modal = $this->input->post('modal');
+		$i=0;
+		foreach ($modal as $mdl) {
+		if($mdl!=""){
+			$nominal[] = str_replace(",", "", $_POST['nominal'][$i]);
+			$bunga[] = str_replace(",", "", $_POST['bunga'][$i]);
+
+			$modals[] = $mdl;		
+		}
+		$i++; }	
+
+		$nm = json_encode($nominal);
+		$md = json_encode($modals);
+		$bng = json_encode($bunga);
+
+		$param['pr_modal'] = $nm;
+		$param['pr_sumber'] = $md;
+		$param['pr_bunga'] = $bng;
+
+
+
 		$query = $this->mymodel->updateData("proyek",$param,array('pr_id'=>$id));
 		redirect('matters/list-matters');
 	}
@@ -163,7 +211,7 @@ class Matters extends CI_Controller {
 				   				'dir'=> $dir.$file_name,
 				   				'table'=> 'proyek',
 				   				'table_id'=> $id,
-				   				'user_id'=> 0 ,
+				   				'user_id'=> user_id ,
 				   				'desc'=>$desc,
 				   				'created_at'=>date('Y-m-d H:i:s')
 

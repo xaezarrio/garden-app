@@ -99,6 +99,8 @@ $route['master/karyawan/edit/(:any)'] = 'master/karyawan_edit/$1';
 $route['master/karyawan/delete/(:any)'] = 'master/karyawan_delete/$1';
 //======================================
 $route['aset/registrasi/action'] = 'aset/registrasi_action';
+$route['aset/registrasi/action_edit'] = 'aset/registrasi_action_edit';
+
 $route['aset/registrasi/edit/(:any)'] = 'aset/registrasi_edit/$1';
 
 $route['aset/transaksi/out'] = 'aset/transaksi_out';
@@ -187,3 +189,6 @@ $route['billing/invoice/json-collections'] = 'billing/json_collections';
 
 $route['koperasi/data'] = 'koperasi/data_koperasi';
 $route['koperasi/simpan/add'] = 'koperasi/store';
+// =================
+$route['report/proyek/detail/(:any)'] = 'report/proyek_detail/$1';
+

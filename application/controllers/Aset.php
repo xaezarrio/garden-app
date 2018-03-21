@@ -12,6 +12,11 @@ class Aset extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
 		
 	}
 
@@ -60,6 +65,7 @@ class Aset extends CI_Controller {
         		$stock = $_POST['stock'];
         		$dt['stock'] = $stock;
         		$dt['created_at'] = date("Y-m-d H:i:s");
+        		$dt['user_id'] = user_id;
 	        	$this->db->insert('aset',$dt);
 	        	$ids = $this->db->insert_id();
 	        	$detail = array(
@@ -67,7 +73,7 @@ class Aset extends CI_Controller {
 	        					'stock'=>$stock,
 	        					'date'=>$date,
 	        					'price'=>$dt['price'],
-	        					'user_id'=>0,
+	        					'user_id'=>user_id,
 	        					'created_at'=>date("Y-m-d H:i:s")
 	        				);
 	        	$this->db->insert('aset_detail',$detail);
@@ -83,7 +89,7 @@ class Aset extends CI_Controller {
 	        					'stock'=>$stock,
 	        					'date'=>$date,
 	        					'price'=>$dt['price'],
-	        					'user_id'=>0,
+	        					'user_id'=>user_id,
 	        					'created_at'=>date("Y-m-d H:i:s")
 	        				);
 	        	$this->db->insert('aset_detail',$detail);
@@ -94,12 +100,49 @@ class Aset extends CI_Controller {
         }
 	}
 
+	public function registrasi_action_edit()
+	{
+		# code...
+		$this->form_validation->set_error_delimiters('<li>', '</li>');
+		$this->form_validation->set_rules('dt[kode]', '<strong>Kode</strong>', 'required');
+		
+		if ($this->form_validation->run() == FALSE){
+			$error = validation_errors();
+			$this->alert->alertdanger($error);
+        }else{
+        	$dt = $_POST['dt'];
+        	$id = $_POST['id'];
+        	$adj = $_POST['adj'];
+
+
+        	$cek = $this->mymodel->selectdataOne('aset',array('kode'=>$dt['kode']));
+
+	        if($adj!=""){
+        		$detail = array(
+	        					'aset_id'=>$cek['id'],
+	        					'stock'=>$adj,
+	        					'date'=>date('Y-m-d'),
+	        					'price'=>0,
+	        					'user_id'=>user_id,
+	        					'created_at'=>date("Y-m-d H:i:s")
+	        				);
+	        	$this->db->insert('aset_detail',$detail);
+	        	$dt['stock'] = $cek['stock']+$adj;
+	        }
+        	$this->mymodel->updateData('aset',$dt,array('id'=>$id));
+
+        	
+        	$this->alert->alertsuccess('Success Input Data');
+
+        }
+	}
+
 	public function json()
 	{
 		header('Content-Type: application/json');
         $this->datatables->select('id,kode,name,stock,price');
         $this->datatables->from('aset');
-        $this->datatables->add_column('view', '<div class="btn-group"> <!--a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a--> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span>Detail</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
         echo $this->datatables->generate();		
 	}
 
@@ -154,7 +197,7 @@ class Aset extends CI_Controller {
         // 	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
         // }
         $this->datatables->from('aset_transaksi');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();
 	}
 
@@ -264,7 +307,7 @@ class Aset extends CI_Controller {
         // 	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
         // }
         $this->datatables->from('aset_transaksi');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();
 	}
 
@@ -287,7 +330,7 @@ class Aset extends CI_Controller {
 		for ($i=0; $i < count($td['aset_id']) ; $i++) { 
 			$aset = $this->mymodel->selectDataone('aset',array('id'=>$td['aset_id'][$i]));
 			$aset_detail = $this->mymodel->selectWhere('aset_detail',array('aset_id'=>$td['aset_id'][$i]));
-			$qty_new = $aset['stock'] - $td['qty'][$i];
+			$qty_new = $aset['stock'] + $td['qty'][$i];
 			$arraytrans = array(
 				'transaksi_id' => $idt,
 				'aset_id' => $td['aset_id'][$i],

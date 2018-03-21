@@ -12,19 +12,41 @@ class Report extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
+
 		
 	}
 	
-	public function index()
+	public function proyek()
 	{
-		$this->data['page']="office";
+		$this->data['page']="report";
+		if(role==3){
+			$this->db->where(array('created_by'=>user_id));
+		}
 		
-		$this->render->admin('officeprogram/report', $this->data);
+		$this->data['matters']=$this->mmodel->selectData("proyek");
+		
+		$this->render->admin('garden-app/report/report-proyek', $this->data);
 	}
-	public function hr()
+
+
+	public function proyek_detail($id)
 	{
-		$this->data['page']="office";
+		$this->data['page']="report";
+		// $this->data['matters']=$this->mymodel->selectWhere("proyek",array('pr_id'=>$id));
+		$this->data['matters']=$this->mmodel->selectWhere("proyek",array("pr_id"=>$id))->row();
 		
-		$this->render->admin('officeprogram/report_hr', $this->data);
+		$this->data['page']="matters";
+		$this->data['aktivitas']=$this->mmodel->selectWhere("aktivitas",array("parent"=>"0"));
+		$this->data['ap']=$this->mmodel->selectWhere("aktivitas_proyek",array("ap_idproyek"=>$id));
+		$this->data['id'] = $id;
+		
+
+		
+		$this->render->admin('garden-app/report/report-proyek-detail', $this->data);
 	}
 }

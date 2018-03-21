@@ -16,7 +16,7 @@
 			                  <th>Nama Perusahaan</th>
 			                  <th>Telepon</th>
 			                  <th>Alamat</th>
-			                  <th style="width:40px;">Project</th>
+			                  <!-- <th style="width:40px;">Project</th> -->
 			                  <th style="width:120px;">Action</th>
 			                </tr>
 			              </thead>
@@ -27,7 +27,7 @@
 			                  <td><?= $v->p_nama_perusahaan ?></td>
 			                  <td><?= $v->p_phone ?></td>
 			                  <td><?= $v->p_alamat ?></td>
-			                  <td></td>
+			                  <!-- <td></td> -->
 			                  <td>
 			                  	<a href="<?= base_url('customer/detail/'.$v->p_id) ?>" class="btn btn-xs btn-success btn-flat" ><i class="fa fa-eye"></i>detail</a>
 			                  	<a href="<?= base_url('customer/edit/'.$v->p_id) ?>" class="btn btn-xs btn-primary btn-flat" ><i class="fa fa-edit"></i>edit</a>

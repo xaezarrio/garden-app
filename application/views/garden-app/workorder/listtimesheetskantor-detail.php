@@ -12,17 +12,19 @@ $saldo = $this->db->query($sql)->row()->saldo;
 	<caption class="text-center"><h4><?= $bulan." ".$tahun ?></h4></caption>
 
 	<thead>
+		<tr>
 		<th style="width: 30px;">No</th>
 		<th>Tanggal</th>
 		<th>Sub Aktivitas</th>
 		<th>Item</th>
 		<th>Qty</th>
 		<th>Keterangan</th>
-		<!-- <th>Masuk</th> -->
+		<th>Download</th>
 		<th>Nominal</th>
 		<th></th>
+		</tr>
 		<tr style="background: #ddd">
-			<th colspan="6">Saldo Awal</th>
+			<th colspan="7">Saldo Awal</th>
 			<th class="text-right"><?= number_format($saldo)  ?></th>
 			<th></th>
 		</tr>
@@ -31,6 +33,7 @@ $saldo = $this->db->query($sql)->row()->saldo;
 		<?php 
 		$mm =array();
 		$kl =array();
+		$total = array();
 		$i =1;
 		$this->db->order_by('date ASC');
 		$data = $this->mymodel->selectWhere('pengeluaran',array('kategori'=>'Kantor','YEAR(date)'=>$tahun,'MONTH(date)'=>$mn));
@@ -56,7 +59,9 @@ $saldo = $this->db->query($sql)->row()->saldo;
 			<td><?= $rec['item'] ?></td>
 			<td><?= $rec['qty'] ?></td>
 			<td><?= $rec['keterangan'] ?></td>
-			<!-- <td class="text-right"><?= number_format($masuk) ?></td> -->
+			<td class="text-right">
+				<a href="<?= base_url('uploads/'.$rec['file']) ?>" target="_blank"><i class="fa fa-download"></i> Download</a>
+			</td>
 			<td class="text-right"><?= number_format($keluar) ?></td>
 			<td>
 			<?php 
@@ -78,12 +83,12 @@ $saldo = $this->db->query($sql)->row()->saldo;
 		$totals =  array_sum($total);
 		?>
 		<tr>
-			<th colspan="6">Total</th>
+			<th colspan="7">Total</th>
 			<th class="text-right"><?= number_format($totals); ?></th>
 			<th></th>
 		</tr>
 		<tr style="background: #ddd;font-weight: bold;color:blue">
-			<td colspan="6">Margin</td>
+			<td colspan="7">Margin</td>
 
 			<td class="text-right">
 				<?= number_format($saldo-$totals) ?>

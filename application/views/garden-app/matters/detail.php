@@ -33,6 +33,8 @@
 			            		<th>Download</th>
 			            		<th>Masuk</th>
 			            		<th>Keluar</th>
+			            		<th></th>
+
 
 			            	</thead>
 			            	<tbody>
@@ -58,7 +60,7 @@
 			 					$k += $keluar;
 
 
-			            		?>
+			            		?>	
 			 
 			            		<tr>
 			            			<td><?= $i+1 ?></td>
@@ -73,7 +75,21 @@
 			            			</td>
 			            			<td class="text-right"><?= number_format($masuk) ?></td>
 			            			<td class="text-right"><?= number_format($keluar) ?></td>
+			            			<td>
+			            				<?php 
+			            				$add = strtotime($v->created_at);
+			            				$add = date('Y-m-d',$add);
+			            				$now = date('Y-m-d');
+			            				if($add==$now){
 
+			            				?>
+			            				<a href="<?= base_url('matters/delete_aktivitas/'.$v->ap_id) ?>" onclick="return confirm('Apakah anda yakin ??')">
+			            					<i class="fa fa-remove text-danger"></i>
+			            				</a>
+			            				<?php 
+			            				} 
+			            				?>
+			            			</td>
 			            		</tr>
 			            		<?php endforeach;
 			            		 ?>
@@ -86,16 +102,18 @@
 			            			<td class="text-right">
 			            				<?= number_format($k) ?>
 			            			</td>
+			            			<td></td>
 			            		</tr>
 			            		<tr style="background: #aaa;font-weight: bold">
-			            			<td colspan="8"></td>
+			            			<td colspan="9"></td>
 			            		</tr>
 			            		<tr style="background: #ddd;font-weight: bold;color:blue">
 			            			<td colspan="7">Margin</td>
 
 			            			<td class="text-right">
-			            				<?= number_format(0) ?>
+			            				<?= number_format($m-$k) ?>
 			            			</td>
+			            			<td></td>
 			            		</tr>
 			            	</tbody>
 			            </table>
@@ -123,6 +141,8 @@
 			            		<th>Masuk</th>
 			            		<th>Keluar</th>
 			            		<th>Keterangan</th>
+			            		<th>Status</th>
+
 			            	</tr>	
 			            	</thead>
 			            	<tbody>
@@ -134,7 +154,18 @@
 		            				$i = 1;
 		            				foreach ($ad as $detail) {
 			            			$aset = $this->mymodel->selectdataOne('aset',array('id'=>$detail['aset_id']));  
+			            			if($astr['tipe']=="OUT"){
+			            				$in = 0;
+			            				$class ="danger";
+			            				$text = "Peminjaman";
+			            				$out = $detail['price']*$detail['qty'];
+			            			}else{
+										$in = $detail['price']*$detail['qty'];
+			            				$out = 0;
+			            				$class ="success";
+			            				$text = "Pengembalian";
 			            			
+			            			}
 		            		?>
 
 			            		<tr>
@@ -143,15 +174,19 @@
 			            			<td><?= $karyawan['name'] ?></td>
 			            			<td><?= $aset['name'] ?></td>
 			            			<td><?=  $detail['qty'] ?></td>
-			            			<td><label class="label label-danger">belum</label></td>
-			            			<td><label class="label label-danger">belum</label></td>
+			            			<td class="text-right"><?= number_format($in) ?></td>
+			            			<td class="text-right"><?= number_format($out) ?></td>
 			            			<td><?= $astr['desc'] ?></td>
+			            			<td>
+			            				<label class="label label-<?= $class ?>"><?= $text ?></label>
+			            			</td>
 
 
 			            		</tr>
 			            	<?php
 			            	$i++; }	
 			            		} ?>
+			            		
 			            	</tbody>
 			            </table>
 			            
@@ -235,7 +270,20 @@
 			            			Modal
 			            		</td>
 			            		<td>
-			            			<?= $matters->pr_sumber ?> | <?= number_format($matters->pr_modal) ?>
+			            			<?php $sumber =  json_decode($matters->pr_sumber) ?> <?php $nominal = json_decode($matters->pr_modal) ?>
+
+			            			<p><b>Total : <?= number_format(array_sum($nominal)) ?></b></p>
+			            			
+			            			<ul>
+			            			<?php 
+			            				$i=0;
+			            				foreach ($sumber as $sbr) {
+			            					$sbrr = $this->mymodel->selectdataOne('modal',array('id'=>$sbr));
+			            					echo "<li>".$sbrr['name']." | ".number_format($nominal[$i])."</li>";
+			            				$i++;}
+			            			?>
+			            			</ul>
+			            			
 			            		</td>
 			            	</tr>
 			            	<tr>
@@ -333,7 +381,10 @@
             		<td>
             			<select class="form-control" name="dt[ap_idaktivitas]" onchange="aktivitass();" id="aktivitas" required="">
             				<?php foreach ($aktivitas->result() as $a): ?>
+            					<?php 
+            						if($a->name=="Pegawai" OR $a->name=="Kantor"OR $a->name=="Pribadi"OR $a->name=="Koperasi"OR $a->name=="Bahan"){}else{?>
 		    				<option value="<?= $a->id ?>"><?= $a->name ?></option>
+            					<?php } ?>
             				<?php endforeach ?>
 		    			</select>
             		</td>

@@ -44,7 +44,10 @@ $mn = date('m',$a);
 		 	<td><?= $proyek['pr_nama'] ?></td>
 		 	<td><?= $karyawan['name'] ?></td>
 		 	<td><?= $rec['desc'] ?></td>
-		 	<td><?= $total[] = $total_d->total ?></td>
+		 	<?php 
+				$total[] = $total_d->total;
+		 	 ?>
+		 	<td class="text-right"><?= number_format($total_d->total) ?></td>
 		 </tr>
 		<?php $i++;} ?>
 	</tbody>

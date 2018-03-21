@@ -12,6 +12,12 @@ class Workorder extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
+
 		
 	}
 	
@@ -90,6 +96,8 @@ class Workorder extends CI_Controller {
 			$data['kategori'] = "Pegawai";
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['created_at'] = date('Y-m-d H:i:s');
+        	$data['user_id'] = user_id;
+
         	$count = $this->mymodel->selectWhere('pengeluaran',array('month(date)'=>$m,'year(date)'=>$y,'karyawan_id'=>$_POST['dt']['karyawan_id']));
         	$cnt = count($count);
         	if($cnt==0){
@@ -104,7 +112,7 @@ class Workorder extends CI_Controller {
         						'karyawan_id' => $kar['id'] ,
         						'keterangan' => "Gaji Pokok Bulanan",
         						'file' => "" ,
-        						'user_id' => 0,
+        						'user_id' => user_id,
         						'kategori' => 'Pegawai' ,
         						'created_at' =>  date('Y-m-d H:i:s')
         					);
@@ -119,7 +127,7 @@ class Workorder extends CI_Controller {
 	        						'nominal' => '20000' ,
 	        						'karyawan_id' => $kar['id'] ,
 	        						'desc' => "Simpanan perbulan",
-	        						'user_id' => 0,
+	        						'user_id' => user_id,
 	        						// 'type' => 'Simpan' ,
 	        						'created_at' =>  date('Y-m-d H:i:s')
 	        					);
@@ -172,6 +180,8 @@ class Workorder extends CI_Controller {
         	$data['date'] = date('Y-m-d',$a);
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['updated_at'] = date('Y-m-d H:i:s');
+        	$data['user_id'] = user_id;
+
         	$this->mymodel->updateData('pengeluaran',$data,array('id'=>$ids));
         	$this->alert->alertsuccess('Success Input Data');
         }
@@ -193,6 +203,9 @@ class Workorder extends CI_Controller {
         $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'Pegawai'));
+        if(role==3){
+			$this->datatables->where(array('pengeluaran.user_id'=>user_id));
+		}
         if ($karyawan) {
         	$this->datatables->where('karyawan.id', $karyawan);
         }
@@ -209,7 +222,7 @@ class Workorder extends CI_Controller {
         	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
         }
         $this->datatables->from('pengeluaran');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
         echo $this->datatables->generate();
 	}
 
@@ -299,6 +312,8 @@ class Workorder extends CI_Controller {
 			$data['kategori'] = "Kantor";
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['created_at'] = date('Y-m-d H:i:s');
+        	$data['user_id'] = user_id;
+
         	$this->db->insert('pengeluaran',$data);
 
         	$itemquery = $this->mmodel->selectWhere("item",array("i_nama"=>$data['item']));
@@ -379,6 +394,9 @@ class Workorder extends CI_Controller {
         // $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'kantor'));
+        if(role==3){
+			$this->datatables->where(array('pengeluaran.user_id'=>user_id));
+		}
         if ($sub) {
         	$this->datatables->where('aktivitas.id', $sub);
         }
@@ -395,7 +413,7 @@ class Workorder extends CI_Controller {
         	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
         }
         $this->datatables->from('pengeluaran');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
         echo $this->datatables->generate();
 	}
 
@@ -497,6 +515,8 @@ class Workorder extends CI_Controller {
 			$data['kategori'] = "Pribadi";
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['created_at'] = date('Y-m-d H:i:s');
+        	$data['user_id'] = user_id;
+
         	$this->db->insert('pengeluaran',$data);
         	$this->alert->alertsuccess('Success Input Data');
         }
@@ -537,6 +557,8 @@ class Workorder extends CI_Controller {
         	$data['date'] = date('Y-m-d',$a);
         	$data['nominal'] = str_replace(",", "", $_POST['dt']['nominal']);
         	$data['updated_at'] = date('Y-m-d H:i:s');
+        	$data['user_id'] = user_id;
+        	
         	$this->mymodel->updateData('pengeluaran',$data,array('id'=>$ids));
         	$this->alert->alertsuccess('Success Input Data');
         }
@@ -569,7 +591,7 @@ class Workorder extends CI_Controller {
         	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
         }
         $this->datatables->from('pengeluaran');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-sm btn-info"><span class="txt-white fa fa-edit"></span></a> <a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a>  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span>Edit</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
         echo $this->datatables->generate();
 	}
 

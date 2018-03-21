@@ -12,7 +12,12 @@ class Billing extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		define('role', $role);
+		define('user_id', $user_id);
+
+
 	}
 	
 	public function proforma()
@@ -65,7 +70,7 @@ class Billing extends CI_Controller {
 	{
 			$dir  = "webfile/invoice/";
 			$config['upload_path']          = $dir;
-			$config['allowed_types']        = 'gif|jpg|png';
+			$config['allowed_types']        = '*';
 			// $config['max_size']             = 100;
 			$config['max_width']            = 500;
 			$config['max_height']           = 500;
@@ -89,7 +94,7 @@ class Billing extends CI_Controller {
 			   				'dir'=> $dir.$image['file_name'],
 			   				'table'=> 'invoice',
 			   				'table_id'=> $id,
-			   				'user_id'=> 0 ,
+			   				'user_id'=> user_id ,
 			   				'desc'=>"",
 			   				'created_at'=>date('Y-m-d H:i:s')
 
@@ -121,6 +126,9 @@ class Billing extends CI_Controller {
         $this->datatables->join('pelanggan','proyek.pr_idpelanggan=pelanggan.p_id','left');
         $this->datatables->where('invoice.status',$status);
         $this->datatables->from('invoice');
+        if(role==3){
+			$this->datatables->where(array('proyek.created_by'=>user_id));
+		}
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="detail($1)" class="btn btn-xs btn-primary">detail</span></a></div>', 'id');
         echo $this->datatables->generate();
 	}
@@ -148,6 +156,9 @@ class Billing extends CI_Controller {
         $pelanggan = $this->input->get('pelanggan');
         $start = $this->input->get('start');
         $due = $this->input->get('due');
+     	if(role==3){
+			$this->datatables->where(array('proyek.created_by'=>user_id));
+		}
 		if($start != "" AND $due !=""){
 			$start = strtotime($start);
 			$start = date('Y-m-d',$start);
@@ -209,7 +220,7 @@ class Billing extends CI_Controller {
         }else{
 			$dt = $this->input->post('dt');
 			$dt['created_at'] = date("Y-m-d H:i:s");
-			$dt['user_id'] = 0;
+			$dt['user_id'] = user_id;
 			$dt['status'] = "Belum Lunas";
 
 			$dt['pajak1'] = str_replace(",", "", $dt['pajak1']);

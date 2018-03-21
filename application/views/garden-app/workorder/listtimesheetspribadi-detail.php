@@ -19,11 +19,15 @@ $saldo = $this->db->query($sql)->row()->saldo;
 			<th>Tanggal</th>
 			<th>Sub Aktivitas</th>
 			<th>Keterangan</th>
+			<th>Download</th>
+
 			<th>Nominal</th>
+			<th></th>
 		</tr>
 		<tr style="background: #ddd">
-			<th colspan="4">Saldo Awal</th>
+			<th colspan="5">Saldo Awal</th>
 			<th class="text-right"><?= number_format($saldo)  ?></th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -42,7 +46,21 @@ $saldo = $this->db->query($sql)->row()->saldo;
 		 	<td><?= $rec['date'] ?></td>
 		 	<td><?= $sub['name'] ?></td>
 		 	<td><?= $rec['keterangan'] ?></td>
+		 	<td class="text-right">
+				<a href="<?= base_url('uploads/'.$rec['file']) ?>" target="_blank"><i class="fa fa-download"></i> Download</a>
+			</td>
 		 	<td class="text-right"><?= number_format($rec['nominal']) ?></td>
+			<th>
+				<?php 
+			 	$created = strtotime($rec['created_at']);
+			 	$created = date('Y-m-d',$created);
+			 	$now = date('Y-m-d');
+			 	if($created==$now){
+			 	?>
+			 		<a href="javascript:void(0)" onclick="hapus(<?= $rec['id'] ?>)" class="text-danger"><i class="fa fa-times"></i></a>
+			 	<?php } ?>
+			</th>
+
 		 </tr>
 		<?php $i++;}} ?>
 	</tbody>
@@ -51,15 +69,27 @@ $saldo = $this->db->query($sql)->row()->saldo;
 		$totals =  array_sum($total);
 		?>
 		<tr>
-			<th colspan="4">Total</th>
+			<th colspan="5">Total</th>
 			<th class="text-right"><?= number_format($totals); ?></th>
+			<td></td>
 		</tr>
 		<tr style="background: #ddd;font-weight: bold;color:blue">
-			<td colspan="4">Margin</td>
+			<td colspan="5">Margin</td>
 
 			<td class="text-right">
 				<?= number_format($saldo-$totals) ?>
 			</td>
+			<td></td>
 		</tr>
 	</tfoot>
 </table>
+<script type="text/javascript">
+	 function hapus(id) {
+     	if (confirm('Are you sure delete this data ?')) {
+     		window.location.href = "<?= base_url('workorder/list-timesheets/pribadi/delete/') ?>"+id;		
+		} else {
+		    return false
+		}
+
+     }
+</script>
