@@ -49,4 +49,17 @@ class Report extends CI_Controller {
 		
 		$this->render->admin('garden-app/report/report-proyek-detail', $this->data);
 	}
+	
+	public function proyek_excel($id)
+	{	
+		$this->data['page']="report";
+		$this->data['matters']=$this->mmodel->selectWhere("proyek",array("pr_id"=>$id))->row();
+		
+		$this->data['page']="matters";
+		$this->data['aktivitas']=$this->mmodel->selectWhere("aktivitas",array("parent"=>"0"));
+		$this->data['ap']=$this->mmodel->selectWhere("aktivitas_proyek",array("ap_idproyek"=>$id));
+		$this->data['id'] = $id;
+		$this->load->view('garden-app/report/report-proyek-excel', $this->data);
+	
+	}
 }

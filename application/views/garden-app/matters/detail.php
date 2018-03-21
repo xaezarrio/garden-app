@@ -19,8 +19,8 @@
 					
 			        <div class="box box-primary">
 					   <div class="box-header with-border">	
-						<button class="btn btn-primary btn-flat " data-toggle="modal" data-target="#activity"><i class="fa fa-plus"></i> Tambahkan Aktivitas</button>
-						<button class="btn btn-success btn-flat pull-right"><i class="fa fa-file-excel"></i> Export Excel</button>
+						<button class="btn btn-primary btn-sm btn-flat " data-toggle="modal" data-target="#activity"><i class="fa fa-plus"></i> Tambahkan Aktivitas</button>
+						<a class="btn btn-success btn-sm btn-flat pull-right" href="<?= base_url('matters/detail-aktivitas/excel/'.$id) ?>" target="_blank"><i class="fa fa-file-excel"></i> Export Excel</a>
 					  </div>
 					  <div class="box-body table-responsive">
 			            <table class="table table-bordered table-striped">
@@ -127,7 +127,10 @@
 
 			            <div class="box box-primary">
 					   <div class="box-header with-border">	
+						<a class="btn btn-success btn-sm btn-flat pull-right" href="<?= base_url('matters/detail-aset/excel/'.$id) ?>" target="_blank"><i class="fa fa-file-excel"></i> Export Excel</a>
+
 						<h4><b>Aset</b></h4>
+
 					  </div>
 					  <div class="box-body table-responsive">
 			            <table class="table table-bordered table-striped">
@@ -138,8 +141,6 @@
 			            		<th>Karyawan</th>
 			            		<th>Aset</th>
 			            		<th>Qty</th>
-			            		<th>Masuk</th>
-			            		<th>Keluar</th>
 			            		<th>Keterangan</th>
 			            		<th>Status</th>
 
@@ -174,8 +175,6 @@
 			            			<td><?= $karyawan['name'] ?></td>
 			            			<td><?= $aset['name'] ?></td>
 			            			<td><?=  $detail['qty'] ?></td>
-			            			<td class="text-right"><?= number_format($in) ?></td>
-			            			<td class="text-right"><?= number_format($out) ?></td>
 			            			<td><?= $astr['desc'] ?></td>
 			            			<td>
 			            				<label class="label label-<?= $class ?>"><?= $text ?></label>

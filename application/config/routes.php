@@ -72,6 +72,10 @@ $route['matters/aktivitas/(:any:)'] = 'matters/aktivitas/$1';
 $route['matters/aktivitas/add'] = 'matters/add_aktivitas';
 
 
+$route['matters/detail-aktivitas/excel/(:any)'] = 'matters/aktivitas_excel/$1';
+$route['matters/detail-aset/excel/(:any)'] = 'matters/aset_excel/$1';
+
+
 
 $route['master/aktivitas/js'] = 'master/aktivitas_js';
 $route['master/aktivitas/data'] = 'master/aktivitas_data';
@@ -191,4 +195,6 @@ $route['koperasi/data'] = 'koperasi/data_koperasi';
 $route['koperasi/simpan/add'] = 'koperasi/store';
 // =================
 $route['report/proyek/detail/(:any)'] = 'report/proyek_detail/$1';
+$route['report/proyek/excel/(:any)'] = 'report/proyek_excel/$1';
+
 

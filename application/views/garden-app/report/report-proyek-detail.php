@@ -165,7 +165,7 @@
 				<div class="col-xs-9">
 					<div class="box box-primary">
 					<div class="box-header">
-						<button class="btn btn-sm btn-success btn-flat pull-right"><i class="fa fa-file-o"></i> Excel</button>
+						<a class="btn btn-sm btn-success btn-flat pull-right" target="_blank" href="<?= base_url('report/proyek/excel/'.$matters->pr_id) ?>"><i class="fa fa-file-o"></i> Excel</a>
 					</div>
 			          <div class="box-body">
 			           	<table class="table table-condensed table-hover table-bordered">

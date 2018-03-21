@@ -88,7 +88,7 @@ class Matters extends CI_Controller {
 				$this->alert->alertdanger($error);		
 			}else{
 				$param['created_at'] = date('Y-m-d H:i:s');
-				$param['user_id'] = user_id;
+				// $param['user_id'] = user_id;
 				
 			   	$str = $this->db->insert('aktivitas_proyek', $param);
 			   	$last_id = $this->db->insert_id();
@@ -222,6 +222,23 @@ class Matters extends CI_Controller {
 
 			$this->alert->alertsuccess('Success Send Data');
 		}
+	}
+
+
+	public function aktivitas_excel($id)
+	{
+		$this->data['matters']=$this->mmodel->selectWhere("proyek",array("pr_id"=>$id))->row();
+		$this->data['ap']=$this->mmodel->selectWhere("aktivitas_proyek",array("ap_idproyek"=>$id));
+
+		$this->load->view('garden-app/matters/excel-aktivitas',$this->data);
+	}
+
+	public function aset_excel($id)
+	{
+		$this->data['matters']=$this->mmodel->selectWhere("proyek",array("pr_id"=>$id))->row();
+		$this->data['id'] = $id;
+
+		$this->load->view('garden-app/matters/excel-aset',$this->data);
 	}
 	
 }
