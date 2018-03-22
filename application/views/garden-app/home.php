@@ -1,3 +1,7 @@
+<?php 
+$year = 2018;
+
+?>
 <div class="content-wrapper" >
 	<!-- Main content -->
 	<section class="content">
@@ -21,7 +25,10 @@
 					            <div class="col-xs-4">
 					            	<p class="text-center">
 					                    <strong>
-					                    	Rekap Finansial (<?= date('M-y') ?>)
+					                    	<select class="form-control">
+					                    		<option>2018</option>
+					                    		<option></option>
+					                    	</select>
 
 					                    </strong>
 					                    
@@ -40,10 +47,7 @@
 			                	</div>
 					          	<!-- end cols -->
 					          	<div class="col-xs-4">
-					          		<select class="form-control">
-					                    		<option><?= date('M-y') ?></option>
-					                    		<option>Jan-18</option>
-					                    	</select>
+					          		
 					          		  <table class="table table-striped" style="border: solid 2px red !important">
 
 					          		  	<tbody>
@@ -53,23 +57,106 @@
 					          		  		</tr>
 					          		  		<tr>
 					          		  			<td>Proyek</td>
-					          		  			<td><?= number_format(235000000) ?></td>
+					          		  			<?php 
+													$nilai = array();
+													$mdl =array();
+													$proyek = $this->mymodel->selectWhere('proyek','year(pr_tgl_mulai) = '.$year);
+													foreach ($proyek as $prk) {
+														$nilai[] = $prk['pr_nilai_kontrak'];
+													}
+													
+													$pengeluaranproyek = array_sum($nilai);
+					          		  				// $pengeluaranproyek = 0;
+					          		  			?>
+					          		  			<td><?= number_format($pengeluaranproyek) ?></td>
 					          		  		</tr>
 					          		  		<tr>
 					          		  			<td>Pribadi</td>
-					          		  			<td><?= number_format(15000000) ?></td>
+						      		  			<?php 
+													$m = array();
+													$masuk = $this->db->select('nominal');
+													$masuk = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+													$masuk = $this->db->where('year(date) = '.$year);
+													$masuk = $this->db->where(array('aktivitas.kategori'=>'Masuk','pengeluaran.kategori'=>'Pribadi'));
+													$masuk = $this->db->get('pengeluaran')->result_array();
+													foreach ($masuk as $msk) {
+														$m[] = $msk['nominal']; 
+													}
+
+													$k = array();
+													$keluar = $this->db->select('nominal');
+													$keluar = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+													$keluar = $this->db->where('year(date) = '.$year);
+													$keluar = $this->db->where(array('aktivitas.kategori'=>'Keluar','pengeluaran.kategori'=>'Pribadi'));
+													$keluar = $this->db->get('pengeluaran')->result_array();
+													foreach ($keluar as $kl) {
+														$k[] = $kl['nominal']; 
+													}
+
+
+													$pengeluaranpribadi = (array_sum($m)-array_sum($k));
+						      		  			 ?>
+					          		  			<td><?= number_format($pengeluaranpribadi) ?></td>
 					          		  		</tr>
 					          		  		<tr>
 					          		  			<td>Gaji</td>
-					          		  			<td><?= number_format(15000000) ?></td>
+					          		  			<?php 
+													$m = array();
+													$masuk = $this->db->select('nominal');
+													$masuk = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+													$masuk = $this->db->where('year(date) = '.$year);
+													$masuk = $this->db->where(array('aktivitas.kategori'=>'Masuk','pengeluaran.kategori'=>'Pegawai'));
+													$masuk = $this->db->get('pengeluaran')->result_array();
+													foreach ($masuk as $msk) {
+														$m[] = $msk['nominal']; 
+													}
+
+
+													$k = array();
+													$keluar = $this->db->select('nominal');
+													$keluar = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+													$keluar = $this->db->where('year(date) = '.$year);
+													$keluar = $this->db->where(array('aktivitas.kategori'=>'Keluar','pengeluaran.kategori'=>'Pegawai'));
+													$keluar = $this->db->get('pengeluaran')->result_array();
+													foreach ($keluar as $kl) {
+														$k[] = $kl['nominal']; 
+													}
+													// print_r($k);
+													$pengeluaranpegawai = array_sum($m)-array_sum($k);
+						      		  			 ?>
+					          		  			<td><?= number_format($pengeluaranpegawai) ?></td>
 					          		  		</tr>
 					          		  		<tr>
 					          		  			<td>Kantor</td>
-					          		  			<td><?= number_format(15000000) ?></td>
+					          		  			<?php 
+													$m = array();
+													$masuk = $this->db->select('nominal');
+													$masuk = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+													$masuk = $this->db->where('year(date) = '.$year);
+													$masuk = $this->db->where(array('aktivitas.kategori'=>'Masuk','pengeluaran.kategori'=>'Kantor'));
+													$masuk = $this->db->get('pengeluaran')->result_array();
+													foreach ($masuk as $msk) {
+														$m[] = $msk['nominal']; 
+													}
+
+
+													$k = array();
+													$keluar = $this->db->select('nominal');
+													$keluar = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+													$keluar = $this->db->where('year(date) = '.$year);
+													$keluar = $this->db->where(array('aktivitas.kategori'=>'Keluar','pengeluaran.kategori'=>'Kantor'));
+													$keluar = $this->db->get('pengeluaran')->result_array();
+													foreach ($keluar as $kl) {
+														$k[] = $kl['nominal']; 
+													}
+													// print_r($k);
+													$pengeluarankantor = array_sum($m)-array_sum($k);
+						      		  			 ?>
+					          		  			<td><?= number_format($pengeluarankantor) ?></td>
 					          		  		</tr>
 					          		  		<tr>
 					          		  			<td>Toko</td>
-					          		  			<td><?= number_format(15000000) ?></td>
+					          		  			<td><?= number_format(0) ?></td>
 					          		  		</tr>
 					          		  	</tbody>
 					          		  </table>
@@ -91,7 +178,12 @@
 							<!-- small box -->
 							<div class="small-box bg-red">
 								<div class="inner">
-									<h3>15</h3>
+									<?php 
+									$this->db->where('year(pr_tgl_mulai) ='.$year);
+									$pr = $this->mymodel->selectData('proyek');
+									$countpr = count($pr);
+									?>
+									<h3><?= $countpr ?></h3>
 									<p>Proyek</p>
 								</div>
 								<div class="icon">
@@ -105,7 +197,12 @@
 							<!-- small box -->
 							<div class="small-box bg-aqua">
 								<div class="inner">
-									<h3>8</h3>
+									<?php 
+									$this->db->where('year(date) ='.$year);
+									$inv = $this->mymodel->selectData('invoice');
+									$countinv = count($inv);
+									?>
+									<h3><?= $countinv ?></h3>
 									<p>Invoice </p>
 								</div>
 								<div class="icon">
@@ -119,7 +216,7 @@
 							<!-- small box -->
 							<div class="small-box bg-teal">
 								<div class="inner">
-									<h3>800</h3>
+									<h3>0</h3>
 									<p>Produk</p>
 								</div>
 								<div class="icon">
@@ -132,8 +229,13 @@
 						<div class="col-lg-3 col-xs-6">
 							<!-- small box -->
 							<div class="small-box bg-primary">
+								<?php 
+									// $this->db->where('year(date) ='.$year);
+									$aset = $this->mymodel->selectData('aset');
+									$countaset = count($aset);
+									?>
 								<div class="inner">
-									<h3>15</h3>
+									<h3><?= $countaset ?></h3>
 									<p>Aset Aktif</p>
 								</div>
 								<div class="icon">
@@ -168,15 +270,24 @@
 								    </tr>
 								  </thead>
 								  <tbody>
+								  	<?php 
+										$i=1;
+										$masuk = $this->db->select('pengeluaran.date,pengeluaran.kategori,pengeluaran.nominal,pengeluaran.keterangan');
+										$masuk = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+										$masuk = $this->db->where('year(date) = '.$year);
+										$masuk = $this->db->where(array('aktivitas.kategori'=>'Keluar'));
+										$masuk = $this->db->get('pengeluaran')->result_array();
+										foreach ($masuk as $msk) {
+										
+								  	 ?>
 								    <tr>
-								      <td><a href="#">1</a></td>
-								      <td><?= date('Y-m-d H:i'); ?></td>
-								      <td>Gaji</td>
-								      <td><?= number_format(10000000) ?></td>
-								      <td>Gaji Februari - Arif</td>
-								      	
+								      <td><a href="#"><?= $i ?></a></td>
+								      <td><?= $msk['date']; ?></td>
+								      <td><?= $msk['kategori'] ?></td>
+								      <td><?= number_format($msk['nominal']) ?></td>
+								      <td><?= $msk['keterangan'] ?></td>
 								    </tr>
-								    
+								    <?php $i++;} ?>
 								  </tbody>
 								</table>
 							</div>
@@ -203,24 +314,30 @@
 								    </tr>
 								  </thead>
 								  <tbody>
+								   <?php 
+										$i=1;
+										$masuk = $this->db->select('*');
+										$masuk = $this->db->join('aktivitas','aktivitas_proyek.ap_idsubaktivitas=aktivitas.id','left');
+										$masuk = $this->db->where('year(ap_tanggal) = '.$year);
+										$masuk = $this->db->where(array('aktivitas.kategori'=>'Keluar'));
+										$masuk = $this->db->get('aktivitas_proyek')->result_array();
+										foreach ($masuk as $msk) {
+											$akt= $this->mymodel->selectdataOne('aktivitas',array('id'=>$msk['ap_idaktivitas']));
+											$proyek= $this->mymodel->selectdataOne('proyek',array('pr_id'=>$msk['ap_idproyek']));
+											$perusahaan= $this->mymodel->selectdataOne('perusahaan',array('id'=>$proyek['pr_idperusahaan']));
+										
+								  	 ?>
 								    <tr>
 								      <td><a href="#">1</a></td>
-								      <td><?= date('d M Y'); ?></td>
-								      <td>Bahan </td>
-								      <td><b>Bekasi</b><br>Taman Nor Ali</td>
-								      <td><?= number_format(10000000) ?></td>
-								      <td>Pot (10pcs)</td>
+								      <td><?= $msk['ap_tanggal']; ?></td>
+								      <td><?= $akt['name'] ?> </td>
+								      <td><b><?= $perusahaan['name'] ?></b><br><?= $proyek['pr_nama'] ?></td>
+								      <td><?= number_format($msk['ap_nominal']) ?></td>
+								      <td><?= $msk['ap_keterangan'] ?></td>
 								      	
 								    </tr>
-								    <tr>
-								      <td><a href="#">2</a></td>
-								      <td><?= date('d M Y'); ?></td>
-								      <td>Konsumsi</td>
-								      <td><b>Bekasi</b><br>Mega Bekasi</td>
-								      <td><?= number_format(10000000) ?></td>
-								      <td>makan minum 1 minggu</td>
-								      	
-								    </tr>
+								    <?php } ?>
+								   
 								    
 								  </tbody>
 								</table>
@@ -253,17 +370,78 @@
     });
   });
 </script>
+<?php 
+foreach ($bulan as $month) {
+	$mth[] = $month['month'];
+	// ------------------KONTRAK dan modal------------------------//
+	$this->db->where('year(pr_tgl_mulai) = '.$year);
+	$nilai = array();
+	$mdl =array();
+	$proyek = $this->mymodel->selectWhere('proyek','month(pr_tgl_mulai) = '.$month['name']);
+	foreach ($proyek as $prk) {
+		$nilai[] = $prk['pr_nilai_kontrak']/1000000;	
+		$modal = json_decode($prk['pr_modal']);
+		$mdl[] = array_sum($modal)/1000000;
+	}
+	
+	$kontrak[] = array_sum($nilai);
+	$mdals[] = array_sum($mdl);
+
+	// ---------------------INVOICE----------------------------//
+	$invo = array();
+	$this->db->where('year(date) = '.$year);
+	$invoice = $this->mymodel->selectWhere('invoice','month(date) = '.$month['name']);
+	foreach ($invoice as $inv) {
+		$invo[] = $inv['subtotal']/1000000;	
+	}
+
+	$in[] = array_sum($invo);
+
+	// --------------------------------------------------------
+	$m = array();
+	$masuk = $this->db->select('nominal');
+	$masuk = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+	$masuk = $this->db->where('year(date) = '.$year);
+	$masuk = $this->db->where(array('month(pengeluaran.date) '=>$month['name'],'aktivitas.kategori'=>'Masuk'));
+	$masuk = $this->db->get('pengeluaran')->result_array();
+	foreach ($masuk as $msk) {
+		$m[] = $msk['nominal']; 
+	}
+
+	$k = array();
+	$keluar = $this->db->select('nominal');
+	$keluar = $this->db->join('aktivitas','pengeluaran.aktivitas_sub=aktivitas.id','left');
+	$keluar = $this->db->where('year(date) = '.$year);
+	$keluar = $this->db->where(array('month(pengeluaran.date) '=>$month['name'],'aktivitas.kategori'=>'Keluar'));
+	$keluar = $this->db->get('pengeluaran')->result_array();
+	foreach ($keluar as $kl) {
+		$k[] = $kl['nominal']; 
+	}
+
+
+	$pengeluaran[] = (array_sum($m)-array_sum($k))/1000000;
+
+}
+
+$bln = json_encode($mth);
+$nilaikontrak = json_encode($kontrak);
+$nilaiinvo = json_encode($in);
+$nilaimodal= json_encode($mdals);
+$nilaipengeluaran= json_encode($pengeluaran);
+
+
+
+
+
+
+ ?>
 <script type="text/javascript">
 //--------------
 //- AREA CHART -
 //--------------
 
-// Get context with jQuery - using jQuery's .get() method.
-// var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
-// This will get the first returned node in the jQuery collection.
-
 var areaChartData = {
-  labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels  : <?= $bln ?>,
   datasets: [
     {
       label               : 'Kontrak',
@@ -273,7 +451,7 @@ var areaChartData = {
       pointStrokeColor    : '#c1c7d1',
       pointHighlightFill  : '#fff',
       pointHighlightStroke: 'rgba(220,220,220,1)',
-      data                : [650, 590, 800, 810, 560, 550, 400]
+      data                : <?= $nilaikontrak ?>
     },
     {
       label               : 'Invoice',
@@ -283,7 +461,7 @@ var areaChartData = {
       pointStrokeColor    : 'rgba(60,141,188,1)',
       pointHighlightFill  : '#fff',
       pointHighlightStroke: 'rgba(60,141,188,1)',
-      data                : [580, 480, 400, 390, 860, 527, 900]
+      data                : <?= $nilaiinvo ?>
     },
     {
       label               : 'Modal',
@@ -293,7 +471,7 @@ var areaChartData = {
       pointStrokeColor    : 'rgba(60,141,188,1)',
       pointHighlightFill  : '#fff',
       pointHighlightStroke: 'rgba(60,141,188,1)',
-      data                : [580, 580, 500, 590, 660, 770, 500]
+      data                : <?= $nilaimodal ?>
     },
     {
       label               : 'Pengeluaran',
@@ -303,7 +481,7 @@ var areaChartData = {
       pointStrokeColor    : 'rgba(60,1,1,1)',
       pointHighlightFill  : '#fff',
       pointHighlightStroke: 'rgba(60,1,1,1)',
-      data                : [580, 480, 400, 390, 860, 527, 900]
+      data                : <?= $nilaipengeluaran ?>
     }
   ]
 }

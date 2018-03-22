@@ -23,6 +23,7 @@ class Home extends CI_Controller {
 	public function index()
 	{
 		$this->data['page']="home";
+		$this->data['bulan']= array(array("name"=>"01","month"=>"Januari"),array("name"=>"02","month"=>"Februari"),array("name"=>"03","month"=>"Maret"),array("name"=>"04","month"=>"April"),array("name"=>"05","month"=>"Mei"),array("name"=>"06","month"=>"Juni"),array("name"=>"07","month"=>"Juli"),array("name"=>"08","month"=>"Agustus"),array("name"=>"09","month"=>"September"),array("name"=>"10","month"=>"Oktober"),array("name"=>"11","month"=>"November"),array("name"=>"12","month"=>"Desember"));
 		
 		$this->render->admin('garden-app/home', $this->data);
 	}
