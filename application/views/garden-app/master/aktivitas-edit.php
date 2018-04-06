@@ -5,4 +5,6 @@
 <select name="dt[kategori]" class="form-control">
 	<option value="Masuk" <?php if($aktivitas['kategori']=="Masuk"){ echo "selected=''"; } ?>>Masuk</option>
 	<option value="Keluar" <?php if($aktivitas['kategori']=="Keluar"){ echo "selected=''"; } ?>>Keluar</option>
+	<option value="Pakai" <?php if($aktivitas['kategori']=="Pakai"){ echo "selected=''"; } ?>>Pakai</option>
+
 </select>

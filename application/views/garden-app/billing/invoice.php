@@ -9,28 +9,22 @@
 				<div class="col-xs-12">
 					<div class="box box-primary">
 			          <div class="box-body">
-			          	<a href="<?= base_url('billing/add-invoice') ?>" class="btn btn-success btn-flat">New Invoice</a>
+			          	<div class="row">
+			          		<div class="col-xs-9">
+			          			<a href="<?= base_url('billing/add-invoice') ?>" class="btn btn-success btn-flat">New Invoice</a>
+			          			
+			          		</div>
+			          		<div class="col-xs-3">
+			          			<label>Status Invoice</label>
+			          			<select class="form-control" id="status" onchange="settable()">
+			          				<option value="Belum">Belum Lunas</option>
+			          				<option value="Lunas">Lunas</option>
+			          			</select>
+			          		</div>
+			          	</div>
 			          	<br>
-			          	<br>
-			            <table class="table table-condensed table-hover table-bordered" id="mytable">
-			              <thead>
-			                <tr>
-			                  <th>No</th>
-			                  <th>Invoice</th>
-			                  <th>Inv Date</th>
-			                  <th>Due Date</th>
-			                  <th>Perusahaan</th>
-			                  <th>Proyek</th>
-			                  <th>Termin</th>
-			                  <th>Nominal</th>
-			                  <th>Status</th>
-			                  <th>#</th>
-			                </tr>
-			                </thead>
-			                <tbody>
-			                
-			                </tbody>
-			            </table>
+
+			           <div id="set"></div>
 			          </div>
 			        </div>
 
@@ -47,7 +41,33 @@
 
 <script type="text/javascript">
 	
+	function settable() {
+		var html  = '<table class="table table-condensed table-hover table-bordered" id="mytable">'+
+			        '      <thead>'+
+			        '        <tr>'+
+			        '          <th>No</th>'+
+			        '          <th>Invoice</th>'+
+			        '          <th>Proyek</th>'+
+			        '          <th>Pelannggan</th>'+
+			        '          <th>Inv Date</th>'+
+			        '          <th>Due Date</th>'+
+			        '          <th>Type</th>'+
+			        '          <th>Tgl Bayar</th>'+
+			        '          <th>Nominal</th>'+
+			        '          <th>Status</th>'+
+			        '          <th>#</th>'+
+			        '        </tr>'+
+			        '        </thead>'+
+			        '        <tbody>'+
+			        '        '+
+			        '        </tbody>'+
+			         '   </table>';
+		         $("#set").html(html);
+		         loaddata()
+	}
+
 		function loaddata() {
+		var stt = $("#status").val();
 		var t = $("#mytable").dataTable({
 		  initComplete: function() {
 		    var api = this.api();
@@ -64,15 +84,17 @@
 		  },
 		  processing: true,
 		  serverSide: true,
-		  ajax: {"url": "<?= base_url('billing/invoice/json') ?>/Belum", "type": "POST"},
+		  ajax: {"url": "<?= base_url('billing/invoice/json') ?>/"+stt, "type": "POST"},
 		    columns: [
 		      {"data": "id","orderable": false},
 		      {"data": "id"},
-		      {"data": "date"},
-              {"data": "due"},
-              {"data": "perusahaan"},
               {"data": "proyek"},
-              {"data": "termin"},
+              {"data": "perusahaan"},
+		      {"data": "date"},
+
+              {"data": "due"},
+              {"data": "type"},
+              {"data": "updated_at"},
               {"data": "total"},
               {"data": "status"},
 
@@ -82,7 +104,7 @@
 		    ],
 		  order: [[0, 'asc']],
 		  columnDefs : [
-		    { targets : [7],
+		    { targets : [8],
 		      render : function (data, type, row) {
 		        return convertToRupiah(row['total']);
 		      }
@@ -102,7 +124,7 @@
 		});
 		}
 
-     loaddata();
+     settable();
 
      function detail(id) {
      	window.location.href= "<?= base_url("billing/detail-invoice/") ?>"+id;

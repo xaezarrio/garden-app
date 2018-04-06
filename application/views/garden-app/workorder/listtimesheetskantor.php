@@ -56,6 +56,8 @@
 		                          <option value="">Semua Kategori</option>
 		                          <option value="Masuk">Masuk</option>
 		                          <option value="Keluar">Keluar</option>
+		                          <option value="Pakai">Pakai</option>
+		                          
 
 		                        </select>
 		                      <!-- /.input group -->
@@ -123,7 +125,7 @@
 			            		<th>QTY</th>
 			            		<th>Keterangan</th>
 			            		<th>Nominal</th>
-			                  	<th style="width:80px;">Action</th>
+			                  	<!-- <th style="width:80px;">Action</th> -->
 			                </tr>
 			              </thead>
 			              <tbody>
@@ -156,7 +158,7 @@
 					'		<th>QTY</th>'+
 					'		<th>Keterangan</th>'+
 					'		<th>Nominal</th>'+
-					'      	<th style="width:80px;">Action</th>'+
+					// '      	<th style="width:80px;">Action</th>'+
 					'    </tr>'+
 					'  </thead>'+
 					'  <tbody>'+
@@ -206,15 +208,19 @@
 		      {"data": "qty"},
 		      {"data": "keterangan"},
 		      {"data": "nominal"},
-		      {   "data": "view",
-		      "orderable": false
-		      }
+		      // {   "data": "view",
+		      // "orderable": false
+		      // }
 		    ],
 		  order: [[0, 'asc']],
 		  columnDefs : [
 		    { targets : [7],
 		      render : function (data, type, row) {
-		        return convertToRupiah(row['nominal']);
+		      	if(row['kategori']=='Pakai'){
+			        return 0;
+		      	}else{
+			        return convertToRupiah(row['nominal']);
+		      	}
 		      }
 		    }
 		  ],

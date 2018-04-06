@@ -62,7 +62,7 @@
 			            			File
 			            		</td>
 			            		<td>
-			            			<input name="file" type="file" class="form-control" required/>
+			            			<input name="file" type="file" class="form-control" />
 			            		</td>
 			            	</tr>
 			            </table>
@@ -148,7 +148,7 @@
                     form.find(".show_error").hide().html(response).slideDown("fast");
                     setTimeout(function(){ 
                         document.getElementById('upload').reset();
-                        window.location.href="<?= base_url("workorder/list-timesheets/pribadi") ?>";
+                        window.location.href="<?= base_url("workorder/addpribadi") ?>";
                     }, 1000);
                     $("#send-btn").removeClass("disabled").html("Tambahkan").attr('disabled',false);;
 

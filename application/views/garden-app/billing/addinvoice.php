@@ -69,13 +69,11 @@
                         </td>
                       </tr>
                       <tr>
-                        <td style="width: 140px;">Termin</td>
+                        <td style="width: 140px;">Type</td>
                         <td>
-                          <select class="form-control select2" name="dt[termin]">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
+                          <select class="form-control select2" name="dt[type]">
+                                <option value="Pembayaran Proyek">Pembayaran Proyek </option>
+                                <option value="Penambahan Proyek">Penambahan Proyek </option>
 
                           </select>
                         </td>

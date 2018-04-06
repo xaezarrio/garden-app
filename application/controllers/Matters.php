@@ -77,7 +77,6 @@ class Matters extends CI_Controller {
 	        $dir  = "webfile/aktivitas-proyek/";
 			$config['upload_path']          = $dir;
 			$config['allowed_types']        = '*';
-			// $config['max_size']             = 100;
 			$config['max_width']            = 500;
 			$config['max_height']           = 500;
 			$config['file_name']           = rand(1,1000);
@@ -153,7 +152,6 @@ class Matters extends CI_Controller {
 		$id = $this->input->post('id');
 		$param = $this->input->post('dt');
 		$param['pr_nilai_kontrak'] = str_replace(",", "", $param['pr_nilai_kontrak']);
-		// $param['pr_modal'] = str_replace(",", "", $param['pr_modal']);
 		$param['update_at'] = date("Y-m-d H:i:s");
 		$param['update_by'] = "";
 
@@ -176,10 +174,39 @@ class Matters extends CI_Controller {
 		$param['pr_sumber'] = $md;
 		$param['pr_bunga'] = $bng;
 
-
-
 		$query = $this->mymodel->updateData("proyek",$param,array('pr_id'=>$id));
-		redirect('matters/list-matters');
+		
+
+
+		$start    = (new DateTime($param['pr_tgl_mulai']))->modify('first day of this month');
+		$end      = (new DateTime($param['pr_tgl_selesai']))->modify('first day of next month');
+		$interval = DateInterval::createFromDateString('1 month');
+		$period   = new DatePeriod($start, $interval, $end);
+
+		$this->db->select('DISTINCT(karyawan_id) as karyawan');
+		$kp = $this->mymodel->selectWhere('karyawan_proyek',array('proyek_id'=>$id));
+		
+		$this->mymodel->deleteData('karyawan_proyek',array('proyek_id'=>$id));
+
+		foreach ($kp as $value) {
+			foreach ($period as $dt) {
+		    	$data['proyek_id'] = $id;
+		    	$data['karyawan_id'] = $value['karyawan'];
+		    	$data['user_id'] = user_id;
+		    	$data['created_at'] = date('Y-m-d H:i:s');
+		    	$data['date'] = $dt->format("Y-m-01") . "<br>\n";
+		    	// print_r($data);
+    		$this->db->insert('karyawan_proyek', $data);
+
+			}
+		}
+
+
+
+		
+
+
+		redirect('matters/edit/'.$id);
 	}
 
 	public function savedocument()

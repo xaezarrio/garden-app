@@ -5,6 +5,7 @@
 			<div class="row no_margin">
 				<h3 class="jdl_page">
 				TAMBAH PENGELUARAN KANTOR
+				<a href="<?= base_url('item') ?>" class="btn btn-xs btn-primary pull-right">Lihat Item</a>
 				</h3>
 			</div>
 			<div class="row">
@@ -29,7 +30,7 @@
 			            			Digunakan
 			            		</td>
 			            		<td>
-			            			<select class="form-control" id="" name="dt[proyek_id]">
+			            			<select class="form-control" id="digunakan" name="dt[proyek_id]" onchange="getoption()">
 					    				<option value="0">Kantor</option>
 					    				<?php 
 					    					$proyek = $this->mymodel->selectData('proyek');
@@ -45,14 +46,8 @@
 			            			Sub Aktivitas
 			            		</td>
 			            		<td>
-			            			<select class="form-control" name="dt[aktivitas_sub]" id="sub" onchange="subitem()">
-					    				<?php 
-					    					$parent = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Kantor'));
-					    					$sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$parent['id']));
-					    					foreach ($sub as $s) {
-					    				?>
-					    					<option value="<?= $s['id'] ?>"><?= $s['name'] ?></option>
-					    				<?php } ?>
+			            			<select class="form-control" name="dt[aktivitas_sub]" id="sub" onchange="subitem()" required="">
+					    				<!-- <option value="">-Pilih Sub Aktivitas-</option> -->
 					    			</select>
 			            		</td>
 			            	</tr>
@@ -61,7 +56,8 @@
 			            			Item
 			            		</td>
 			            		<td>
-			            			<input type="text" name="dt[item]" placeholder="masukan item produk" class="form-control" id="item" onkeyup="resets()">
+  
+			            			<input type="text" name="dt[item]" placeholder="masukan item produk" class="form-control" id="item" onkeyup="resets()" onchange="getstock()">
 			            		</td>
 			            	</tr>
 			            	<tr class="item">
@@ -69,7 +65,7 @@
 			            			QTY
 			            		</td>
 			            		<td>
-			            			<input type="number" name="dt[qty]" class="form-control" style="display: inline;width: 100px;">
+			            			<input type="number" name="dt[qty]" class="form-control" style="display: inline;width: 100px;" id="qty">
 			            			<select class="form-control" style="display: inline;width: 100px;" name="dt[satuan_id]" id="satuan" >
 					    				<?php 
 					    					$satuan = $this->mymodel->selectData('satuan');
@@ -143,15 +139,32 @@
           var value = ui.item.value;
           document.valueSelectedForAutocomplete = value;
           getdetail(value)
+
         }
       });
 
       function getdetail(kode) {
-        // body...
         $.getJSON( "<?= base_url('workorder/json_detail/'); ?>"+kode, function( data ) {
          $("#satuan").val(data.i_satuan);   
-      });
+      	});
       }
+
+       function getstock() {
+       	var item = $("#item").val();
+       	var sub = $("#sub").val();
+
+        $.getJSON( "<?= base_url('workorder/getstock/'); ?>"+item+"/"+sub, function( data ) {
+         	// $("#").val();
+         	if(data.i_stok==null){
+       			$("#qty").attr('max','');
+         	}else{
+       			$("#qty").attr('max',data.i_stok);
+         	}
+         	console.log(data.i_stok)
+
+      	});
+      }
+
 	function subitem() {
 		var sub = $("#sub").val();
 		if (sub=="78") {
@@ -159,6 +172,7 @@
 		} else {
 			$('.item').show();
 		}
+		getstock()
 	}
     subitem();
  
@@ -211,7 +225,7 @@
                     form.find(".show_error").hide().html(response).slideDown("fast");
                     setTimeout(function(){ 
                         document.getElementById('upload').reset();
-                        window.location.href="<?= base_url("workorder/list-timesheets/kantor") ?>";
+                        window.location.href="<?= base_url("workorder/addkantor") ?>";
                     }, 1000);
                     $("#send-btn").removeClass("disabled").html("Tambahkan").attr('disabled',false);;
 
@@ -230,4 +244,34 @@
         return false;
         });
 
+
+    function getoption() {
+    	// body...
+		$("#sub").html('');
+
+    	var digu = $("#digunakan").val();
+    	 
+    	 $.getJSON( "<?= base_url('workorder/ceksub/'); ?>"+digu, function( data ) {
+         	// $("#satuan").val(data.i_satuan);   
+         	 $.each(data, function (key, val) {
+				
+				var opt = '<option value="'+val.value+'">'+val.option+'</option>';
+				$("#sub").append(opt);
+		     
+		    });
+      
+
+      	});
+
+    	
+		
+
+    
+		setTimeout(function () {
+			// body...
+			subitem()
+		},200)
+    }
+
+    getoption()
 </script>

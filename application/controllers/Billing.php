@@ -121,7 +121,7 @@ class Billing extends CI_Controller {
 		}
 
 		header('Content-Type: application/json');
-        $this->datatables->select('invoice.id,invoice.date,invoice.due,pelanggan.p_nama_perusahaan as perusahaan, proyek.pr_nama as proyek,invoice.termin,invoice.total,invoice.status');
+        $this->datatables->select('invoice.id,invoice.date,invoice.due,pelanggan.p_nama_perusahaan as perusahaan, proyek.pr_nama as proyek,invoice.type,invoice.total,invoice.status,invoice.updated_at');
         $this->datatables->join('proyek','invoice.proyek_id=proyek.pr_id','left');
         $this->datatables->join('pelanggan','proyek.pr_idpelanggan=pelanggan.p_id','left');
         $this->datatables->where('invoice.status',$status);
@@ -147,8 +147,12 @@ class Billing extends CI_Controller {
 		header('Content-Type: application/json');
 
         $this->datatables->select("`proyek`.`pr_id` as id, 
+        							pelanggan.p_nama_perusahaan as perusahaan,
 									`proyek`.`pr_nama` as proyek,
 									`proyek`.`pr_tgl_mulai` as date,
+									`proyek`.`pr_status` as status,
+
+
 									`proyek`.`pr_tgl_selesai` as due,
 									(SELECT COUNT(`invoice`.`id`) as invoice FROM `invoice` WHERE `proyek`.`pr_id` = `invoice`.`proyek_id` AND `invoice`.`status`='Lunas') as invoice,
 									`proyek`.`pr_nilai_kontrak` as kontrak,
@@ -180,6 +184,7 @@ class Billing extends CI_Controller {
 			$this->datatables->where('proyek.pr_idpelanggan', $pelanggan);
 		}
 
+        $this->datatables->join('pelanggan','proyek.pr_idpelanggan=pelanggan.p_id','left');
 
         $this->datatables->from('proyek');
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="detail($1)" class="btn btn-xs btn-primary">detail</span></a></div>', 'id');

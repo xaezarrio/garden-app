@@ -1,5 +1,10 @@
 <?php 
-$year = 2018;
+if(@$_GET['year']==""){
+$year = date('Y');
+}else{
+$year = $this->input->get('year');	
+}
+$years = date('Y');
 
 ?>
 <div class="content-wrapper" >
@@ -25,9 +30,14 @@ $year = 2018;
 					            <div class="col-xs-4">
 					            	<p class="text-center">
 					                    <strong>
-					                    	<select class="form-control">
-					                    		<option>2018</option>
-					                    		<option></option>
+					                    	<select class="form-control" onchange="loadwindw()" id="year">
+
+					                    		<?php for ($i=$years; $i >= 2017 ; $i--) { 
+					                    		?>
+					                    			<option value="<?= $i ?>" <?php if($i==$year){ echo "selected";} ?>><?= $i ?></option>";
+					                    		<?php
+					                    		} ?>
+					                    		<!-- <option></option> -->
 					                    	</select>
 
 					                    </strong>
@@ -359,6 +369,13 @@ $year = 2018;
 	
 </div><!-- /.content-wrapper -->
 <script>
+
+	function loadwindw() {
+		// body...
+		var year = $("#year").val();
+		window.location.href = "<?= base_url('?year=') ?>"+year;	
+	}
+
   $(function () {
     $('#example1').DataTable({
       "paging": true,

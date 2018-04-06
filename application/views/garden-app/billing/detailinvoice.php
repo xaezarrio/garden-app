@@ -25,7 +25,7 @@
         </div>
         <div class="col-xs-6">
           <?php if($invoice['status']!="Lunas"){ ?>
-          <button type="button" class="btn btn-primary btn-flat pull-right" style="bottom: 0px" onclick="modalchange()"><i class="fa fa-refresh"></i>  Change to <b>LUNAS</b></button>  
+          <button type="button" class="btn btn-primary btn-flat pull-right" style="bottom: 0px" onclick="modalchange()"><i class="fa fa-refresh"></i>  Bayar Invoice</button>  
           <?php } ?>
         </div>
         <!-- /.col -->
@@ -44,11 +44,11 @@
               <td> : </td>
               <td><?= $due ?></td>
             </tr>
-            <tr>
+          <!--   <tr>
               <td>Hal</td>
               <td> : </td>
               <td>2</td>
-            </tr>
+            </tr> -->
           </table>
         </div>
        
@@ -62,13 +62,16 @@
             <strong><?= $pelanggan['p_nama_perusahaan'] ?></strong><br>
             <?= $pelanggan['p_alamat'] ?>
           </address>
+        <p><b>Subject : </b> <?= $invoice['subject'] ?></p>
+        <p><b>Type : </b> <?= $invoice['type'] ?></p>
+
         </div>
       </div>
       <!-- Table row -->
       <div class="row">
         <div class="col-xs-12 table-responsive">
           <table class="table table-bordered table-condensed">
-            <caption><strong>Item purchase </strong></caption>
+            <!-- <caption><strong>Item purchase </strong></caption> -->
             <thead>
             <tr class="bg-aqua">
               <th class="text-center">ITEM</th>
@@ -133,111 +136,13 @@
 
       <div class="row">
         <div class="col-xs-12">
-          <p>Hal 1</p>
+          <!-- <p>Hal 1</p> -->
         </div>
       </div>
   
     </section>
 
-          <!-- Main content -->
-    <section class="invoice">
-      <!-- title row -->
-      <div class="row">
-        <div class="col-xs-12">
-          <h2 class="page-header">
-             INVOICE :  INV<?= $no ?>
-            <!-- <small class="pull-right">Date: 2/10/2014</small> -->
-          </h2>
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- info row -->
-      <div class="row invoice-info">
-        <div class="col-sm-12 invoice-col">
-           <h4>LAMPIRAN</h4>
-        </div>
-       
-      </div>
-      <!-- /.row -->
-      <hr>
-
-      <div class="row">
-        <div class="col-xs-12 table-responsive">
-          <table class="table table-striped table-bordered table-condensed">
-            <thead>
-            <tr class="bg-aqua ">
-              <th class="text-center">DATE</th>
-              <th class="text-center">TYPE</th>
-              <th class="text-center">ACTIVITY</th>
-              <th class="text-center">OUT</th>
-              <th class="text-center">IN</th>
-
-
-            </tr>
-            </thead>
-            <tbody>
-              <?php $total=0; 
-                      $m = 0;
-                      $k = 0;
-              foreach ($ap->result() as $i => $v): 
-                      
-                $sub = $this->mymodel->selectdataOne("aktivitas",array("id"=>$v->ap_idsubaktivitas));
-                      if($sub['kategori']=="Masuk"){
-                        $masuk = $v->ap_nominal;
-                        $keluar = 0;
-                        $type = "IN";
-                      }else{
-                        $keluar = $v->ap_nominal;
-                        $masuk = 0;
-                        $type = "OUT";
-
-                      }
-                $m += $masuk;
-                $k += $keluar;
-                      ?>
-            <tr>
-              <?php $akt = $this->mmodel->selectWhere("aktivitas",array("id"=>$v->ap_idaktivitas))->row()->name ?>
-              <td><?= $v->ap_tanggal ?></td>
-              <td><?= $type ?></td>
-              <td><?= $akt ?> - <?= $sub['name'] ?></td>
-              <td class="text-right"><?= number_format($masuk) ?></td>
-              <td class="text-right"><?= number_format($keluar) ?></td>
-            </tr>
-            <?php endforeach;
-                       ?>
-            </tbody>
-            <tfoot>
-              <tr class="bg-info">
-                <td colspan="3">Total</td>
-                <td class="text-right"><?= number_format($m) ?></td>
-                <td class="text-right"><?= number_format($k) ?></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-
-      <div class="row">
-        <div class="col-xs-12">
-          <p>Hal 2</p>
-        </div>
-      </div>
-      <!-- /.row -->
-
-      <!-- this row will not appear when printing -->
-      <!-- <div class="row no-print">
-        <div class="col-xs-12">
-          <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
-          <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
-          </button>
-          <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
-            <i class="fa fa-download"></i> Generate PDF
-          </button>
-        </div>
-      </div> -->
-    </section>
+          
 	</div>
     </section>
 </div>
@@ -247,21 +152,21 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Alert</h4>
+        <h4 class="modal-title">Pembayaran Invoice</h4>
       </div>
       <form id="upload" enctype="multipart/form-data" action="<?= base_url('billing/updatestatus/'.$invoice['id']) ?>">
       <div class="modal-body">
 
-        <h5 class="text-center"><b>Are you sure change invoice status ?</b></h5>
+        <h5 class="text-center"><b>Apakah Anda Yakin Memproses pembayaran ini ?</b></h5>
         <div class="show_error"></div>
         <br>
         <input type="file" name="gambar" class="form-control" required="">
       </div>
       <div class="modal-footer">
-        <center>
-        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary btn-flat" id="send-btn">Save changes</button>
-      </center> 
+        <!-- <center> -->
+        <!-- <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cancel</button> -->
+        <button type="submit" class="btn btn-primary btn-flat" id="send-btn">Save</button>
+      <!-- </center>  -->
       </div>
       </form>
     </div>

@@ -3,14 +3,14 @@
 	<section class="content">
 		<div class="container">
 			<div class="row no_margin">
-				<h3 class="jdl_page">List Detail Transaction</h3>
+				<h3 class="jdl_page">List Detail Simpan</h3>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="box box-primary">
 			          	<div class="box-body">
 			        		<div class="row no_margin">
-			        			<a href="" class="btn btn-success btn-flat pull-right">Excel</a>
+			        			<!-- <a href="" class="btn btn-success btn-flat pull-right">Excel</a> -->
 			        			<div class="col-xs-3">
 			        				<select class="form-control" id="month" onchange="loaddata()">
 			        					<option value="">Semua Bulan .. </option>
@@ -110,8 +110,9 @@
       $("#load-data").html("");
       var month = $("#month").val();
       var year = $("#year").val();
-      // var karyawan = $("#karyawan").val();
-      var url = "<?= base_url('koperasi/data') ?>?month="+month+"&year="+year+"&karyawan=<?= $karyawan_id ?>&id=<?= $id ?>";
+      <?php $akt = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Simpan')); ?>
+      var akt = <?= $akt['id'] ?>;
+      var url = "<?= base_url('koperasi/data_koperasi_simpan') ?>?month="+month+"&year="+year+"&karyawan=<?= $karyawan_id ?>&id=<?= $id ?>&aktivitas="+akt;
       $("#load-data").load(url);
       $("#loading").hide();
     }

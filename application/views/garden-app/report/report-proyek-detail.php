@@ -251,6 +251,47 @@
 			            		</tr>
 			            		<?php $i++; endforeach; ?>
 
+
+			            		<tr>
+			            			<td colspan="10" class="text-center" style="background: #ddd">Kantor</td>
+			            		</tr>
+			            		<?php 
+			            			$kantor = $this->mymodel->selectWhere('pengeluaran',array('proyek_id'=>$id,'kategori'=>'Kantor'));
+			            			foreach ($kantor as $ktr) {
+			            			$sub = $this->mymodel->selectdataOne('aktivitas',array('id'=>$ktr['aktivitas_sub']));
+			            			$akt = $this->mymodel->selectdataOne('aktivitas',array('id'=>$sub['parent']));
+			            			if($sub['kategori']=="Masuk"){
+									$masuk = $ktr['nominal'];
+									$keluar = 0;	
+									}else if($sub['kategori']=="Keluar"){
+									$masuk = $ktr['nominal'];
+									$keluar = 0;	
+									// $total[] = $rec['nominal']; 
+									}else{
+										$masuk = 0;
+										$keluar = $ktr['nominal'];
+									}
+									$m += $masuk;
+									$k += $keluar;
+			            		?>
+			            		<tr>
+			            			<td><?= $i ?></td>
+			            			<td><?= $ktr['date'] ?></td>
+			            			<td>-</td>
+
+			            			<td><?= $akt['name'] ?></td>
+			            			<td><?= $sub['name'] ?></td>
+			            			<td><?= $ktr['item'] ?></td>
+			            			<td><?= $ktr['qty'] ?></td>
+
+			            			<td class="text-right"><?= number_format($masuk) ?></td>
+			            			<td class="text-right"><?= number_format($keluar) ?></td>
+			            			<td><?= $ktr['keterangan'] ?></td>
+
+			            		</tr>
+
+			            		<?php $i++;} ?>
+
 			           			<!-- ----------------------------------------------------------- -->
 								<tr style="background: #ddd">
 			           				<th colspan="10" class="text-center">Aset</th>
@@ -279,8 +320,8 @@
 
 			            			
 			            			}
-			            			$m+=$in;
-			            			$k+=$out;
+			            			// $m+=$in;
+			            			// $k+=$out;
 
 		            		?>
 
@@ -301,6 +342,42 @@
 			            	<?php
 			            	$i++; }	
 			            		} ?>
+			            		<tr>
+			            			<td colspan="10" class="text-center" style="background: #ddd">Pegawai</td>
+			            		</tr>
+
+			            		 <?php
+			            		$kp = $this->mymodel->selectWhere('karyawan_proyek',array('proyek_id'=>$id));
+			            		foreach ($kp as $rec) {
+			            			$bulan = date('m',strtotime($rec['date']));
+			            			$tahun = date('Y',strtotime($rec['date']));
+
+			            			$gaji = $this->mymodel->gaji($id,$bulan,$tahun,$rec['karyawan_id']);
+			            			// echo $gaji['gaji'];
+			            			$akt = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pegawai'));
+			            			$sub = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Gaji','parent'=>$akt['id']));
+			            			$karyawan = $this->mymodel->selectdataOne('karyawan',array('id'=>$rec['karyawan_id']));
+		 							$k += $gaji['gaji'];
+
+			            		?>
+			            		<tr>
+			            			<td><?= $i ?></td>
+			            			<td><?= $rec['date'] ?></td>
+			            			<td><?= $karyawan['name'] ?></td>
+
+			            			<td>Pegawai</td>
+			            			<td><?= $sub['name'] ?></td>
+			            			<td>-</td>
+			            			<td>-</td>
+			            		
+			            			<td class="text-right">0</td>
+			            			<td class="text-right"><?= number_format($gaji['gaji']) ?></td>
+			            			<td>Gaji <?= $karyawan['name'] ?></td>
+			            		</tr>
+
+			            		<?php
+			            		$i++;}
+			            		 ?>
 			            		<tr style="background: #ddd">
 			            			<td colspan="10"></td>
 			            		</tr>
@@ -311,7 +388,7 @@
 			            			<td ></td>
 			            		</tr>
 			            		<tr style="background: #ddd">
-			            			<th colspan="8">Margin Operasional</th>
+			            			<th colspan="8">Saldo Akhir</th>
 			            			<?php 
 			            			$mo = $m-$k;
 			            			?>
@@ -321,8 +398,17 @@
 			            		<tr>
 			            			<th colspan="10"></th>
 			            		</tr>
+			            		<tr >
+			            			<td colspan="10" class="text-danger"><b>Rekap Profit</b></td>
+			            		</tr>
 			            		<tr style="background: #ddd">
-			            			<th colspan="8">Modal yang harus dikembalikan</th>
+			            			<th colspan="8">Nilai Kontrak</th>
+			       
+			            			<th class="text-right"><?= number_format($matters->pr_nilai_kontrak) ?></th>
+			            			<td ></td>
+			            		</tr>
+			            		<tr style="background: #ddd">
+			            			<th colspan="8">Hutang (Modal + Bunga)</th>
 			            			<?php 
 			            			$modalbunga = array_sum($nominal)+array_sum($bunga);
 			            			 ?>
@@ -334,12 +420,20 @@
 
 			            		?>
 			            		<tr style="background: #ddd">
-			            			<th colspan="8">Keuntungan Proyek</th>
+			            			<th colspan="8">Profit (Kontrak - Hutang - Pengeluaran)</th>
 			            			<th class="text-right"><?= number_format($kp) ?></th>
 			            			<td ></td>
 			            		</tr>
+			            		<tr>
+			            			<th colspan="10"></th>
+			            		</tr>
+			            		<tr >
+			            			<td colspan="10" class="text-danger"><b>Rekap Pembayaran</b></td>
+			            		</tr>
 			            		<?php 
-			            		$tp = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id));
+			            		$totaltp = array();
+			            		
+			            		$tp = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id,'type'=>'Pembayaran Proyek'));
 			            		foreach ($tp as $tpp) {
 			            			# code...
 			            			$totaltp[] = $tpp['total'];
@@ -347,13 +441,13 @@
 			            		$stp = array_sum($totaltp);
 			            		?>
 			            		<tr style="background: #ddd">
-			            			<th colspan="8">Total Penagihan</th>
+			            			<th colspan="8">Invoice</th>
 			            			<th class="text-right"><?= number_format($stp) ?></th>
 			            			<td ></td>
 			            		</tr>
 				            		<?php 
-
-				            		$tps = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id,'status'=>'Lunas'));
+				            		$totaltps = array();
+				            		$tps = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id,'status'=>'Lunas','type'=>'Pembayaran Proyek'));
 				            		foreach ($tps as $tpps) {
 				            			# code...
 				            			$totaltps[] = $tpps['total'];
@@ -361,8 +455,43 @@
 				            		$stps = array_sum($totaltps);
 				            		?>
 			            		<tr style="background: #ddd">
-			            			<th colspan="8">Total Pembayaran</th>
+			            			<th colspan="8">Invoice Dibayar</th>
 			            			<th class="text-right"><?= number_format($stps) ?></th>
+			            			<td ></td>
+			            		</tr>
+			            		<tr>
+			            			<th colspan="10"></th>
+			            		</tr>
+			            		<tr >
+			            			<td colspan="10" class="text-danger"><b>Rekap Pembayaran Tambahan</b></td>
+			            		</tr>
+			            		<?php 
+			            		$totalpp = array();
+			            		
+			            		$tp = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id,'type'=>'Penambahan Proyek'));
+			            		foreach ($tp as $tpp) {
+			            			# code...
+			            			$totalpp[] = $tpp['total'];
+			            		}
+			            		$stpp = array_sum($totalpp);
+			            		?>
+			            		<tr style="background: #ddd">
+			            			<th colspan="8">Invoice Tambahan</th>
+			            			<th class="text-right"><?= number_format($stpp) ?></th>
+			            			<td ></td>
+			            		</tr>
+			            		<?php 
+				            		$totaltpp = array();
+				            		$tpp = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id,'status'=>'Lunas','type'=>'Penambahan Proyek'));
+				            		foreach ($tpp as $tpps) {
+				            			# code...
+				            			$totaltpp[] = $tpps['total'];
+				            		}
+				            		$ttpp = array_sum($totaltpp);
+			            		?>
+			            		<tr style="background: #ddd">
+			            			<th colspan="8">Invoice Tambahan Dibayar</th>
+			            			<th class="text-right">	<?= number_format($ttpp) ?></th>
 			            			<td ></td>
 			            		</tr>
 			           		</tbody>

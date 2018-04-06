@@ -71,10 +71,13 @@
 				            <tr>
 				              <th >No</th>
 				              <th >Proyek</th>
-				              <th >Tanggal Mulai</th>
-				              <th >Tanggal Selesai</th>
+				              <th >Pelanggan</th>
+				              <th >Invoice Date</th>
+				              <th >Due Date</th>
+				              <th >Status</th>
 				              <th >Invoice</th>
-				              <th >Kontrak</th>
+
+				              <!-- <th >Tanggal bayar</th> -->
 				              <th >Terbayar</th>
 				              <th >#</th>
 				            </tr>
@@ -156,10 +159,13 @@
 		    columns: [
 		      {"data": "id","orderable": false},
 		      {"data": "proyek"},
-		      {"data": "date"},
+              {"data": "perusahaan"},
+              {"data": "date"},
               {"data": "due"},
-              {"data": "invoice"},
-              {"data": "kontrak"},
+              {"data": "status"},
+		      {"data": "invoice"},
+              
+
               {"data": "terbayar"},
 		      {   "data": "view",
 		      "orderable": false
@@ -167,13 +173,14 @@
 		    ],
 		  order: [[0, 'asc']],
 		  columnDefs : [
-		    { targets : [5],
-		      render : function (data, type, row) {
-		        return convertToRupiah(row['kontrak']);
-		        // return true;
-		      }
-		    },
-		    { targets : [6],
+		    // { targets : [5],
+		    //   render : function (data, type, row) {
+		    //     return convertToRupiah(row['kontrak']);
+		    //   }
+		    // },
+
+
+		    { targets : [7],
 		      render : function (data, type, row) {
 		      	if(row['terbayar']!=null){
 		      		var a = convertToRupiah(row['terbayar']);

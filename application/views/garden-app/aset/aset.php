@@ -21,8 +21,9 @@
 										<th>Code</th>										
 										<th>Name</th>
 										<th>Stock</th>
-										<th>Price</th>
-										<th style="width:100px;"></th>
+										<th>Price per unit</th>
+										<th>Total</th>
+										<th style="width:100px;">Action</th>
 									</tr>
 								</thead>
 								<tbody>

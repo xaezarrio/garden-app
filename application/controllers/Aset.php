@@ -140,7 +140,7 @@ class Aset extends CI_Controller {
 	public function json()
 	{
 		header('Content-Type: application/json');
-        $this->datatables->select('id,kode,name,stock,price');
+        $this->datatables->select('id,kode,name,stock,price,(stock*price) as total');
         $this->datatables->from('aset');
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span>Detail</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
         echo $this->datatables->generate();		
@@ -176,7 +176,7 @@ class Aset extends CI_Controller {
 
 	public function transaksi_out_json()
 	{
-		$sub = $this->input->get('sub');
+		// $sub = $this->input->get('sub');
 		// $kategori = $this->input->get('kategori');
 		$bulan = $this->input->get('bulan');
 		$tahun = $this->input->get('tahun');
@@ -190,12 +190,12 @@ class Aset extends CI_Controller {
         // if ($sub) {
         // 	$this->datatables->where('aktivitas.id', $sub);
         // }
-        // if ($bulan) {
-        // 	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);
-        // }
-        // if ($tahun) {
-        // 	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
-        // }
+        if ($bulan) {
+        	$this->datatables->where("MONTH(aset_transaksi.date) =", $bulan);
+        }
+        if ($tahun) {
+        	$this->datatables->where("YEAR(aset_transaksi.date) =", $tahun);
+        }
         $this->datatables->from('aset_transaksi');
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();
@@ -286,7 +286,7 @@ class Aset extends CI_Controller {
 
 	public function transaksi_in_json()
 	{
-		$sub = $this->input->get('sub');
+		// $sub = $this->input->get('sub');
 		// $kategori = $this->input->get('kategori');
 		$bulan = $this->input->get('bulan');
 		$tahun = $this->input->get('tahun');
@@ -300,12 +300,12 @@ class Aset extends CI_Controller {
         // if ($sub) {
         // 	$this->datatables->where('aktivitas.id', $sub);
         // }
-        // if ($bulan) {
-        // 	$this->datatables->where("date_format(pengeluaran.created_at, '%m') =", $bulan);
-        // }
-        // if ($tahun) {
-        // 	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
-        // }
+        if ($bulan) {
+        	$this->datatables->where("MONTH(aset_transaksi.date) =", $bulan);
+        }
+        if ($tahun) {
+        	$this->datatables->where("YEAR(aset_transaksi.date) =", $tahun);
+        }
         $this->datatables->from('aset_transaksi');
         $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
         echo $this->datatables->generate();

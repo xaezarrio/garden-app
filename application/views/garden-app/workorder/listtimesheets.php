@@ -60,6 +60,7 @@
 		                          <option value="Masuk">Masuk</option>
 		                          <option value="Keluar">Keluar</option>
 
+
 		                        </select>
 		                      <!-- /.input group -->
 		                    </div>      
@@ -214,6 +215,13 @@
 		      render : function (data, type, row) {
 		        return convertToRupiah(row['nominal']);
 		      }
+		    },{
+		    	targets : [7],
+		    	render : function (data,type,row) {
+		    		// body...
+		    		var a = "'"+row['date']+"'"
+		    		return '<div class="btn-group"> <a onclick="edit('+row['karyawan_id']+','+a+')" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Detail</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>'
+		    	}
 		    }
 		  ],
 		  rowCallback: function(row, data, iDisplayIndex) {
@@ -229,8 +237,10 @@
      loaddata();
 
 
-     function edit(id) {
-     	window.location.href = "<?= base_url('workorder/list-timesheets/pegawai/edit/') ?>"+id;
+     function edit(id,date) {
+     	// window.location.href = "<?= base_url('workorder/list-timesheets/pegawai/edit/') ?>"+id;
+     	window.location.href = "<?= base_url('workorder/list-timesheets/pegawai/add?idp=') ?>"+id+"&date="+date;
+    	
      }
 
      function hapus(id) {

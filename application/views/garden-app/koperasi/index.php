@@ -4,7 +4,7 @@
 		<div class="container">
 			<div class="row no_margin">
 				<h3 class="jdl_page">
-					List Transaksi Koperasi  
+					List Transaksi Simpan  
 				</h3>
 			</div>
 			<div class="row">
@@ -34,7 +34,7 @@
 				                      <select class="form-control select2" id="sub">
 				                          <option value="">Semua Sub</option>
 				                          <?php 
-				                          $cari = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Koperasi'));
+				                          $cari = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Simpan'));
 				                          $sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$cari['id']));
 				                          foreach ($sub as $aktivitas) {
 				                           ?>
@@ -154,8 +154,9 @@
 		 var kategori = $("#kategori").val();
 		 var bulan = $("#bulan").val();
 		 var tahun = $("#tahun").val();
-
-		 var link = "?karyawan="+karyawan+"&sub="+sub+"&kategori="+kategori+"&bulan="+bulan+"&tahun="+tahun;
+		<?php $akt = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Simpan')); ?>
+     	 var akt = <?= $akt['id'] ?>;
+		 var link = "?karyawan="+karyawan+"&sub="+sub+"&kategori="+kategori+"&bulan="+bulan+"&tahun="+tahun+"&aktivitas="+akt;
 
 
 		var t = $("#mytable").dataTable({

@@ -437,4 +437,81 @@ class Master extends CI_Controller {
 
 
 	}
+	// ===========================================================================================
+	public function modal()
+	{
+		$this->data['page_name'] = 'master';
+		$this->render->admin('garden-app/master/modal',$this->data);
+	}
+	public function modaljson()
+	{
+		header('Content-Type: application/json');
+        $this->datatables->select('modal.id,modal.name');
+        // $this->datatables->join('role','user.role_id=role.id','left');
+        // $this->datatables->where(array('status'=>0));
+        $this->datatables->from('modal');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <a onclick="hapus($1)"  class="btn btn-xs btn-danger"><span class="txt-white fa fa-trash-o"></span> Hapus</a>  </div>', 'id');
+        echo $this->datatables->generate();
+	}
+	public function modal_js()
+	{
+		# code...
+		$this->load->view('garden-app/master/modal-js');
+
+	}
+
+	public function modal_store()
+	{
+		# code...
+		$this->form_validation->set_error_delimiters('<li>', '</li>');
+		$this->form_validation->set_rules('dt[name]', '<strong>Nama</strong>', 'required');
+
+		if ($this->form_validation->run() == FALSE){
+			$error =  validation_errors();
+			$this->alert->alertdanger($error);
+             
+        }else{
+        	$dt = $this->input->post('dt');
+	    	// $dt['created_at'] = date('Y-m-d H:i:s');
+        	$this->db->insert('modal',$dt);
+        	$this->alert->alertsuccess('Success Send Data');
+
+        }
+
+	}
+	public function modal_edit($id)
+	{
+		# code...
+		$data['modal'] = $this->mymodel->selectdataOne('modal',array('id'=>$id));
+		$this->load->view('garden-app/master/modal-edit',$data);
+	}
+
+	public function modal_update()
+	{
+		# code...
+		# code...
+		$this->form_validation->set_error_delimiters('<li>', '</li>');
+		$this->form_validation->set_rules('dt[name]', '<strong>Name</strong>', 'required');
+		if ($this->form_validation->run() == FALSE){
+			$error =  validation_errors();
+			$this->alert->alertdanger($error);
+             
+        }else{
+        	$dt = $this->input->post('dt');
+        	$ids = $this->input->post('ids');
+	    	// $dt['updated_at'] = date('Y-m-d H:i:s');
+        	$this->mymodel->updateData('modal',$dt,array('id'=>$ids));
+        	$this->alert->alertsuccess('Success Send Data');
+        }
+	}
+
+	public function modal_delete($id)
+	{
+		# code...
+		$this->mymodel->deleteData('modal',array('id'=>$id));
+    	// $this->alert->alertsuccess('Success Send Data');
+		redirect('master/modal');
+
+
+	}
 }

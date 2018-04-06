@@ -3,7 +3,7 @@
       <section class="content">
       <div class="container">
     <div class="row no_margin">
-      <h3 class="jdl_page">ADD SIMPAN / PINJAM</h3>
+      <h3 class="jdl_page">ADD SIMPAN </h3>
     </div>
         <div class="row">      
           <div class="col-md-12">
@@ -11,7 +11,7 @@
             <div class="box box-primary">
               <div class="box-header with-border">
                 <!-- <h3 class="box-title">New Tickets</h3> -->
-                <b>Data Simpan/Pinjam</b>
+                <b>Data Simpan</b>
 
               </div>
               <!-- /.box-header -->
@@ -39,13 +39,16 @@
                          </select>
                         </td>
                       </tr>
-                      <tr>
+                     <tr>
                         <td style="width: 140px;">Aktivitas</td>
                         <td>
-                         <select class="form-control" name="dt[aktivitas_id]" >
+                          <?php 
+                           $aktv = $this->mymodel->selectdataOne('aktivitas',array('name'=>"Simpan"));
+                           ?>
+                           <input type="hidden" name="dt[aktivitas_id]" value="<?= $aktv['id'] ?>">
+                         <select class="form-control" name="dt[aktivitas_sub]" >
                           <option value="">Pilih Aktivitas . . </option>
                             <?php 
-                           $aktv = $this->mymodel->selectdataOne('aktivitas',array('name'=>"Koperasi"));
                            $aktv_sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$aktv['id']));
                                 foreach ($aktv_sub as $akt) {
                             ?>
@@ -125,7 +128,9 @@
       $("#load-data").html("");
       var date = $("#date").val();
       var karyawan = $("#karyawan").val();
-      var url = "<?= base_url('koperasi/data') ?>?date="+date+"&karyawan="+karyawan;
+      <?php $akt = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Simpan')); ?>
+      var akt = <?= $akt['id'] ?>;
+      var url = "<?= base_url('koperasi/data') ?>?date="+date+"&karyawan="+karyawan+"&aktivitas="+akt;
       $("#load-data").load(url);
       $("#loading").hide();
     }

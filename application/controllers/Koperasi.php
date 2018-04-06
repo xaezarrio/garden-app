@@ -29,6 +29,11 @@ class Koperasi extends CI_Controller {
 		$this->load->view('garden-app/koperasi/data-koperasi');
 	}
 
+	public function data_koperasi_simpan()
+	{
+		$this->load->view('garden-app/koperasi/data-koperasi-simpan');
+	}
+
 	public function store()
 	{
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
@@ -42,12 +47,19 @@ class Koperasi extends CI_Controller {
 			$error = validation_errors();
 			$this->alert->alertdanger($error);
         }else{
+
         	$dt = $this->input->post('dt'); 
+        	$akt = $this->mymodel->selectdataOne('aktivitas',array('id'=>$dt['aktivitas_id']));
+        	if($akt['name']=="Simpan"){
+        		// echo "a";
+        	}
+
+
         	$dt['nominal'] = str_replace(",", '', $dt['nominal']);
         	$dt['created_at'] = date("Y-m-d H:i:s");
         	$dt['user_id'] = user_id;
         	// print_r($dt);
-        	$this->db->insert('koperasi', $dt);
+        	$this->db->insert('koperasi', $dt);	
         	$this->alert->alertsuccess('Success Send Data');	
 
         }
@@ -58,13 +70,19 @@ class Koperasi extends CI_Controller {
 		$karyawan = $this->input->get('karyawan');
 		$sub = $this->input->get('sub');
 		$kategori = $this->input->get('kategori');
+		$aktivitas = $this->input->get('aktivitas');
+
 		$bulan = $this->input->get('bulan');
 		$tahun = $this->input->get('tahun');
 		header('Content-Type: application/json');
         $this->datatables->select('koperasi.id,koperasi.date,koperasi.nominal,karyawan.name as karyawan,aktivitas.name as aktivitas,aktivitas.kategori as kategori,koperasi.desc');
         $this->datatables->join('karyawan','koperasi.karyawan_id=karyawan.id','left');
-        $this->datatables->join('aktivitas','koperasi.aktivitas_id=aktivitas.id','left');
-      
+        $this->datatables->join('aktivitas','koperasi.aktivitas_sub=aktivitas.id','left');
+    	
+
+    	$this->datatables->where('koperasi.aktivitas_id', $aktivitas);
+      	
+
 		if ($karyawan) {
         	$this->datatables->where('karyawan.id', $karyawan);
         }
@@ -100,12 +118,40 @@ class Koperasi extends CI_Controller {
 		$this->render->admin('garden-app/koperasi/detail',$data);
 	}
 
+	public function detail_pinjam($id)
+	{
+		$data['bulan']= array(array("name"=>"01","month"=>"Januari"),array("name"=>"02","month"=>"Februari"),array("name"=>"03","month"=>"Maret"),array("name"=>"04","month"=>"April"),array("name"=>"05","month"=>"Mei"),array("name"=>"06","month"=>"Juni"),array("name"=>"07","month"=>"Juli"),array("name"=>"08","month"=>"Agustus"),array("name"=>"09","month"=>"September"),array("name"=>"10","month"=>"Oktober"),array("name"=>"11","month"=>"November"),array("name"=>"12","month"=>"Desember"));
+
+		$this->db->order_by('date','ASC');
+		$detail = $this->mymodel->selectdataOne('koperasi',array('id'=>$id));
+		$data['list'] = $this->mymodel->selectWhere('koperasi',array('karyawan_id'=>$detail['karyawan_id']));
+		$data['karyawan_id'] = $detail['karyawan_id'];
+		$data['id'] = $id;
+		$this->render->admin('garden-app/koperasi/detail-pinjam',$data);
+	}
+
+
+
 
 	public function delete($id)
 	{
 		# code...
 		$this->mymodel->deleteData('koperasi',array('id'=>$id));
 		$this->alert->alertsuccess('Success Delete Data');
+	}
+
+
+	// -----------------------------------------------------------------------
+
+	public function pinjam()
+	{
+		$this->render->admin('garden-app/koperasi/pinjam');
+	}
+
+	public function index_pinjam()
+	{
+		$data['bulan']= array(array("name"=>"01","month"=>"Januari"),array("name"=>"02","month"=>"Februari"),array("name"=>"03","month"=>"Maret"),array("name"=>"04","month"=>"April"),array("name"=>"05","month"=>"Mei"),array("name"=>"06","month"=>"Juni"),array("name"=>"07","month"=>"Juli"),array("name"=>"08","month"=>"Agustus"),array("name"=>"09","month"=>"September"),array("name"=>"10","month"=>"Oktober"),array("name"=>"11","month"=>"November"),array("name"=>"12","month"=>"Desember"));
+		$this->render->admin('garden-app/koperasi/index-pinjam',$data);
 	}
 
 }

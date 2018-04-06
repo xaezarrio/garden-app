@@ -14,7 +14,7 @@ class Alert extends CI_Controller  {
 		# code...
 		echo '<div class="alert alert-success ks-solid ks-active-border" role="alert">';
 		echo '	<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-		echo '		<span aria-hidden="true" class="la la-close"></span>';
+		echo '		<span aria-hidden="true" class="fa fa-close"></span>';
 		echo '	</button>';
 		echo '	<h5 class="alert-heading">Alert</h5>';
 		echo '		<ul>';
@@ -28,7 +28,7 @@ class Alert extends CI_Controller  {
 		# code...
 		echo '<div class="alert alert-danger ks-solid ks-active-border" role="alert">';
 		echo '	<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-		echo '		<span aria-hidden="true" class="la la-close"></span>';
+		echo '		<span aria-hidden="true" class="fa fa-close"></span>';
 		echo '	</button>';
 		echo '	<h5 class="alert-heading">Warning</h5>';
 		echo '		<ul>';

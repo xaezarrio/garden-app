@@ -123,9 +123,7 @@
 
 <script type="text/javascript">
   function loaddata() {
-    var date = $("#date").val();
-    var proyek = $("select[name='tt[proyek_id]']").val();
-    $("#table").load("<?= base_url('aset/transaksi/in/add/detail') ?>?date="+date+"&proyek="+proyek);
+    $("#table").load("<?= base_url('aset/transaksi/in/add/detail') ?>?id=<?= $trans['id'] ?>");
   }
   loaddata();
 

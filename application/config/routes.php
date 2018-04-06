@@ -144,6 +144,14 @@ $route['master/perusahaan/action/update'] = 'master/perusahaan_update';
 $route['master/perusahaan/edit/(:any)'] = 'master/perusahaan_edit/$1';
 $route['master/perusahaan/delete/(:any)'] = 'master/perusahaan_delete/$1';
 
+
+$route['master/modal/json'] = 'master/modaljson';
+$route['master/modal/js'] = 'master/modal_js';
+$route['master/modal/action/store'] = 'master/modal_store';
+$route['master/modal/action/update'] = 'master/modal_update';
+$route['master/modal/edit/(:any)'] = 'master/modal_edit/$1';
+$route['master/modal/delete/(:any)'] = 'master/modal_delete/$1';
+
 //===================================
 //pegawai
 $route['workorder/list-timesheets/pegawai'] = 'workorder/listtimesheets';
@@ -155,7 +163,9 @@ $route['workorder/list-timesheets/pegawai/edit/(:any)'] = 'workorder/editgaji/$1
 $route['workorder/list-timesheets/pegawai/update/action'] = 'workorder/editgaji_action';
 $route['workorder/list-timesheets/pegawai/add/action'] = 'workorder/addgaji_action';
 $route['workorder/list-timesheets/pegawai/delete/(:any)'] = 'workorder/listtimesheets_delete/$1';
-
+$route['workorder/list-timesheets/pegawai/proyek'] = 'workorder/listtimesheets_proyek';
+$route['workorder/list-timesheets/pegawai/add/action_proyek'] = 'workorder/addgaji_actionproyek';
+$route['workorder/list-timesheets/pegawai/action_deleteproyek'] = 'workorder/addgaji_deleteproyek';
 
 // pribadi
 $route['workorder/list-timesheets/pribadi'] = 'workorder/listtimesheetspribadi';
@@ -193,6 +203,11 @@ $route['billing/invoice/json-collections'] = 'billing/json_collections';
 
 $route['koperasi/data'] = 'koperasi/data_koperasi';
 $route['koperasi/simpan/add'] = 'koperasi/store';
+
+$route['koperasi-pinjam'] = 'koperasi/index_pinjam';
+$route['koperasi-pinjam/detail/(:any)'] = 'koperasi/detail_pinjam/$1';
+
+
 // =================
 $route['report/proyek/detail/(:any)'] = 'report/proyek_detail/$1';
 $route['report/proyek/excel/(:any)'] = 'report/proyek_excel/$1';

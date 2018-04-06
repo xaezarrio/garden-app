@@ -108,7 +108,7 @@
 			            		<th>Kategori</th>
 			            		<th>Keterangan</th>
 			            		<th>Nominal</th>
-			                  	<th style="width:80px;">Action</th>
+			                  	<!-- <th style="width:80px;">Action</th> -->
 			                </tr>
 			              </thead>
 			              <tbody>
@@ -142,7 +142,7 @@
 					'		<th>Kategori</th>'+
 					'		<th>Keterangan</th>'+
 					'		<th>Nominal</th>'+
-					'      	<th style="width:80px;">Action</th>'+
+					// '      	<th style="width:80px;">Action</th>'+
 					'    </tr>'+
 					'  </thead>'+
 					'  <tbody>'+
@@ -189,9 +189,9 @@
 		      {"data": "kategori"},
 		      {"data": "keterangan"},
 		      {"data": "nominal"},
-		      {   "data": "view",
-		      "orderable": false
-		      }
+		      // {   "data": "view",
+		      // "orderable": false
+		      // }
 		    ],
 		  order: [[0, 'asc']],
 		  columnDefs : [

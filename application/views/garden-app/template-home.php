@@ -134,7 +134,7 @@
 		                    <a href="<?= base_url('billing/invoice') ?>"> <i class="fa fa-file"></i> Invoice </a>
 		                   </li>
 		                   <li>
-		                    <a href="<?= base_url('billing/collections') ?>"> <i class="fa fa-files-o"></i> Pembayaran  </a>
+		                    <a href="<?= base_url('billing/collections') ?>"> <i class="fa fa-files-o"></i> Pembayaran Invoice </a>
 		                   </li>
 						</ul>
 		              </li>
@@ -174,7 +174,7 @@
 		                    <a href="<?= base_url('billing/invoice') ?>"> <i class="fa fa-file-text-o"></i> Per Aktivitas </a>
 		                   </li>
 		                   <li>
-		                    <a href="<?= base_url('billing/collections') ?>"> <i class="fa fa-line-chart"></i> Finansial Perusahaan  </a>
+		                    <a href="<?= base_url('report/finansial') ?>"> <i class="fa fa-line-chart"></i> Finansial Perusahaan  </a>
 		                   </li>
 
 						</ul>
@@ -211,10 +211,17 @@
 		                </a>
 		                <ul class="dropdown-menu">
 						   <li>
-		                    <a href="<?= base_url('koperasi/simpan') ?>"> <i class="fa  fa-sign-in"></i> Simpan / Pinjam</a>
+		                    <a href="<?= base_url('koperasi/simpan') ?>"> <i class="fa  fa-sign-in"></i> Simpan</a>
 		                   </li>
 		                   <li>
-		                    <a href="<?= base_url('koperasi') ?>"> <i class="fa  fa-users"></i> List Transaksi</a>
+		                    <a href="<?= base_url('koperasi') ?>"> <i class="fa  fa-users"></i> List Transaksi Simpan</a>
+		                   </li>
+
+		                   <li>
+		                    <a href="<?= base_url('koperasi/pinjam') ?>"> <i class="fa  fa-sign-in"></i> Pinjam</a>
+		                   </li>
+		                   <li>
+		                    <a href="<?= base_url('koperasi-pinjam') ?>"> <i class="fa  fa-users"></i> List Transaksi Pinjam</a>
 		                   </li>
 		                  
 
@@ -244,6 +251,9 @@
 		                   </li>
 		                   <li>
 		                    <a href="<?= base_url('master/perusahaan') ?>"> <i class="fa fa-legal"></i> Data Perusahaan  </a>
+		                   </li>
+		                   <li>
+		                    <a href="<?= base_url('master/modal') ?>"> <i class="fa fa-money"></i> Data Pemodal  </a>
 		                   </li>
 
 						</ul>

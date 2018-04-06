@@ -23,7 +23,7 @@
 						<a class="btn btn-success btn-sm btn-flat pull-right" href="<?= base_url('matters/detail-aktivitas/excel/'.$id) ?>" target="_blank"><i class="fa fa-file-excel"></i> Export Excel</a>
 					  </div>
 					  <div class="box-body table-responsive">
-			            <table class="table table-bordered table-striped">
+			            <table class="table table-bordered table-striped" style="font-size: 12px">
 			            	<thead>
 			            		<th style="width: 30px;">No</th>
 			            		<th>Tanggal</th>
@@ -38,10 +38,61 @@
 
 			            	</thead>
 			            	<tbody>
-			            		<?php $total=0; 
+			            	<!-- 	<tr style="background: #ddd">
+			           				<td class="text-center" colspan="10">Pembayaran Proyek</td>
+			           			</tr>
+ -->
+			           			<?php 
 			            		$m = 0;
+
+									// $totaltps = array();
+				     //        		$tps = $this->mymodel->selectWhere('invoice',array('proyek_id'=>$id,'status'=>'Lunas'));
+				     //        		foreach ($tps as $tpps) {
+				     //        			# code...
+				     //        			$totaltps[] = $tpps['total'];
+				     //        		}
+				     //        		$stps = array_sum($totaltps);
+			      //       			$m += $stps;
+
+			           			 ?>
+			           			<!--  <tr>
+			           			 	<td>1</td>
+			           			 	<td><?= $matters->pr_tgl_mulai ?></td>
+			           			 	<td>Invoice</td>
+			           			 	<td>Invoice Lunas</td>
+			           			 	<td>-</td>
+			           			 	<td>-</td>
+			           			 	<td class="text-right"><?php// number_format($stps) ?></td>
+			           			 	<td class="text-right">0</td>
+			           			 	<td></td>
+			           			 	
+			           			 </tr> -->
+			            		<tr>
+			            			<td colspan="9" class="text-center" style="background: #ddd">Modal</td>
+			            		</tr>
+			            		<?php 
+			            		$nominals = json_decode($matters->pr_modal);
+			            		$modals = @array_sum($nominals);
+			            		$m+=$modals; 
+			            		 ?>
+			            		<tr>
+			            			<td>1</td>
+			            			<td><?= $matters->pr_tgl_mulai ?></td>
+			            			<td>Total Modal</td>
+			            			<td>-</td>
+			            			<td>-</td>
+			            			<td>-</td>
+			            			<td class="text-right"><?= number_format($modals) ?></td>
+			            			<td class="text-right">0</td>
+			            			<td></td>
+			            		</tr>
+			            		<tr>
+			            			<td colspan="9" class="text-center" style="background: #ddd">Aktivitas</td>
+			            		</tr>
+			            		<?php $total=0; 
 			            		$k = 0;
-			            		foreach ($ap->result() as $i => $v): 
+			            		$i=3;
+			            		foreach ($ap->result() as $v): 
 			            		
 								$file = $this->mymodel->selectdataOne("file",array("table"=>'aktivitas_proyek',"table_id"=>$v->ap_id));
 								// print_r($file)
@@ -63,7 +114,7 @@
 			            		?>	
 			 
 			            		<tr>
-			            			<td><?= $i+1 ?></td>
+			            			<td><?= $i ?></td>
 			            			<td><?= $v->ap_tanggal ?></td>
 			            			<?php $akt = $this->mmodel->selectWhere("aktivitas",array("id"=>$v->ap_idaktivitas))->row()->name ?>
 			            			<td><?= $akt ?></td>
@@ -91,8 +142,78 @@
 			            				?>
 			            			</td>
 			            		</tr>
-			            		<?php endforeach;
+			            		<?php $i++; endforeach;
 			            		 ?>
+								<tr>
+			            			<td colspan="9" class="text-center" style="background: #ddd">Kantor</td>
+			            		</tr>
+			            		<?php 
+			            			$kantor = $this->mymodel->selectWhere('pengeluaran',array('proyek_id'=>$id,'kategori'=>'Kantor'));
+			            			foreach ($kantor as $ktr) {
+			            			$sub = $this->mymodel->selectdataOne('aktivitas',array('id'=>$ktr['aktivitas_sub']));
+			            			$akt = $this->mymodel->selectdataOne('aktivitas',array('id'=>$sub['parent']));
+			            			if($sub['kategori']=="Masuk"){
+									$masuk = $ktr['nominal'];
+									$keluar = 0;	
+									}else if($sub['kategori']=="Keluar"){
+									$masuk = $ktr['nominal'];
+									$keluar = 0;	
+									// $total[] = $rec['nominal']; 
+									}else{
+										$masuk = 0;
+										$keluar = $ktr['nominal'];
+									}
+									$m += $masuk;
+									$k += $keluar;
+			            		?>
+			            		<tr>
+			            			<td><?= $i ?></td>
+			            			<td><?= $ktr['date'] ?></td>
+			            			<td><?= $akt['name'] ?></td>
+			            			<td><?= $sub['name'] ?></td>
+			            			<td><?= $ktr['keterangan'] ?></td>
+			            			<td>-</td>
+			            			<td class="text-right"><?= number_format($masuk) ?></td>
+			            			<td class="text-right"><?= number_format($keluar) ?></td>
+			            			<td></td>
+			            		</tr>
+
+			            		<?php $i++;} ?>
+
+								<tr>
+			            			<td colspan="9" class="text-center" style="background: #ddd">Pegawai</td>
+			            		</tr>
+
+			            		 <?php
+			            		$kp = $this->mymodel->selectWhere('karyawan_proyek',array('proyek_id'=>$id));
+			            		foreach ($kp as $rec) {
+			            			$bulan = date('m',strtotime($rec['date']));
+			            			$tahun = date('Y',strtotime($rec['date']));
+
+			            			$gaji = $this->mymodel->gaji($id,$bulan,$tahun,$rec['karyawan_id']);
+			            			// echo $gaji['gaji'];
+			            			$akt = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pegawai'));
+			            			$sub = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Gaji','parent'=>$akt['id']));
+			            			$karyawan = $this->mymodel->selectdataOne('karyawan',array('id'=>$rec['karyawan_id']));
+		 							$k += $gaji['gaji'];
+
+			            		?>
+			            		<tr>
+			            			<td><?= $i ?></td>
+			            			<td><?= $rec['date'] ?></td>
+			            			<td><?= $akt['name'] ?></td>
+			            			<td><?= $sub['name'] ?></td>
+			            			<td>Gaji <?= $karyawan['name'] ?></td>
+			            			<td>-</td>
+			            			<td class="text-right">0</td>
+			            			<td class="text-right"><?= number_format($gaji['gaji']) ?></td>
+			            			<td></td>
+			            		</tr>
+
+			            		<?php
+			            		$i++;}
+			            		 ?>
+			            		
 			            		<tr style="background: #ddd;font-weight: bold">
 			            			<td colspan="6">Total</td>
 
@@ -108,7 +229,7 @@
 			            			<td colspan="9"></td>
 			            		</tr>
 			            		<tr style="background: #ddd;font-weight: bold;color:blue">
-			            			<td colspan="7">Margin</td>
+			            			<td colspan="7">Saldo</td>
 
 			            			<td class="text-right">
 			            				<?= number_format($m-$k) ?>
@@ -133,7 +254,7 @@
 
 					  </div>
 					  <div class="box-body table-responsive">
-			            <table class="table table-bordered table-striped">
+			            <table class="table table-bordered table-striped" style="font-size: 12px">
 			            	<thead>
 			            	<tr>
 			            		<th style="width: 30px;">No</th>
@@ -149,10 +270,11 @@
 			            	<tbody>
 		            		<?php 
 		            			$at = $this->mymodel->selectWhere('aset_transaksi',array('proyek_id'=>$id));
+		            				$i = 1;
+
 			            		foreach ($at as $astr) {
 			            			$karyawan = $this->mymodel->selectdataOne('karyawan',array('id'=>$astr['karyawan_id']));  
 		            				$ad = $this->mymodel->selectWhere('aset_transaksi_detail',array('transaksi_id'=>$astr['id']));
-		            				$i = 1;
 		            				foreach ($ad as $detail) {
 			            			$aset = $this->mymodel->selectdataOne('aset',array('id'=>$detail['aset_id']));  
 			            			if($astr['tipe']=="OUT"){
@@ -183,8 +305,8 @@
 
 			            		</tr>
 			            	<?php
-			            	$i++; }	
-			            		} ?>
+			            	 }	
+			            	$i++;	} ?>
 			            		
 			            	</tbody>
 			            </table>
@@ -269,9 +391,11 @@
 			            			Modal
 			            		</td>
 			            		<td>
-			            			<?php $sumber =  json_decode($matters->pr_sumber) ?> <?php $nominal = json_decode($matters->pr_modal) ?>
+			            			<?php 
+			            			// $sumber = array();
+			            			$sumber =  @json_decode($matters->pr_sumber) ?> <?php $nominal = json_decode($matters->pr_modal) ?>
 
-			            			<p><b>Total : <?= number_format(array_sum($nominal)) ?></b></p>
+			            			<p><b>Total : <?= number_format(@array_sum($nominal)) ?></b></p>
 			            			
 			            			<ul>
 			            			<?php 
@@ -381,7 +505,7 @@
             			<select class="form-control" name="dt[ap_idaktivitas]" onchange="aktivitass();" id="aktivitas" required="">
             				<?php foreach ($aktivitas->result() as $a): ?>
             					<?php 
-            						if($a->name=="Pegawai" OR $a->name=="Kantor"OR $a->name=="Pribadi"OR $a->name=="Koperasi"OR $a->name=="Bahan"){}else{?>
+            						if($a->name=="Pegawai" OR $a->name=="Kantor"OR $a->name=="Pribadi"OR $a->name=="Simpan"OR$a->name=="Pinjam"OR $a->name=="Bahan"){}else{?>
 		    				<option value="<?= $a->id ?>"><?= $a->name ?></option>
             					<?php } ?>
             				<?php endforeach ?>
@@ -397,7 +521,7 @@
 		    			</select>
             		</td>
             	</tr>
-            	<tr class="cekap">
+            	<!-- <tr class="cekap">
             		<td>
             			Item 
             		</td>
@@ -412,7 +536,7 @@
             		<td>
             			<input type="text" class="form-control" name="dt[ap_qty]" style="width: 60px;" value="0" >
             		</td>
-            	</tr>
+            	</tr> -->
             	<tr>
             		<td>
             			Nominal (Rp) 
@@ -458,22 +582,22 @@
 		$("#parent").load(url);
 		$("#parent").prop( "disabled", false );
 		
-		if(id==75 || id==77){
-			$(".cekap").show();
-		}else{
-			$(".cekap").hide();
-		}
-		getattr();
+		// if(id==75 || id==77){
+		// 	$(".cekap").show();
+		// }else{
+		// 	$(".cekap").hide();
+		// }
+		// getattr();
 	}
 
 	function getattr(){
-		var option = $('#parent').find(":selected").attr('data-kategori');
-		// alert(option);
-		if(option==="Keluar"){
-			$(".cekap").slideDown();
-		}else{
-			$(".cekap").slideUp();
-		}
+		// var option = $('#parent').find(":selected").attr('data-kategori');
+		// // alert(option);
+		// if(option==="Keluar"){
+		// 	$(".cekap").slideDown();
+		// }else{
+		// 	$(".cekap").slideUp();
+		// }
 	}
 
 	aktivitass();

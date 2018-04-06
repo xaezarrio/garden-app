@@ -59,8 +59,9 @@
 	      	<small>kategori</small>
 	        <select name="dt[kategori]" class="form-control" >
               <option value="Masuk">Masuk</option>
-            
               <option value="Keluar">Keluar</option>
+              <option value="Pakai">Pakai</option>
+
             </select>
             </div>
 

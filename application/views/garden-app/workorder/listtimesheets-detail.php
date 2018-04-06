@@ -29,6 +29,7 @@ $mn = date('m',$a);
 		$this->db->order_by('date ASC');
 		$data = $this->mymodel->selectWhere('pengeluaran',array('karyawan_id'=>$id,'YEAR(date)'=>$tahun,'MONTH(date)'=>$mn));
 		foreach ($data as $rec) {
+			// echo $rec['aktivitas_sub'];
 		$sub = $this->mymodel->selectdataOne('aktivitas',array('id'=>$rec['aktivitas_sub']));
 		// print_r($file);
 		if($sub['kategori']=="Masuk"){
@@ -61,7 +62,8 @@ $mn = date('m',$a);
 				<?php 
 					$add =  date('Y-m-d',strtotime($rec['date']));
 					$now = date('Y-m-d');
-					if($add==$now){
+					// if($add==$now){
+					if($rec['aktivitas_sub']!=67){
 				 ?>
 				<a href="javascript::void(0)" onclick="hapus(<?= $rec['id'] ?>)" class="text-danger">
 					<i class="fa fa-remove"></i>

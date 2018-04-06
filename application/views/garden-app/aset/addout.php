@@ -86,7 +86,7 @@
             			<button type="submit" class="btn btn-primary btn-flat" id="send-btn">Save</button>
             			</form>
 					  </div>
-					  <div class="box-body table-responsive">
+					<!--   <div class="box-body table-responsive">
 					  		<div id='loadingDiv'> 
 				              <center>
 				                <img src='https://www.quodfinancial.com/wp-content/themes/pro-child/QUOD-Diagram/loading_spinner.gif' style='width:75px;' /><br>
@@ -97,7 +97,7 @@
 				           
 				          </div>
 
-			          </div>
+			          </div> -->
 			          <!-- END OF BODY -->
 			        </div> 
 			        <!-- end of box  -->
@@ -117,12 +117,12 @@
 ?>
 
 <script type="text/javascript">
-  function loaddata() {
-    var date = $("#date").val();
-    var proyek = $("select[name='tt[proyek_id]']").val();
-    $("#table").load("<?= base_url('aset/transaksi/out/add/detail') ?>?date="+date+"&proyek="+proyek);
-  }
-  loaddata();
+  // function loaddata() {
+  //   var date = $("#date").val();
+  //   var proyek = $("select[name='tt[proyek_id]']").val();
+  //   $("#table").load("<?= base_url('aset/transaksi/out/add/detail') ?>?date="+date+"&proyek="+proyek);
+  // }
+  // loaddata();
 
     $('#loadingDiv').hide().ajaxStart( function() {
     $(this).show();  // show Loading Div
@@ -134,8 +134,7 @@
     $("#date").datepicker({
       dateFormat: "yy-mm-dd",
         onSelect: function (date) {
-          loaddata();
-
+          // loaddata();
         }
     });
 

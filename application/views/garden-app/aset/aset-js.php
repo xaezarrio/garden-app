@@ -23,8 +23,10 @@
                  '   <th>Code</th>'+                         
                  '   <th>Name</th>'+
                  '   <th>Stock</th>'+
-                 '   <th>Price</th>'+
-                 '   <th style="width:100px;"></th>'+
+                 '   <th>Price per unit</th>'+
+                 '   <th>Total</th>'+
+
+                 '   <th style="width:100px;">Action</th>'+
 	             '  </tr>'+
 	             '</thead>'+
 	             '<tbody>'+
@@ -61,6 +63,8 @@
               {"data": "name"},
               {"data": "stock"},
               {"data": "price"},
+              {"data": "total"},
+
 		      {   "data": "view",
 		      "orderable": false
 		      }
@@ -70,6 +74,10 @@
 		    { targets : [4],
 		      render : function (data, type, row) {
 		        return convertToRupiah(row['price']);
+		      }
+		    },{ targets : [5],
+		      render : function (data, type, row) {
+		        return convertToRupiah(row['total']);
 		      }
 		    }
 		  ],

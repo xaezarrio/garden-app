@@ -73,15 +73,66 @@
 		$excel->getActiveSheet()->getStyle('G1')->applyFromArray($style_col);
 
 
-
+		$id = $matters->pr_id;
 		
 
 		$no = 1; 
-		$numrow = 2; 
-		$total=0; 
 		$m = 0;
 		$k = 0;
-		foreach ($ap->result() as $i => $v): 
+
+		//--------------------------------------------------------------------------------------------------------------------------
+		//--Saldo--
+		$numrow = 2; 
+		$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, "Modal")->mergeCells('A'.$numrow.':G'.$numrow);
+
+		$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_col);
+
+
+		$numrow = $numrow+1; 
+
+
+		$nominals = json_decode($matters->pr_modal);
+		$modals = array_sum($nominals);
+		$m+=$modals; 
+
+			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $no);
+			$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow,  $matters->pr_tgl_mulai);
+			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow,  'Total Modal');
+			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, 	'-' );
+			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow,  '-');
+			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow,  $modals);
+			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow,  0);
+			
+			
+			$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
+		//--------------------------------------------------------------------------------------------------------------------------
+		//--Aktivitas--
+		$numrow = $numrow+1; 
+		$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, "Aktivitas")->mergeCells('A'.$numrow.':G'.$numrow);
+
+		$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_col);
+
+		$no = $no+1; 
+		$numrow = $numrow+1; 
+		foreach ($ap->result() as $v):	            		
 		$sub = $this->mymodel->selectdataOne("aktivitas",array("id"=>$v->ap_idsubaktivitas));
 		if($sub['kategori']=="Masuk"){
 			$masuk = $v->ap_nominal;
@@ -95,12 +146,12 @@
 		}
 			$m += $masuk;
 			$k += $keluar;
-			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $no);
-			$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow,  $v->ap_tanggal);
 			$akt = $this->mmodel->selectWhere("aktivitas",array("id"=>$v->ap_idaktivitas))->row()->name;
+			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $no);
+			$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $v->ap_tanggal );
 			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow,  $akt);
 			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, 	$sub['name'] );
-			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow,  $v->ap_keterangan);
+			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow,  $v->ap_keterangan );
 			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow,  $masuk);
 			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow,  $keluar);
 			
@@ -114,15 +165,49 @@
 			$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
 
 
-			
-			$no++; 
-			$numrow++; 
-		 endforeach;
+			$numrow++;$no++; 
+		endforeach;
+		//--------------------------------------------------------------------------------------------------------------------------
+		//--Kantor--
+		$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, "Kantor")->mergeCells('A'.$numrow.':G'.$numrow);
+
+		$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_col);
 
 
-			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, "Total")->mergeCells('A'.$numrow.':E'.$numrow);
-			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow,  $m);
-			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow,  $k);
+
+		$no = $no+1; 
+		$numrow = $numrow+1; 
+		$kantor = $this->mymodel->selectWhere('pengeluaran',array('proyek_id'=>$id,'kategori'=>'Kantor'));
+		foreach ($kantor as $ktr) {
+		$sub = $this->mymodel->selectdataOne('aktivitas',array('id'=>$ktr['aktivitas_sub']));
+		$akt = $this->mymodel->selectdataOne('aktivitas',array('id'=>$sub['parent']));
+		if($sub['kategori']=="Masuk"){
+		$masuk = $ktr['nominal'];
+		$keluar = 0;	
+		}else if($sub['kategori']=="Keluar"){
+		$masuk = $ktr['nominal'];
+		$keluar = 0;	
+		}else{
+			$masuk = 0;
+			$keluar = $ktr['nominal'];
+		}
+		$m += $masuk;
+		$k += $keluar;
+
+
+			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $no);
+			$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $ktr['date'] );
+			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow,  $akt['name']);
+			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, 	$sub['name'] );
+			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow,  $ktr['keterangan'] );
+			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow,  $masuk);
+			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow,  $keluar);
 			
 			
 			$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
@@ -133,8 +218,85 @@
 			$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_row);
 			$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
 
+			$numrow++;$no++; 
+			
+		}
+		//--------------------------------------------------------------------------------------------------------------------------
+		//--Pegawai--
+		$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, "Pegawai")->mergeCells('A'.$numrow.':G'.$numrow);
+
+		$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_col);
+		$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_col);
+
+		$no = $no+1; 
+		$numrow = $numrow+1; 
+		$kp = $this->mymodel->selectWhere('karyawan_proyek',array('proyek_id'=>$id));
+		foreach ($kp as $rec) {
+			$bulan = date('m',strtotime($rec['date']));
+			$tahun = date('Y',strtotime($rec['date']));
+
+			$gaji = $this->mymodel->gaji($id,$bulan,$tahun,$rec['karyawan_id']);
+			// echo $gaji['gaji'];
+			$akt = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pegawai'));
+			$sub = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Gaji','parent'=>$akt['id']));
+			$karyawan = $this->mymodel->selectdataOne('karyawan',array('id'=>$rec['karyawan_id']));
+			$k += $gaji['gaji'];
+
+			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $no);
+			$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $rec['date'] );
+			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow,  $akt['name']);
+			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, 	$sub['name'] );
+			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow,  "Gaji ".$karyawan['name'] );
+			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow,  0);
+			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow,  $gaji['gaji']);
+			
+			
+			$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_row);
+			$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
+			$numrow++;$no++; 
+
+
+		}
+
+
+		$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, "Total")->mergeCells('A'.$numrow.':E'.$numrow);
+		$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow,  $m);
+		$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow,  $k);
+		
+		
+		$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
+
 
 		
+		$numrow = $numrow+1; 
+		$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, "Saldo")->mergeCells('A'.$numrow.':F'.$numrow);
+		$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $m-$k);
+
+
+		$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('F'.$numrow)->applyFromArray($style_row);
+		$excel->getActiveSheet()->getStyle('G'.$numrow)->applyFromArray($style_row);
+
 
 		$excel->getActiveSheet()->getColumnDimension('A')->setAutoSize(TRUE); 
 		$excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(TRUE); 

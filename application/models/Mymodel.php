@@ -67,5 +67,62 @@ class Mymodel extends CI_Model {
 			return $res;
 		}
 
+		public function gaji($proyek,$bulan,$tahun,$karyawan)
+		{
+			# code...
+			$sql="SELECT
+					(
+						(
+							(
+								SELECT
+									SUM(nominal)
+								FROM
+									pengeluaran,
+									aktivitas
+								WHERE
+									pengeluaran.karyawan_id = ".$karyawan."
+								AND MONTH (pengeluaran.date) = ".$bulan."
+								AND YEAR (pengeluaran.date) = ".$tahun."
+								AND aktivitas.kategori = 'Masuk'
+								AND aktivitas.id = pengeluaran.aktivitas_sub
+							) - IFNULL(
+								(
+									SELECT
+										SUM(nominal)
+									FROM
+										pengeluaran,
+										aktivitas
+									WHERE
+										pengeluaran.karyawan_id = ".$karyawan."
+									AND MONTH (pengeluaran.date) = ".$bulan."
+									AND YEAR (pengeluaran.date) = ".$tahun."
+									AND aktivitas.kategori = 'Keluar'
+									AND aktivitas.id = pengeluaran.aktivitas_sub
+									AND aktivitas.name != 'Pembayaran Sisa Gaji'
+								),
+								0
+							)
+						) / (
+							SELECT
+								COUNT(karyawan_proyek.id)
+							FROM
+								karyawan_proyek
+							WHERE
+								karyawan_proyek.karyawan_id = ".$karyawan."
+							AND MONTH (karyawan_proyek.date) = ".$bulan."
+							AND YEAR (karyawan_proyek.date) = ".$tahun."
+						)
+					) AS gaji
+				FROM
+					karyawan_proyek
+				WHERE
+					karyawan_proyek.karyawan_id = ".$karyawan."
+				AND proyek_id = ".$proyek."
+				AND MONTH (karyawan_proyek.date) = ".$bulan."
+				AND YEAR (karyawan_proyek.date) = ".$tahun." ";
+				$rec = $this->db->query($sql)->row_array();
+				// print_r($rec);
+				return $rec;
+		}
 		
 }

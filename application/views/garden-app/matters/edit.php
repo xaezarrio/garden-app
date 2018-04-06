@@ -128,6 +128,22 @@
 			            			</select>
 			            		</td>
 			            	</tr>
+			            	<tr>
+			            		<td>
+			            			Status
+			            		</td>
+			            		<td>
+			            			<select class="form-control" name="dt[pr_status]">
+			            			
+			            				<option value="open" <?php if($matters['pr_status']=="open"){ echo "selected"; } ?>>OPEN</option>
+			            				<option value="retensi" <?php if($matters['pr_status']=="retensi"){ echo "selected"; } ?>>RETENSI</option>
+
+			            				<option value="close" <?php if($matters['pr_status']=="close"){ echo "selected"; } ?>>CLOSE</option>
+			            				
+			            			</select>
+			            			<small class="text-danger">* ubah status menjadi retensi / close akan menghapus relasi pengeluaran pegawai di proyek</small>
+			            		</td>
+			            	</tr>
 
 			            </table>
 			            <br>
@@ -184,7 +200,12 @@
 					  					<input type="text" name="nominal[]" class="form-control rupiah text-right nominal"  value="<?= number_format($nominal[$i]) ?>"  onchange="hitung()">
 					  				</td>
 					  				<td>
-					  					<input type="text" name="bunga[]" class="form-control rupiah text-right nominal"  value="<?= number_format($bunga[$i]) ?>" onchange="hitung()">
+					  					<?php 
+						  					if($bunga[$i]==""){
+						  						$bunga[$i] = 0;
+						  					}
+					  					?>
+					  					<input type="text" name="bunga[]" class="form-control rupiah text-right nominal"  value="<?= number_format(@$bunga[$i]) ?>" onchange="hitung()">
 					  				</td>
 					  				<td>
 					  					<a class="btn btn-success btn-danger" onclick="removemodal(<?= $i ?>)" ><i class="fa fa-remove"></i></a>
@@ -206,10 +227,10 @@
 					  					</select>
 					  				</td>
 					  				<td>
-					  					<input type="text" name="bunga[]" class="form-control rupiah text-right nominal"  onchange="hitung()">
+					  					<input type="text" name="nominal[]" class="form-control rupiah text-right nominal"  onchange="hitung()">
 					  				</td>
 					  				<td>
-					  					<input type="text" name="nominal[]" class="form-control rupiah text-right nominal"  onchange="hitung()">
+					  					<input type="text" name="bunga[]" class="form-control rupiah text-right nominal"  onchange="hitung()">
 					  				</td>
 					  				
 					  				<td>
@@ -257,6 +278,8 @@
 							<?php 
 			            		$file = $this->mymodel->selectWhere('file',array('table'=>'proyek','table_id'=>$matters['pr_id']));
 			            		$a = array();
+			            		$json = array();
+
 			            		foreach ($file as $fl) {
 			            			$date = strtotime($fl['created_at']);
 			            			$date = date('Y-m-d H:i:s',$date);
@@ -365,12 +388,16 @@
             success: function(response, textStatus, xhr) {
                 // alert(mydata);
                var str = response;
-                if (str.indexOf("Success Send Data") != -1){
+                if (str.indexOf("Success") != -1){
                     form.find(".show_error").hide().html(response).slideDown("fast");
                     $("#send-btn").removeClass("disabled").html('<i class="fa fa-save"></i> SAVE and ADD PROCEDURES').attr('disabled',false);
                    
-                     $('#upload')[0].reset();
-                     window.reload();
+                     // $('#upload')[0].reset();
+                     setTimeout(function () {
+                     	// body...
+	                     window.location.href="<?= base_url('matters/edit/'.$matters['pr_id']) ?>";
+
+                     },500);
             
                 }else{
                     form.find(".show_error").hide().html(response).slideDown("fast");

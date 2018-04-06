@@ -118,15 +118,17 @@ class Workorder extends CI_Controller {
         					);
         		$this->db->insert('pengeluaran', $dt_gaji);
 
-        		$aktv = $this->mymodel->selectdataOne('aktivitas',array('name'=>"Koperasi"));
-        		$aktv_sub = $this->mymodel->selectdataOne('aktivitas',array('parent'=>$aktv['id'],'name'=>'Simpan'));
+        		$aktv = $this->mymodel->selectdataOne('aktivitas',array('name'=>"Simpan"));
+        		$aktv_sub = $this->mymodel->selectdataOne('aktivitas',array('parent'=>$aktv['id'],'name'=>'Pokok'));
 
 
         		$dt_koperasi = array ('date' =>  $y."-".$m."-01",
-	        						'aktivitas_id' => $aktv_sub['id'],
+	        						'aktivitas_id' => $aktv['id'],
+	        						'aktivitas_sub' => $aktv_sub['id'],
+
 	        						'nominal' => '20000' ,
 	        						'karyawan_id' => $kar['id'] ,
-	        						'desc' => "Simpanan perbulan",
+	        						'desc' => "Simpanan Pokok",
 	        						'user_id' => user_id,
 	        						// 'type' => 'Simpan' ,
 	        						'created_at' =>  date('Y-m-d H:i:s')
@@ -199,7 +201,7 @@ class Workorder extends CI_Controller {
 		$tahun = $this->input->get('tahun');
 
 		header('Content-Type: application/json');
-        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.kategori as kategori,karyawan.name as karyawan,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal');
+        $this->datatables->select('pengeluaran.id,pengeluaran.date,aktivitas.kategori as kategori,karyawan.name as karyawan,karyawan.id as karyawan_id,aktivitas.name as sub,pengeluaran.keterangan,pengeluaran.nominal');
         $this->datatables->join('karyawan','karyawan.id=pengeluaran.karyawan_id','left');
         $this->datatables->join('aktivitas','aktivitas.id=pengeluaran.aktivitas_sub','left');
         $this->datatables->where(array('pengeluaran.kategori'=>'Pegawai'));
@@ -222,7 +224,7 @@ class Workorder extends CI_Controller {
         	$this->datatables->where("date_format(pengeluaran.created_at, '%Y') =", $tahun);
         }
         $this->datatables->from('pengeluaran');
-        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Edit</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
+        $this->datatables->add_column('view', '<div class="btn-group"> <a onclick="edit($1)" class="btn btn-xs btn-info"><span class="txt-white fa fa-edit"></span> Detail</a> <!--a onclick="hapus($1)"  class="btn btn-sm btn-danger"><span class="txt-white fa fa-trash-o"></span></a-->  </div>', 'id');
         echo $this->datatables->generate();
 	}
 
@@ -238,9 +240,60 @@ class Workorder extends CI_Controller {
 		if ($res<=7) {
 			$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
 			redirect('workorder/list-timesheets/pegawai');
+
 		} else {
 			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/list-timesheets/pegawai/')."';</script>";
 		}
+	}
+
+	public function listtimesheets_proyek()
+	{
+		# code...
+		$data['id'] = $this->input->get('id');
+		$this->load->view('garden-app/workorder/listtimesheets-proyek', $data);
+	}
+	public function addgaji_actionproyek()
+	{
+		$this->form_validation->set_error_delimiters('<li>', '</li>');
+		$this->form_validation->set_rules('dt[date]', '<strong>Tanggal</strong>', 'required');
+		$this->form_validation->set_rules('dt[karyawan_id]', '<strong>Pegawai</strong>', 'required');
+		$this->form_validation->set_rules('dt[proyek_id]', '<strong>Proyek</strong>', 'required');
+
+
+		if ($this->form_validation->run() == FALSE){
+			$error = validation_errors();
+			$this->alert->alertdanger($error);
+        }else{
+        	$data = $this->input->post('dt');
+        	$data['user_id'] = user_id;
+        	$data['created_at'] = date('Y-m-d H:i:s');
+        	$this->db->select('pr_tgl_mulai as mulai,pr_tgl_selesai as selesai');
+        	$proyek = $this->mymodel->selectdataOne('proyek',array('pr_id'=>$data['proyek_id']));
+
+			$start    = (new DateTime($proyek['mulai']))->modify('first day of this month');
+			$end      = (new DateTime($proyek['selesai']))->modify('first day of next month');
+			$interval = DateInterval::createFromDateString('1 month');
+			$period   = new DatePeriod($start, $interval, $end);
+
+			foreach ($period as $dt) {
+			    $data['date'] = $dt->format("Y-m-01") . "<br>\n";
+        		$this->db->insert('karyawan_proyek', $data);
+
+			}
+        	// print_r($proyek);
+
+			$this->alert->alertsuccess('Success Send Data');
+        }
+	}
+
+	public function addgaji_deleteproyek()
+	{
+		# code...
+		$id = $this->input->get('id');
+		$kp = $this->mymodel->selectdataOne('karyawan_proyek',array('id'=>$id));
+		$this->mymodel->deleteData('karyawan_proyek',array('id'=>$kp['id']));
+		redirect('workorder/list-timesheets/pegawai/add?idp='.$kp['karyawan_id']);
+
 	}
 
 // -------------------------------------------------------------------
@@ -280,7 +333,7 @@ class Workorder extends CI_Controller {
 	{
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		$this->form_validation->set_rules('dt[date]', '<strong>Tanggal</strong>', 'required');
-		$this->form_validation->set_rules('dt[nominal]', '<strong>Nominal</strong>', 'required');
+		// $this->form_validation->set_rules('dt[nominal]', '<strong>Nominal</strong>', 'required');
 		$this->form_validation->set_rules('dt[keterangan]', '<strong>keterangan</strong>', 'required');
 
 
@@ -319,12 +372,19 @@ class Workorder extends CI_Controller {
         	$itemquery = $this->mmodel->selectWhere("item",array("i_nama"=>$data['item']));
         	$cekitem = $itemquery->num_rows();	
         	if ($cekitem>0) {
+        		$sub = $this->mymodel->selectdataOne('aktivitas',array('id'=>$data['aktivitas_sub']));
         		$item = $this->mmodel->selectWhere("item", array("i_id"=>$itemquery->row()->i_id))->row();
         		$it['i_id'] = $item->i_id;
-        		$it['i_stok'] = $data['qty'] + $item->i_stok;
+        		if($sub['kategori']=="Pakai"){
+	        		$it['i_stok'] =  $item->i_stok-$data['qty'];
+        		}elseif($sub['kategori']=="Pakai"){
+	        		$it['i_stok'] =  $item->i_stok+$data['qty'];
+        		}
         		$it['i_satuan'] = $data['satuan_id'];
         		$it['updated_at'] = $data['created_at'];
         		$this->mmodel->updateData("item",$it,array("i_id"=>$it['i_id']));
+
+
         	} else {
         		$it['i_nama'] = $data['item'];
         		$it['i_stok'] = $data['qty'];
@@ -337,13 +397,38 @@ class Workorder extends CI_Controller {
         }
 	}
 
+
+	public function getstock($name,$sub)
+	{
+
+			$name = urldecode($name);
+			$itemquery = $this->mmodel->selectWhere("item",array("i_nama"=>$name));
+        	$cekitem = $itemquery->num_rows();	
+        	$it['i_stok'] = null;
+        	if ($cekitem>0) {
+        		$sub = $this->mymodel->selectdataOne('aktivitas',array('id'=>$sub));
+        		$item = $this->mmodel->selectWhere("item", array("i_id"=>$itemquery->row()->i_id))->row();
+        		// $it['i_id'] = $item->i_id;
+        		if($sub['kategori']=="Pakai"){
+	        		$it['i_stok'] =  $item->i_stok;
+        		}else{
+        			$it['i_stok'] = null;
+        		}
+
+        	}
+
+        	echo json_encode($it);
+
+		
+	}
+
 	public function editkantor_action()
 	{
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		$this->form_validation->set_rules('dt[date]', '<strong>Tanggal</strong>', 'required');
 		$this->form_validation->set_rules('dt[aktivitas_sub]', '<strong>Aktivitas Sub</strong>', 'required');
-		$this->form_validation->set_rules('dt[item]', '<strong>Item</strong>', 'required');
-		$this->form_validation->set_rules('dt[nominal]', '<strong>Item</strong>', 'required');
+		// $this->form_validation->set_rules('dt[item]', '<strong>Item</strong>', 'required');
+		// $this->form_validation->set_rules('dt[nominal]', '<strong>Item</strong>', 'required');
 		$this->form_validation->set_rules('dt[keterangan]', '<strong>keterangan</strong>', 'required');
 
 
@@ -420,16 +505,31 @@ class Workorder extends CI_Controller {
 	public function  listtimesheetskantor_delete($id)
 	{
 		$date = $this->mmodel->selectWhere('pengeluaran',array('id'=>$id))->row()->date;
+
+
 		$date1=date_create($date);
 		$date2=date_create(date("Y-m-d"));
 		$diff=date_diff($date1,$date2);
 		$res = $diff->format("%a");
 
 		if ($res<=7) {
+			
+			$pengeluaran = $this->mymodel->selectdataOne('pengeluaran',array('id'=>$id));
+			$aktivitas = $this->mymodel->selectdataOne('aktivitas',array('id'=>$pengeluaran['aktivitas_sub']));
+			if($aktivitas['kategori']=="Pakai"){
+				$item = $this->mymodel->selectdataOne('item',array('i_nama'=>$pengeluaran['item']));
+				// print_r($item);
+				$stock = $item['i_stok']+$pengeluaran['qty'];
+				$this->mymodel->updateData('item',array('i_stok'=>$stock),array('i_id'=>$item['i_id']));
+			}
+
+			// print_r($pengeluaran);
 			$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
-			redirect('workorder/list-timesheets/kantor');
+		
+			redirect('workorder/addkantor');
 		} else {
-			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/list-timesheets/pribadi')."';</script>";
+		
+			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/addkantor')."';</script>";
 		}
 	}
 
@@ -605,9 +705,9 @@ class Workorder extends CI_Controller {
 
 		if ($res<=7) {
 			$this->mymodel->deleteData('pengeluaran',array('id'=>$id));
-			redirect('workorder/list-timesheets/pribadi');
+			redirect('workorder/addpribadi');
 		} else {
-			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/list-timesheets/pribadi')."';</script>";
+			echo "<script type='text/javascript'>alert('Maaf, data yang anda pilih melewati 7 hari setelah pembuatan. Data gagal dihapus');window.location.href='".base_url('workorder/addpribadi')."';</script>";
 		}
 		
 
@@ -634,5 +734,26 @@ class Workorder extends CI_Controller {
 		$this->render->admin('garden-app/workorder/reviewtimesheets', $this->data);
 	}
 	
+
+	public function ceksub($proyek)
+	{
+			// $subs = $this->mymodel->selectdataOne('aktivitas',array('id'=>$sub));
+
+			
+
+			$parent = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Kantor'));
+			if($proyek!=0){
+				$this->db->where(array('kategori'=>'Pakai'));	
+			}
+			$sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$parent['id']));
+			foreach ($sub as $s) {
+				$data[] = array(
+							'value'=>$s['id'],
+							'option'=>$s['name'],
+							);
+			}
+			echo json_encode($data);
+		# code...
+	}
 	
 }

@@ -18,24 +18,7 @@
 
 			          	<!-- filter -->
 			          	<div class="row">
-		                  <div class="col-xs-2">
-		                    <div class="form-group">
-		                      <label>Sub Aktivitas:</label>
-
-		                      <select class="form-control select2" id="sub">
-		                          <option value="">Semua Sub</option>
-		                          <?php 
-		                          $cari = $this->mymodel->selectdataOne('aktivitas',array('name'=>'Pribadi'));
-		                          $sub = $this->mymodel->selectWhere('aktivitas',array('parent'=>$cari['id']));
-		                          foreach ($sub as $aktivitas) {
-		                           ?>
-		                           <option value="<?= $aktivitas['id'] ?>"><?= $aktivitas['name'] ?></option>
-		                           <?php } ?>
-
-		                        </select>
-		                      <!-- /.input group -->
-		                    </div>      
-		                  </div>
+		            
 		                  <div class="col-xs-2">
 		                    <div class="form-group">
 		                      <label>Bulan:</label>
@@ -43,7 +26,7 @@
 		                      <select class="form-control select2" id="bulan">
 		                          <option value="">Semua Bulan</option>
 		                          <?php 
-		                          // $bulan = $this->db->query("SELECT DISTINCT MONTHNAME(date) as month, MONTH(date) as name FROM pengeluaran")->result_array();
+		                          $bulan = $this->db->query("SELECT DISTINCT MONTHNAME(date) as month, MONTH(date) as name FROM aset_transaksi")->result_array();
 		                          for ($i=0; $i < count($bulan) ; $i++) { 
 		                          ?>
 		                          <option value="<?= $bulan[$i]['name'] ?>"><?= $bulan[$i]['month'] ?></option>
@@ -58,7 +41,7 @@
 
 		                      <select class="form-control select2" id="tahun">
 		                      	<?php 
-	                          $year = $this->db->query("SELECT DISTINCT YEAR(date) as year FROM pengeluaran ")->result_array();
+	                          $year = $this->db->query("SELECT DISTINCT YEAR(date) as year FROM aset_transaksi ")->result_array();
 		                          foreach ($year as $y) {
 
 		                      ?>
@@ -95,7 +78,7 @@
 			            		<th>Karyawan</th>
 			            		<th>Deskripsi</th>
 			            		<th>Total</th>
-			                  	<th style="width:80px;">Action</th>
+			                  	<th>Action</th>
 			                </tr>
 			              </thead>
 			              <tbody>
@@ -129,7 +112,7 @@
 					'		<th>Karyawan</th>'+
 					'		<th>Deskripsi</th>'+
 					'		<th>Total</th>'+
-					'      	<th style="width:80px;">Action</th>'+
+					'      	<th>Action</th>'+
 					'    </tr>'+
 					'  </thead>'+
 					'  <tbody>'+
@@ -141,7 +124,7 @@
 		 var bulan = $("#bulan").val();
 		 var tahun = $("#tahun").val();
 
-		 var url = "?sub="+sub+"&bulan="+bulan+"&tahun="+tahun;
+		 var url = "?bulan="+bulan+"&tahun="+tahun;
 
 		 loaddata(url);
 	}
